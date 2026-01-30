@@ -1,0 +1,112 @@
+{
+  "plans": {
+    "SUP001": {
+      "id": "PLAN-2024-0042",
+      "supplierId": "SUP001",
+      "supplierName": "SuratHomeTex Pvt Ltd",
+      "createdAt": "2024-01-20T14:30:00Z",
+      "status": "pending_approval",
+      "confidenceScore": 0.82,
+      "expectedOtifRecovery": 91,
+      "recoveryTimeline": "14 days",
+      "actions": [
+        {
+          "id": "ACT001",
+          "category": "Logistics",
+          "title": "Temporary forwarder switch for next 2 POs",
+          "description": "Revert to MaerskLine Global for PO-HC-2024-8920 and PO-HC-2024-8935 to stabilize port-to-DC transit time",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-22",
+          "expectedImpact": "Lead time reduction: 13.5 → 11.2 days",
+          "enabled": true,
+          "priority": "high",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT002",
+          "category": "Supplier Corrective Action",
+          "title": "Rollback Arabic label template to V2.1",
+          "description": "Instruct supplier to immediately revert to approved label template V2.1 for all towel/bedding SKUs",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-21",
+          "expectedImpact": "Compliance fail rate: 6.2% → <1%",
+          "enabled": true,
+          "priority": "critical",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT003",
+          "category": "Supplier Corrective Action",
+          "title": "Sample approval for corrected labels within 48h",
+          "description": "Supplier to submit 3 sample SKUs with corrected labels for QC approval before next shipment",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-23",
+          "expectedImpact": "Prevent future compliance holds",
+          "enabled": true,
+          "priority": "high",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT004",
+          "category": "ASN Quality Gate",
+          "title": "Block ASN submission if carton_count mismatch",
+          "description": "Enable system validation to reject ASN where carton count differs by >2% from PO",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-22",
+          "expectedImpact": "ASN accuracy: 91.1% → 97%+",
+          "enabled": true,
+          "priority": "high",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT005",
+          "category": "ASN Quality Gate",
+          "title": "Block ASN if SSCC missing",
+          "description": "Enforce SSCC barcode requirement for all cartons in ASN submission",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-22",
+          "expectedImpact": "Eliminate SSCC-related GRN delays",
+          "enabled": true,
+          "priority": "medium",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT006",
+          "category": "DC Receiving",
+          "title": "Prioritize GRN for Top 30 SKUs",
+          "description": "Fast-track receiving process for high-velocity bedding/towel SKUs from SuratHomeTex",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-21",
+          "expectedImpact": "GRN cycle time: 5.5h → 2.5h for priority SKUs",
+          "enabled": true,
+          "priority": "medium",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT007",
+          "category": "Escalation",
+          "title": "Auto-escalate if compliance_fail >2% for 3 consecutive days",
+          "description": "Trigger Category Head notification and supplier scorecard penalty if threshold exceeded",
+          "owner": "Category Head",
+          "dueDate": "2024-01-21",
+          "expectedImpact": "Governance oversight",
+          "enabled": true,
+          "priority": "medium",
+          "requiresApproval": true
+        },
+        {
+          "id": "ACT008",
+          "category": "Escalation",
+          "title": "Freeze new PO release pending plan execution",
+          "description": "Hold PO-HC-2024-8945 and subsequent orders until OTIF recovers above 85%",
+          "owner": "Category Head",
+          "dueDate": "2024-01-21",
+          "expectedImpact": "Risk mitigation - prevent further exposure",
+          "enabled": false,
+          "priority": "critical",
+          "requiresApproval": true
+        }
+      ]
+    }
+  }
+}
