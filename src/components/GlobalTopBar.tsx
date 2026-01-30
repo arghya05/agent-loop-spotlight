@@ -3,7 +3,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Building2, MapPin, Globe, Plus, ChevronRight, Zap } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Building2, MapPin, Globe, Plus, ChevronRight, Zap, Bot, Play } from 'lucide-react';
 
 const GCCMapIcon = () => (
   <svg viewBox="0 0 32 32" className="w-6 h-6 text-header-foreground/60">
@@ -26,19 +27,39 @@ export const GlobalTopBar = () => {
     selectedCountry,
     currentRole,
     demoMode,
+    autopilotEnabled,
     setSelectedBrand,
     setSelectedDC,
     setSelectedCountry,
     setCurrentRole,
     setDemoMode,
+    setAutopilotEnabled,
     simulateNextDay,
-    currentDay
+    currentDay,
+    investigationStatus,
+    selectedSupplierId,
+    selectSupplier,
+    startInvestigation
   } = useAppStore();
 
   const roleLabels: Record<Role, string> = {
     viewer: 'Viewer',
     ops_manager: 'Ops Manager',
     category_head: 'Category Head'
+  };
+
+  // Auto-start investigation when autopilot enabled and drift detected
+  const handleAutopilotToggle = (enabled: boolean) => {
+    setAutopilotEnabled(enabled);
+    
+    // If autopilot just enabled and there's an alert supplier, auto-select and investigate
+    if (enabled && !selectedSupplierId && investigationStatus === 'idle') {
+      // Auto-select the supplier with alert
+      selectSupplier('SUP001');
+      setTimeout(() => {
+        startInvestigation();
+      }, 500);
+    }
   };
 
   return (
@@ -110,19 +131,44 @@ export const GlobalTopBar = () => {
         </div>
 
         {/* Right: Controls */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          {/* Autopilot Toggle - Prominent */}
+          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all ${
+            autopilotEnabled 
+              ? 'bg-status-success/20 border border-status-success/40' 
+              : 'bg-header-foreground/5 border border-header-foreground/10'
+          }`}>
+            <Bot className={`w-4 h-4 ${autopilotEnabled ? 'text-status-success' : 'text-header-foreground/60'}`} />
+            <Label htmlFor="autopilot" className={`text-xs font-medium ${autopilotEnabled ? 'text-status-success' : 'text-header-foreground/60'}`}>
+              Autopilot
+            </Label>
+            <Switch
+              id="autopilot"
+              checked={autopilotEnabled}
+              onCheckedChange={handleAutopilotToggle}
+              className="data-[state=checked]:bg-status-success"
+            />
+            {autopilotEnabled && (
+              <Badge className="bg-status-success text-white text-[9px] px-1.5 animate-pulse">
+                ON
+              </Badge>
+            )}
+          </div>
+
+          <div className="h-6 w-px bg-header-foreground/20" />
+
           <div className="flex items-center gap-2">
-            <Label htmlFor="demo-mode" className="text-xs text-header-foreground/60">Demo Mode</Label>
+            <Label htmlFor="demo-mode" className="text-xs text-header-foreground/60">Demo</Label>
             <Switch
               id="demo-mode"
               checked={demoMode}
               onCheckedChange={setDemoMode}
-              className="data-[state=checked]:bg-status-success"
+              className="data-[state=checked]:bg-status-info scale-90"
             />
           </div>
 
           <Select value={currentRole} onValueChange={(v) => setCurrentRole(v as Role)}>
-            <SelectTrigger className="w-[130px] h-8 bg-header-foreground/10 border-header-foreground/20 text-header-foreground text-xs">
+            <SelectTrigger className="w-[120px] h-8 bg-header-foreground/10 border-header-foreground/20 text-header-foreground text-xs">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -134,7 +180,7 @@ export const GlobalTopBar = () => {
 
           <Button variant="outline" size="sm" className="h-8 text-xs bg-transparent border-header-foreground/20 text-header-foreground hover:bg-header-foreground/10">
             <Plus className="w-3.5 h-3.5 mr-1" />
-            New Vendor Request
+            New Vendor
           </Button>
 
           <Button 
@@ -142,8 +188,8 @@ export const GlobalTopBar = () => {
             className="h-8 text-xs bg-primary hover:bg-primary/90"
             onClick={simulateNextDay}
           >
-            Simulate Day {currentDay + 1}
-            <ChevronRight className="w-3.5 h-3.5 ml-1" />
+            <Play className="w-3.5 h-3.5 mr-1" />
+            Day {currentDay + 1}
           </Button>
         </div>
       </div>
