@@ -1,0 +1,124 @@
+{
+  "tasks": [
+    {
+      "id": "TSK001",
+      "planId": "PLAN-2024-0042",
+      "actionId": "ACT001",
+      "title": "Contact MaerskLine for expedited booking",
+      "assignee": "Logistics Coordinator",
+      "status": "todo",
+      "dueDate": "2024-01-21",
+      "priority": "high"
+    },
+    {
+      "id": "TSK002",
+      "planId": "PLAN-2024-0042",
+      "actionId": "ACT001",
+      "title": "Cancel QuickFreight booking for next 2 POs",
+      "assignee": "Logistics Coordinator",
+      "status": "todo",
+      "dueDate": "2024-01-21",
+      "priority": "high"
+    },
+    {
+      "id": "TSK003",
+      "planId": "PLAN-2024-0042",
+      "actionId": "ACT002",
+      "title": "Send label rollback notice to SuratHomeTex",
+      "assignee": "Supplier Manager",
+      "status": "todo",
+      "dueDate": "2024-01-21",
+      "priority": "critical"
+    },
+    {
+      "id": "TSK004",
+      "planId": "PLAN-2024-0042",
+      "actionId": "ACT002",
+      "title": "Share approved V2.1 template files",
+      "assignee": "Compliance Team",
+      "status": "todo",
+      "dueDate": "2024-01-21",
+      "priority": "high"
+    },
+    {
+      "id": "TSK005",
+      "planId": "PLAN-2024-0042",
+      "actionId": "ACT003",
+      "title": "Schedule video QC call with supplier",
+      "assignee": "QC Manager",
+      "status": "todo",
+      "dueDate": "2024-01-22",
+      "priority": "medium"
+    },
+    {
+      "id": "TSK006",
+      "planId": "PLAN-2024-0042",
+      "actionId": "ACT004",
+      "title": "Enable carton count validation in ASN portal",
+      "assignee": "IT Systems",
+      "status": "todo",
+      "dueDate": "2024-01-22",
+      "priority": "high"
+    },
+    {
+      "id": "TSK007",
+      "planId": "PLAN-2024-0042",
+      "actionId": "ACT005",
+      "title": "Configure SSCC mandatory field in ASN form",
+      "assignee": "IT Systems",
+      "status": "todo",
+      "dueDate": "2024-01-22",
+      "priority": "medium"
+    },
+    {
+      "id": "TSK008",
+      "planId": "PLAN-2024-0042",
+      "actionId": "ACT006",
+      "title": "Update DC priority queue for SuratHomeTex SKUs",
+      "assignee": "DC Supervisor",
+      "status": "todo",
+      "dueDate": "2024-01-21",
+      "priority": "medium"
+    },
+    {
+      "id": "TSK009",
+      "planId": "PLAN-2024-0042",
+      "actionId": "ACT006",
+      "title": "Allocate dedicated receiving bay",
+      "assignee": "DC Supervisor",
+      "status": "todo",
+      "dueDate": "2024-01-21",
+      "priority": "medium"
+    },
+    {
+      "id": "TSK010",
+      "planId": "PLAN-2024-0042",
+      "actionId": "ACT007",
+      "title": "Configure escalation alert rules",
+      "assignee": "IT Systems",
+      "status": "todo",
+      "dueDate": "2024-01-21",
+      "priority": "medium"
+    },
+    {
+      "id": "TSK011",
+      "planId": "PLAN-2024-0042",
+      "actionId": "ACT002",
+      "title": "Notify Category Head of label issue",
+      "assignee": "Ops Manager",
+      "status": "todo",
+      "dueDate": "2024-01-21",
+      "priority": "high"
+    },
+    {
+      "id": "TSK012",
+      "planId": "PLAN-2024-0042",
+      "actionId": "ACT001",
+      "title": "Update supplier portal with new forwarder details",
+      "assignee": "Supplier Manager",
+      "status": "todo",
+      "dueDate": "2024-01-22",
+      "priority": "medium"
+    }
+  ]
+}

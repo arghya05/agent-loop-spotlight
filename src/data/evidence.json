@@ -1,0 +1,141 @@
+{
+  "shipmentDelays": [
+    {
+      "id": "SHP-2024-1142",
+      "poNumber": "PO-HC-2024-8892",
+      "origin": "Mundra Port, India",
+      "destination": "Jebel Ali, Dubai",
+      "forwarder": "QuickFreight Logistics (NEW)",
+      "previousForwarder": "MaerskLine Global",
+      "scheduledETD": "2024-01-10",
+      "actualETD": "2024-01-11",
+      "scheduledETA": "2024-01-17",
+      "actualETA": "2024-01-20",
+      "delayDays": 3,
+      "portDwell": 4.2,
+      "previousPortDwell": 1.8,
+      "status": "Delivered Late",
+      "cartons": 1240,
+      "skus": 48
+    },
+    {
+      "id": "SHP-2024-1156",
+      "poNumber": "PO-HC-2024-8903",
+      "origin": "Mundra Port, India",
+      "destination": "Jebel Ali, Dubai",
+      "forwarder": "QuickFreight Logistics (NEW)",
+      "previousForwarder": "MaerskLine Global",
+      "scheduledETD": "2024-01-12",
+      "actualETD": "2024-01-13",
+      "scheduledETA": "2024-01-19",
+      "actualETA": "2024-01-22",
+      "delayDays": 3,
+      "portDwell": 3.8,
+      "previousPortDwell": 1.8,
+      "status": "Delivered Late",
+      "cartons": 980,
+      "skus": 36
+    }
+  ],
+  "complianceHolds": [
+    {
+      "id": "COMP-2024-0089",
+      "shipmentId": "SHP-2024-1142",
+      "category": "Bedding",
+      "subcategory": "Bath Towels",
+      "skuCount": 12,
+      "issue": "Arabic care label missing/incorrect",
+      "details": "Template V2.3 applied instead of approved V2.1 - missing fabric composition in Arabic",
+      "holdDuration": 2.5,
+      "dcLocation": "DXB-JAFZA DC Bay 14",
+      "inspector": "Mohamed Al-Hashimi",
+      "holdDate": "2024-01-18"
+    },
+    {
+      "id": "COMP-2024-0091",
+      "shipmentId": "SHP-2024-1142",
+      "category": "Bedding",
+      "subcategory": "Bed Sheets",
+      "skuCount": 8,
+      "issue": "Arabic care label font size below minimum",
+      "details": "Font size 6pt detected, minimum required 8pt per UAE compliance",
+      "holdDuration": 1.8,
+      "dcLocation": "DXB-JAFZA DC Bay 14",
+      "inspector": "Mohamed Al-Hashimi",
+      "holdDate": "2024-01-18"
+    },
+    {
+      "id": "COMP-2024-0094",
+      "shipmentId": "SHP-2024-1156",
+      "category": "Bedding",
+      "subcategory": "Hand Towels",
+      "skuCount": 6,
+      "issue": "Arabic care label symbol mismatch",
+      "details": "Washing symbol doesn't match Arabic text instructions",
+      "holdDuration": 2.0,
+      "dcLocation": "DXB-JAFZA DC Bay 16",
+      "inspector": "Sara Al-Mahmoud",
+      "holdDate": "2024-01-20"
+    }
+  ],
+  "asnErrors": [
+    {
+      "id": "ASN-2024-8892-A",
+      "poNumber": "PO-HC-2024-8892",
+      "errorType": "Carton count mismatch",
+      "expected": 1240,
+      "received": 1218,
+      "variance": 22,
+      "impactedSkus": 8,
+      "grnDelay": 4.2,
+      "timestamp": "2024-01-17T08:45:00Z"
+    },
+    {
+      "id": "ASN-2024-8892-B",
+      "poNumber": "PO-HC-2024-8892",
+      "errorType": "SSCC barcode missing",
+      "affectedCartons": 45,
+      "impactedSkus": 12,
+      "grnDelay": 2.1,
+      "timestamp": "2024-01-17T09:15:00Z"
+    },
+    {
+      "id": "ASN-2024-8903-A",
+      "poNumber": "PO-HC-2024-8903",
+      "errorType": "SKU quantity mismatch",
+      "affectedSkus": 6,
+      "quantityVariance": -142,
+      "grnDelay": 3.8,
+      "timestamp": "2024-01-20T07:30:00Z"
+    }
+  ],
+  "receivingMetrics": [
+    {
+      "date": "2024-01-17",
+      "poNumber": "PO-HC-2024-8892",
+      "scheduledGrnTime": 2.0,
+      "actualGrnTime": 6.2,
+      "delay": 4.2,
+      "reason": "ASN carton count verification failure",
+      "partialGrn": true
+    },
+    {
+      "date": "2024-01-18",
+      "poNumber": "PO-HC-2024-8892",
+      "scheduledGrnTime": 1.5,
+      "actualGrnTime": 4.0,
+      "delay": 2.5,
+      "reason": "Compliance hold - Arabic label inspection",
+      "partialGrn": true
+    },
+    {
+      "date": "2024-01-20",
+      "poNumber": "PO-HC-2024-8903",
+      "scheduledGrnTime": 1.8,
+      "actualGrnTime": 5.6,
+      "delay": 3.8,
+      "reason": "ASN SKU quantity discrepancy",
+      "partialGrn": true
+    }
+  ]
+}

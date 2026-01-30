@@ -1,0 +1,93 @@
+{
+  "suppliers": [
+    {
+      "id": "SUP001",
+      "name": "SuratHomeTex Pvt Ltd",
+      "country": "India",
+      "category": "Bedding/Towels",
+      "brand": "Home Centre",
+      "lane": "Mundra(IN) → Jebel Ali(DXB) → DXB-JAFZA DC → RUH-RDC",
+      "primaryDC": "DXB-JAFZA",
+      "status": "critical",
+      "hasActiveAlert": true,
+      "alertDate": "2024-01-14",
+      "kpis": {
+        "otif": { "current": 76, "previous": 94, "trend": "down", "status": "danger" },
+        "fillRate": { "current": 88, "previous": 97, "trend": "down", "status": "warning" },
+        "compliance": { "current": 6.2, "previous": 0.8, "trend": "up", "status": "danger", "inverted": true },
+        "asnAccuracy": { "current": 91.1, "previous": 98.6, "trend": "down", "status": "warning" },
+        "leadTime": { "current": 13.5, "previous": 11.0, "trend": "up", "status": "warning", "unit": "days", "inverted": true }
+      },
+      "contacts": {
+        "primary": "Rajesh Patel",
+        "email": "rajesh.patel@surathometex.com"
+      }
+    },
+    {
+      "id": "SUP002",
+      "name": "Al-Futtaim Textiles LLC",
+      "country": "UAE",
+      "category": "Apparel",
+      "brand": "Max",
+      "lane": "Local (DXB) → DXB-AL QUOZ DC",
+      "primaryDC": "DXB-AL QUOZ",
+      "status": "healthy",
+      "hasActiveAlert": false,
+      "kpis": {
+        "otif": { "current": 96, "previous": 95, "trend": "up", "status": "success" },
+        "fillRate": { "current": 99, "previous": 98, "trend": "up", "status": "success" },
+        "compliance": { "current": 0.3, "previous": 0.4, "trend": "down", "status": "success", "inverted": true },
+        "asnAccuracy": { "current": 99.2, "previous": 99.0, "trend": "up", "status": "success" },
+        "leadTime": { "current": 2.1, "previous": 2.2, "trend": "down", "status": "success", "unit": "days", "inverted": true }
+      },
+      "contacts": {
+        "primary": "Ahmed Al-Futtaim",
+        "email": "ahmed@alfuttaimtex.ae"
+      }
+    },
+    {
+      "id": "SUP003",
+      "name": "GuangZhou Fashion Co",
+      "country": "China",
+      "category": "Fashion Accessories",
+      "brand": "Centrepoint",
+      "lane": "Shenzhen(CN) → Jebel Ali(DXB) → DXB-JAFZA DC",
+      "primaryDC": "DXB-JAFZA",
+      "status": "warning",
+      "hasActiveAlert": false,
+      "kpis": {
+        "otif": { "current": 89, "previous": 92, "trend": "down", "status": "warning" },
+        "fillRate": { "current": 94, "previous": 96, "trend": "down", "status": "success" },
+        "compliance": { "current": 1.5, "previous": 1.2, "trend": "up", "status": "success", "inverted": true },
+        "asnAccuracy": { "current": 97.8, "previous": 98.2, "trend": "down", "status": "success" },
+        "leadTime": { "current": 18.2, "previous": 17.5, "trend": "up", "status": "warning", "unit": "days", "inverted": true }
+      },
+      "contacts": {
+        "primary": "Wei Chen",
+        "email": "wei.chen@gzfashion.cn"
+      }
+    },
+    {
+      "id": "SUP004",
+      "name": "Riyadh Home Decor",
+      "country": "KSA",
+      "category": "Home Decor",
+      "brand": "Home Centre",
+      "lane": "Local (RUH) → RUH-RDC",
+      "primaryDC": "RUH-RDC",
+      "status": "healthy",
+      "hasActiveAlert": false,
+      "kpis": {
+        "otif": { "current": 97, "previous": 96, "trend": "up", "status": "success" },
+        "fillRate": { "current": 98, "previous": 97, "trend": "up", "status": "success" },
+        "compliance": { "current": 0.2, "previous": 0.3, "trend": "down", "status": "success", "inverted": true },
+        "asnAccuracy": { "current": 99.5, "previous": 99.3, "trend": "up", "status": "success" },
+        "leadTime": { "current": 1.8, "previous": 1.9, "trend": "down", "status": "success", "unit": "days", "inverted": true }
+      },
+      "contacts": {
+        "primary": "Khalid Al-Rashid",
+        "email": "khalid@riyadhhomedecor.sa"
+      }
+    }
+  ]
+}
