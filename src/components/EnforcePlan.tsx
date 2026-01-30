@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useAppStore, Task, TaskStatus } from '@/store/appStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -300,15 +301,15 @@ const TaskBoard = () => {
 
   const TaskColumn = ({ title, tasks, status, color }: { title: string; tasks: Task[]; status: TaskStatus; color: string }) => (
     <div className="flex-1 min-w-0">
-      <div className={`flex items-center gap-2 mb-2 pb-2 border-b-2 ${color}`}>
-        <p className="text-[10px] font-semibold uppercase tracking-wide">{title}</p>
-        <Badge variant="secondary" className="text-[9px] h-4 px-1.5">{tasks.length}</Badge>
+      <div className={`flex items-center gap-2 mb-3 pb-2 border-b-2 ${color}`}>
+        <p className="text-xs font-semibold uppercase tracking-wide">{title}</p>
+        <Badge variant="secondary" className="text-[10px] h-5 px-2">{tasks.length}</Badge>
       </div>
-      <div className="space-y-1.5 max-h-[180px] overflow-auto scrollbar-thin">
+      <div className="space-y-2 max-h-[220px] overflow-auto scrollbar-thin">
         {tasks.map((task) => (
           <div 
             key={task.id} 
-            className="p-2 bg-card rounded border text-[10px] cursor-pointer hover:bg-muted/50 transition-colors"
+            className="p-3 bg-card rounded-lg border text-xs cursor-pointer hover:bg-muted/50 hover:border-primary/30 transition-all shadow-sm"
             onClick={() => {
               const nextStatus: Record<TaskStatus, TaskStatus> = {
                 todo: 'in_progress',
@@ -318,8 +319,8 @@ const TaskBoard = () => {
               updateTaskStatus(task.id, nextStatus[task.status]);
             }}
           >
-            <p className="font-medium truncate">{task.title}</p>
-            <p className="text-muted-foreground">{task.assignee}</p>
+            <p className="font-semibold text-foreground leading-tight mb-1">{task.title}</p>
+            <p className="text-muted-foreground text-[11px]">{task.assignee}</p>
           </div>
         ))}
       </div>
@@ -347,11 +348,22 @@ const TaskBoard = () => {
 
 const SupplierCommunication = () => {
   const { planStatus, selectedSupplierId } = useAppStore();
+  const [isSending, setIsSending] = React.useState(false);
+  const [isSent, setIsSent] = React.useState(false);
   
   const supplierDetails = selectedSupplierId ? (supplierDetailsData as SupplierDetailsType)[selectedSupplierId as keyof SupplierDetailsType] : null;
   const communication = supplierDetails?.communication;
   
   if (planStatus !== 'approved' || !communication) return null;
+
+  const handleSendEmail = () => {
+    setIsSending(true);
+    // Simulate sending email
+    setTimeout(() => {
+      setIsSending(false);
+      setIsSent(true);
+    }, 1500);
+  };
 
   return (
     <Card className="card-elevated">
@@ -362,21 +374,42 @@ const SupplierCommunication = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="p-3 bg-muted/30 rounded-lg text-xs space-y-2">
+        <div className="p-3 bg-muted/30 rounded-lg text-xs space-y-3">
           <div className="flex items-center justify-between">
             <span className="font-medium">To: {communication.to}</span>
-            <Badge variant="outline" className="text-[9px]">Draft</Badge>
+            <Badge variant="outline" className={`text-[10px] ${isSent ? 'bg-status-success text-white border-status-success' : ''}`}>
+              {isSent ? 'Sent' : 'Draft'}
+            </Badge>
           </div>
           <p className="text-muted-foreground">
             Subject: {communication.subject}
           </p>
-          <div className="p-2 bg-card rounded border text-[10px]">
-            <p>Dear {communication.contact},</p>
-            <p className="mt-1">{communication.preview}</p>
+          <div className="p-3 bg-card rounded-lg border text-xs leading-relaxed">
+            <p className="font-medium">Dear {communication.contact},</p>
+            <p className="mt-2 text-muted-foreground">{communication.preview}</p>
           </div>
-          <Button size="sm" className="w-full mt-2">
-            <Mail className="w-3.5 h-3.5 mr-1" />
-            Send via Supplier Portal
+          <Button 
+            size="sm" 
+            className="w-full mt-2 bg-primary hover:bg-primary/90"
+            onClick={handleSendEmail}
+            disabled={isSending || isSent}
+          >
+            {isSending ? (
+              <>
+                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                Sending...
+              </>
+            ) : isSent ? (
+              <>
+                <CheckCircle2 className="w-4 h-4 mr-2" />
+                Email Sent
+              </>
+            ) : (
+              <>
+                <Mail className="w-4 h-4 mr-2" />
+                Send via Supplier Portal
+              </>
+            )}
           </Button>
         </div>
       </CardContent>
