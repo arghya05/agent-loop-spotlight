@@ -1,0 +1,48 @@
+{
+  "materials": [
+    {
+      "po_id": "MAX-PL-10421",
+      "materials": [
+        { "material": "Denim Fabric Greige", "planned_eta": "2024-01-12", "actual_eta": "2024-01-16", "slip_days": 4, "risk_flag": true, "supplier": "Arvind Mills" },
+        { "material": "Rivets & Buttons", "planned_eta": "2024-01-10", "actual_eta": "2024-01-10", "slip_days": 0, "risk_flag": false, "supplier": "YKK India" },
+        { "material": "Labels & Tags", "planned_eta": "2024-01-14", "actual_eta": "2024-01-15", "slip_days": 1, "risk_flag": false, "supplier": "Avery Dennison" }
+      ]
+    },
+    {
+      "po_id": "MAX-PL-10422",
+      "materials": [
+        { "material": "Cotton Twill Fabric", "planned_eta": "2024-01-15", "actual_eta": "2024-01-17", "slip_days": 2, "risk_flag": true, "supplier": "Vardhman Textiles" },
+        { "material": "Elastic Waistband", "planned_eta": "2024-01-14", "actual_eta": "2024-01-14", "slip_days": 0, "risk_flag": false, "supplier": "Coats India" },
+        { "material": "Arabic Care Labels", "planned_eta": "2024-01-16", "actual_eta": "2024-01-16", "slip_days": 0, "risk_flag": false, "supplier": "SML Labels" }
+      ]
+    },
+    {
+      "po_id": "MAX-PL-10423",
+      "materials": [
+        { "material": "Jersey Knit Fabric", "planned_eta": "2024-01-19", "actual_eta": "2024-01-22", "slip_days": 3, "risk_flag": true, "supplier": "Nahar Spinning" },
+        { "material": "Rib Collar Material", "planned_eta": "2024-01-18", "actual_eta": "2024-01-18", "slip_days": 0, "risk_flag": false, "supplier": "Alok Industries" }
+      ]
+    },
+    {
+      "po_id": "MAX-PL-10425",
+      "materials": [
+        { "material": "Stretch Denim Fabric", "planned_eta": "2024-01-25", "actual_eta": null, "slip_days": 0, "risk_flag": true, "supplier": "Arvind Mills", "notes": "Expected 5-day delay due to loom maintenance" },
+        { "material": "Zippers", "planned_eta": "2024-01-24", "actual_eta": null, "slip_days": 0, "risk_flag": false, "supplier": "YKK India" }
+      ]
+    },
+    {
+      "po_id": "CP-PL-5521",
+      "materials": [
+        { "material": "PU Leather", "planned_eta": "2024-01-15", "actual_eta": "2024-01-15", "slip_days": 0, "risk_flag": false, "supplier": "Nan Ya Plastics" },
+        { "material": "Metal Hardware", "planned_eta": "2024-01-14", "actual_eta": "2024-01-14", "slip_days": 0, "risk_flag": false, "supplier": "KAM Snaps" }
+      ]
+    },
+    {
+      "po_id": "HC-LO-3341",
+      "materials": [
+        { "material": "Egyptian Cotton", "planned_eta": "2024-01-17", "actual_eta": "2024-01-17", "slip_days": 0, "risk_flag": false, "supplier": "Local Supplier" },
+        { "material": "Polyester Fill", "planned_eta": "2024-01-18", "actual_eta": "2024-01-18", "slip_days": 0, "risk_flag": false, "supplier": "Reliance Industries" }
+      ]
+    }
+  ]
+}

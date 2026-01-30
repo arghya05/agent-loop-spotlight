@@ -1,0 +1,123 @@
+{
+  "suppliers": [
+    {
+      "supplier_id": "DSUP001",
+      "name": "SuratApparelWorks",
+      "country": "India",
+      "factories": [
+        {
+          "factory_id": "FAC001",
+          "name": "Surat Unit-1",
+          "location": "Surat, Gujarat",
+          "capacity_lines": 8,
+          "monthly_capacity_units": 45000,
+          "categories": ["Apparel", "Denim", "Casual Wear"],
+          "reliability_score": 72,
+          "quality_baseline": 94.2,
+          "compliance_readiness": {
+            "arabic_labeling": true,
+            "care_instructions": true,
+            "country_origin": true
+          }
+        },
+        {
+          "factory_id": "FAC002",
+          "name": "Tiruppur Unit-2",
+          "location": "Tiruppur, Tamil Nadu",
+          "capacity_lines": 6,
+          "monthly_capacity_units": 35000,
+          "categories": ["Knits", "T-shirts", "Basics"],
+          "reliability_score": 88,
+          "quality_baseline": 96.5,
+          "compliance_readiness": {
+            "arabic_labeling": true,
+            "care_instructions": true,
+            "country_origin": true
+          }
+        }
+      ],
+      "route": "Factory → Mundra Port → Jebel Ali (Dubai) → DXB-JAFZA DC",
+      "primary_forwarder": "MaerskLine",
+      "backup_forwarder": "QuickFreight",
+      "avg_transit_days": 12
+    },
+    {
+      "supplier_id": "DSUP002",
+      "name": "GuangZhou Textile Co",
+      "country": "China",
+      "factories": [
+        {
+          "factory_id": "FAC003",
+          "name": "Dongguan Factory",
+          "location": "Dongguan, Guangdong",
+          "capacity_lines": 12,
+          "monthly_capacity_units": 80000,
+          "categories": ["Fashion Accessories", "Bags", "Shoes"],
+          "reliability_score": 85,
+          "quality_baseline": 95.8,
+          "compliance_readiness": {
+            "arabic_labeling": true,
+            "care_instructions": true,
+            "country_origin": true
+          }
+        }
+      ],
+      "route": "Factory → Shenzhen Port → Jebel Ali (Dubai) → DXB-JAFZA DC",
+      "primary_forwarder": "COSCO",
+      "backup_forwarder": "Evergreen",
+      "avg_transit_days": 18
+    },
+    {
+      "supplier_id": "DSUP003",
+      "name": "Al-Futtaim Manufacturing",
+      "country": "UAE",
+      "factories": [
+        {
+          "factory_id": "FAC004",
+          "name": "Al Quoz Facility",
+          "location": "Dubai, UAE",
+          "capacity_lines": 4,
+          "monthly_capacity_units": 20000,
+          "categories": ["Home Textiles", "Bedding"],
+          "reliability_score": 96,
+          "quality_baseline": 98.2,
+          "compliance_readiness": {
+            "arabic_labeling": true,
+            "care_instructions": true,
+            "country_origin": true
+          }
+        }
+      ],
+      "route": "Factory → DXB-AL QUOZ DC (Local)",
+      "primary_forwarder": "Local Trucking",
+      "backup_forwarder": null,
+      "avg_transit_days": 1
+    },
+    {
+      "supplier_id": "DSUP004",
+      "name": "Riyadh Garments LLC",
+      "country": "KSA",
+      "factories": [
+        {
+          "factory_id": "FAC005",
+          "name": "Riyadh Production Center",
+          "location": "Riyadh, KSA",
+          "capacity_lines": 5,
+          "monthly_capacity_units": 25000,
+          "categories": ["Traditional Wear", "Abayas"],
+          "reliability_score": 91,
+          "quality_baseline": 97.0,
+          "compliance_readiness": {
+            "arabic_labeling": true,
+            "care_instructions": true,
+            "country_origin": true
+          }
+        }
+      ],
+      "route": "Factory → RUH-RDC (Local)",
+      "primary_forwarder": "Local Trucking",
+      "backup_forwarder": null,
+      "avg_transit_days": 1
+    }
+  ]
+}
