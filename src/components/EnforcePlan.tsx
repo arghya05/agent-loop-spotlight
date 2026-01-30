@@ -73,35 +73,35 @@ const ImprovementPlan = () => {
   const canApproveAll = currentRole === 'category_head';
 
   return (
-    <Card className="card-elevated">
-      <CardHeader className="pb-2">
+    <Card className="card-elevated border-t-4 border-t-status-success">
+      <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-semibold flex items-center gap-2">
-            <ClipboardList className="w-4 h-4" />
+          <CardTitle className="text-sm font-bold flex items-center gap-2">
+            <ClipboardList className="w-4 h-4 text-status-success" />
             Improvement Plan
           </CardTitle>
           <Badge 
             className={`text-[10px] ${
-              planStatus === 'approved' ? 'bg-status-success' : 
-              planStatus === 'pending_approval' ? 'bg-status-warning' : 
-              'bg-muted'
-            } text-white`}
+              planStatus === 'approved' ? 'bg-status-success text-white' : 
+              planStatus === 'pending_approval' ? 'bg-status-warning text-white' : 
+              'bg-muted text-muted-foreground'
+            }`}
           >
             {planStatus.replace('_', ' ')}
           </Badge>
         </div>
-        <p className="text-[10px] text-muted-foreground">
-          Recovery: OTIF → {plan.expectedOtifRecovery}% in {plan.recoveryTimeline}
+        <p className="text-xs text-muted-foreground">
+          Recovery: OTIF → <span className="font-semibold text-status-success">{plan.expectedOtifRecovery}%</span> in {plan.recoveryTimeline}
         </p>
       </CardHeader>
-      <CardContent className="space-y-3 max-h-[300px] overflow-auto scrollbar-thin">
+      <CardContent className="space-y-4 max-h-[350px] overflow-auto scrollbar-thin">
         {Object.entries(groupedActions).map(([category, actions]) => {
           const IconComponent = categoryIcons[category] || Package;
           return (
             <div key={category} className="space-y-2">
-              <div className="flex items-center gap-2">
-                <IconComponent className="w-3.5 h-3.5 text-muted-foreground" />
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{category}</p>
+              <div className="flex items-center gap-2 pb-1 border-b">
+                <IconComponent className="w-3.5 h-3.5 text-primary" />
+                <p className="text-[10px] font-bold uppercase tracking-wider text-primary">{category}</p>
               </div>
               {actions.map((action) => {
                 const isEnabled = enabledActions.includes(action.id);
@@ -110,25 +110,25 @@ const ImprovementPlan = () => {
                 return (
                   <div 
                     key={action.id} 
-                    className={`p-2.5 rounded-lg border ${isEnabled ? 'bg-card' : 'bg-muted/30 opacity-60'}`}
+                    className={`p-3 rounded-lg border transition-all ${isEnabled ? 'bg-card border-border' : 'bg-muted/30 opacity-60 border-transparent'}`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <p className="text-xs font-medium truncate">{action.title}</p>
+                        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                          <p className="text-xs font-semibold text-foreground">{action.title}</p>
                           <Badge className={`${priorityColors[action.priority]} text-[9px] px-1.5 py-0`}>
                             {action.priority}
                           </Badge>
                         </div>
                         <p className="text-[10px] text-muted-foreground line-clamp-2">{action.description}</p>
-                        <div className="flex items-center gap-3 mt-1.5">
+                        <div className="flex items-center gap-4 mt-2">
                           <span className="text-[9px] text-muted-foreground flex items-center gap-1">
                             <Clock className="w-3 h-3" /> Due: {action.dueDate.split('-').slice(1).join('/')}
                           </span>
-                          <span className="text-[9px] text-status-success">{action.expectedImpact}</span>
+                          <span className="text-[9px] text-status-success font-medium">{action.expectedImpact}</span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1.5 flex-shrink-0">
                         {needsCategoryHead && (
                           <Lock className="w-3 h-3 text-muted-foreground" />
                         )}
