@@ -196,7 +196,7 @@ const ApprovalsCard = () => {
               className="flex-1 bg-status-success hover:bg-status-success/90"
               size="sm"
               disabled={!canApprove}
-              onClick={approvePlan}
+              onClick={() => approvePlan()}
             >
               <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
               Approve

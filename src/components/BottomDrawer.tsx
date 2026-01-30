@@ -1,5 +1,4 @@
 import { useAppStore } from '@/store/appStore';
-import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -11,7 +10,9 @@ import {
   Clock,
   Cpu,
   Database,
-  User
+  User,
+  RefreshCcw,
+  Bot
 } from 'lucide-react';
 
 const formatTimestamp = (iso: string) => {
@@ -36,11 +37,29 @@ const ToolTraceTab = () => {
   return (
     <div className="space-y-2 max-h-[200px] overflow-auto scrollbar-thin">
       {toolTraces.map((trace) => (
-        <div key={trace.id} className="p-3 bg-drawer-border/30 rounded-lg">
+        <div 
+          key={trace.id} 
+          className={`p-3 rounded-lg ${
+            trace.isRevision 
+              ? 'bg-status-warning/20 border border-status-warning/30' 
+              : 'bg-drawer-border/30'
+          }`}
+        >
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
-              <Cpu className="w-3.5 h-3.5 text-status-info" />
-              <span className="text-xs font-medium text-drawer-foreground">{trace.toolName}</span>
+              {trace.isRevision ? (
+                <RefreshCcw className="w-3.5 h-3.5 text-status-warning" />
+              ) : (
+                <Cpu className="w-3.5 h-3.5 text-status-info" />
+              )}
+              <span className={`text-xs font-medium ${trace.isRevision ? 'text-status-warning' : 'text-drawer-foreground'}`}>
+                {trace.toolName}
+              </span>
+              {trace.isRevision && (
+                <Badge className="bg-status-warning text-white text-[8px] px-1 py-0">
+                  REVISION
+                </Badge>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="text-[9px] border-drawer-border text-drawer-foreground/70">
@@ -52,7 +71,9 @@ const ToolTraceTab = () => {
               </span>
             </div>
           </div>
-          <p className="text-[11px] text-drawer-foreground/70 mb-1">{trace.action}</p>
+          <p className={`text-[11px] mb-1 ${trace.isRevision ? 'text-status-warning' : 'text-drawer-foreground/70'}`}>
+            {trace.action}
+          </p>
           <div className="flex items-center gap-1 flex-wrap">
             <Database className="w-3 h-3 text-drawer-foreground/40" />
             {trace.dataSources.map((ds, i) => (
@@ -88,21 +109,41 @@ const AuditTrailTab = () => {
   return (
     <div className="space-y-2 max-h-[200px] overflow-auto scrollbar-thin">
       {auditTrail.slice().reverse().map((entry) => (
-        <div key={entry.id} className="p-3 bg-drawer-border/30 rounded-lg">
+        <div 
+          key={entry.id} 
+          className={`p-3 rounded-lg ${
+            entry.isAutopilot 
+              ? 'bg-status-info/20 border border-status-info/30' 
+              : 'bg-drawer-border/30'
+          }`}
+        >
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
-              <User className="w-3.5 h-3.5 text-status-success" />
-              <span className="text-xs font-medium text-drawer-foreground">{entry.actor}</span>
+              {entry.isAutopilot ? (
+                <Bot className="w-3.5 h-3.5 text-status-info" />
+              ) : (
+                <User className="w-3.5 h-3.5 text-status-success" />
+              )}
+              <span className={`text-xs font-medium ${entry.isAutopilot ? 'text-status-info' : 'text-drawer-foreground'}`}>
+                {entry.actor}
+              </span>
               <Badge variant="outline" className="text-[9px] border-drawer-border text-drawer-foreground/70">
                 {entry.role}
               </Badge>
+              {entry.isAutopilot && (
+                <Badge className="bg-status-info text-white text-[8px] px-1 py-0">
+                  AUTO
+                </Badge>
+              )}
             </div>
             <span className="text-[10px] text-drawer-foreground/50 flex items-center gap-1">
               <Clock className="w-3 h-3" />
               {formatTimestamp(entry.timestamp)}
             </span>
           </div>
-          <p className="text-xs font-medium text-status-info mb-1">{entry.decision}</p>
+          <p className={`text-xs font-medium mb-1 ${entry.isAutopilot ? 'text-status-info' : 'text-status-success'}`}>
+            {entry.decision}
+          </p>
           <p className="text-[10px] text-drawer-foreground/60">{entry.details}</p>
           {entry.toolsUsed.length > 0 && (
             <div className="flex items-center gap-1 mt-1.5 flex-wrap">
