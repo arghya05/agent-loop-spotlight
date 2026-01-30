@@ -1,0 +1,302 @@
+{
+  "SUP001": {
+    "narrative": {
+      "default": "OTIF fell from 94% to 76% starting Jan 14. Primary drivers: (1) port-to-DC lead time +2.3 days on Mundra→Jebel Ali due to forwarder switch, (2) Arabic care-label nonconformance across 3 towel subcategories, and (3) ASN accuracy dropped to 91.1%, causing receiving delays.",
+      "revised": "OTIF fell from 94% to 76% starting Jan 14. Primary driver: ASN mapping errors (carton count mismatches, missing SSCC barcodes) causing GRN delays of 4-6 hours. Port dwell has normalized to 1.9 days after QuickFreight stabilized. Arabic label compliance (Template V2.3) remains a secondary factor affecting 26 SKUs."
+    },
+    "hypotheses": {
+      "original": "Primary cause: Port dwell increase (+2.3 days) from forwarder switch",
+      "revised": "Revised cause: ASN mapping errors (primary) → Port dwell normal; forwarder transition completed successfully"
+    },
+    "evidence": {
+      "shipmentDelays": [
+        {
+          "id": "SHP-2024-1142",
+          "summary": "Mundra → Jebel Ali",
+          "detail": "Forwarder: QuickFreight (NEW)",
+          "impact": "Port dwell: 4.2 days (was 1.8)",
+          "status": "Delivered Late"
+        },
+        {
+          "id": "SHP-2024-1156",
+          "summary": "Mundra → Jebel Ali",
+          "detail": "Forwarder: QuickFreight (NEW)",
+          "impact": "Port dwell: 3.8 days (was 1.8)",
+          "status": "Delivered Late"
+        }
+      ],
+      "complianceHolds": [
+        {
+          "id": "COMP-2024-0089",
+          "subcategory": "Bath Towels",
+          "skuCount": 12,
+          "issue": "Arabic care label missing/incorrect",
+          "details": "Template V2.3 applied instead of approved V2.1"
+        },
+        {
+          "id": "COMP-2024-0091",
+          "subcategory": "Bed Sheets",
+          "skuCount": 8,
+          "issue": "Arabic care label font size below minimum",
+          "details": "Font size 6pt detected, minimum required 8pt"
+        },
+        {
+          "id": "COMP-2024-0094",
+          "subcategory": "Hand Towels",
+          "skuCount": 6,
+          "issue": "Arabic care label symbol mismatch",
+          "details": "Washing symbol doesn't match Arabic text"
+        }
+      ],
+      "asnErrors": [
+        {
+          "id": "ASN-ERR-001",
+          "errorType": "Carton count mismatch",
+          "detail": "Expected 1240, received 1218",
+          "grnDelay": 4.2
+        },
+        {
+          "id": "ASN-ERR-002",
+          "errorType": "SSCC barcode missing",
+          "detail": "45 cartons affected",
+          "grnDelay": 2.1
+        },
+        {
+          "id": "ASN-ERR-003",
+          "errorType": "SKU quantity mismatch",
+          "detail": "6 SKUs with -142 variance",
+          "grnDelay": 3.8
+        }
+      ]
+    },
+    "kpiChange": {
+      "metric": "OTIF",
+      "from": 94,
+      "to": 76,
+      "changeDate": "Jan 14"
+    },
+    "plan": {
+      "expectedOtifRecovery": 91,
+      "recoveryTimeline": "14 days",
+      "actions": [
+        {
+          "id": "ACT001",
+          "category": "Logistics",
+          "title": "Temporary forwarder switch for next 2 POs",
+          "description": "Revert to MaerskLine Global for upcoming shipments to stabilize port-to-DC transit",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-22",
+          "expectedImpact": "Lead time: 13.5 → 11.2 days",
+          "priority": "high",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT002",
+          "category": "Supplier Corrective Action",
+          "title": "Rollback Arabic label template to V2.1",
+          "description": "Instruct supplier to revert to approved label template V2.1 for all towel/bedding SKUs",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-21",
+          "expectedImpact": "Compliance fail: 6.2% → <1%",
+          "priority": "critical",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT003",
+          "category": "Supplier Corrective Action",
+          "title": "Sample approval for corrected labels within 48h",
+          "description": "Supplier to submit 3 sample SKUs with corrected labels for QC approval",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-23",
+          "expectedImpact": "Prevent future holds",
+          "priority": "high",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT004",
+          "category": "ASN Quality Gate",
+          "title": "Block ASN if carton_count mismatch >2%",
+          "description": "Enable system validation to reject ASN where carton count differs significantly",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-22",
+          "expectedImpact": "ASN accuracy: 91.1% → 97%+",
+          "priority": "high",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT005",
+          "category": "DC Receiving",
+          "title": "Prioritize GRN for Top 30 SKUs",
+          "description": "Fast-track receiving for high-velocity bedding/towel SKUs",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-21",
+          "expectedImpact": "GRN cycle: 5.5h → 2.5h",
+          "priority": "medium",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT006",
+          "category": "Escalation",
+          "title": "Freeze new PO release pending recovery",
+          "description": "Hold subsequent orders until OTIF recovers above 85%",
+          "owner": "Category Head",
+          "dueDate": "2024-01-21",
+          "expectedImpact": "Risk mitigation",
+          "priority": "critical",
+          "requiresApproval": true
+        }
+      ]
+    },
+    "communication": {
+      "to": "SuratHomeTex Pvt Ltd",
+      "contact": "Rajesh Patel",
+      "subject": "Urgent: Corrective Action Required - Arabic Label Compliance & ASN Quality",
+      "preview": "We have identified critical compliance issues with recent shipments requiring immediate attention. Action Required: Rollback to Label Template V2.1 immediately."
+    }
+  },
+  "SUP002": {
+    "narrative": {
+      "default": "Al-Futtaim Textiles continues to perform excellently with OTIF at 96% (up from 95%). Local Dubai supply chain shows minimal variability. No corrective actions required at this time.",
+      "revised": null
+    },
+    "hypotheses": {
+      "original": "No issues detected - supplier performing above target",
+      "revised": null
+    },
+    "evidence": {
+      "shipmentDelays": [],
+      "complianceHolds": [],
+      "asnErrors": []
+    },
+    "kpiChange": {
+      "metric": "OTIF",
+      "from": 95,
+      "to": 96,
+      "changeDate": "Jan 18",
+      "isPositive": true
+    },
+    "plan": {
+      "expectedOtifRecovery": null,
+      "recoveryTimeline": null,
+      "actions": []
+    },
+    "communication": null
+  },
+  "SUP003": {
+    "narrative": {
+      "default": "OTIF declined from 92% to 89% starting Jan 16. Primary drivers: (1) Shenzhen port congestion adding +1.2 days to transit time, (2) Fashion accessory packaging damage on 8 cartons, and (3) Minor ASN timing delays affecting dock scheduling.",
+      "revised": "After further analysis, port congestion was temporary (Chinese New Year prep). Primary issue is supplier packaging quality - 12% of cartons showed damage requiring rework at DC. Recommend packaging audit."
+    },
+    "hypotheses": {
+      "original": "Primary cause: Shenzhen port congestion due to CNY preparation",
+      "revised": "Revised cause: Packaging quality issues (primary) → Port congestion was temporary and has normalized"
+    },
+    "evidence": {
+      "shipmentDelays": [
+        {
+          "id": "SHP-2024-1198",
+          "summary": "Shenzhen → Jebel Ali",
+          "detail": "Via Maersk Line",
+          "impact": "Transit +1.2 days (CNY congestion)",
+          "status": "Delivered Late"
+        }
+      ],
+      "complianceHolds": [
+        {
+          "id": "COMP-2024-0102",
+          "subcategory": "Fashion Bags",
+          "skuCount": 4,
+          "issue": "Packaging damage on arrival",
+          "details": "8 cartons with crushed corners, rework required"
+        }
+      ],
+      "asnErrors": [
+        {
+          "id": "ASN-ERR-010",
+          "errorType": "ASN timing mismatch",
+          "detail": "ASN received 6h after physical arrival",
+          "grnDelay": 1.5
+        }
+      ]
+    },
+    "kpiChange": {
+      "metric": "OTIF",
+      "from": 92,
+      "to": 89,
+      "changeDate": "Jan 16"
+    },
+    "plan": {
+      "expectedOtifRecovery": 93,
+      "recoveryTimeline": "10 days",
+      "actions": [
+        {
+          "id": "ACT101",
+          "category": "Supplier Corrective Action",
+          "title": "Packaging quality audit at origin",
+          "description": "Conduct on-site packaging inspection at GuangZhou facility before CNY",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-25",
+          "expectedImpact": "Reduce damage rate: 12% → <2%",
+          "priority": "high",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT102",
+          "category": "Logistics",
+          "title": "Pre-CNY shipment acceleration",
+          "description": "Expedite remaining Q1 orders before Chinese New Year shutdown",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-28",
+          "expectedImpact": "Avoid CNY transit delays",
+          "priority": "medium",
+          "requiresApproval": false
+        },
+        {
+          "id": "ACT103",
+          "category": "ASN Quality Gate",
+          "title": "Enforce ASN pre-arrival submission",
+          "description": "Require ASN submission 24h before vessel arrival at Jebel Ali",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-23",
+          "expectedImpact": "Eliminate dock scheduling delays",
+          "priority": "medium",
+          "requiresApproval": false
+        }
+      ]
+    },
+    "communication": {
+      "to": "GuangZhou Fashion Co",
+      "contact": "Wei Chen",
+      "subject": "Action Required: Packaging Quality & Pre-CNY Shipment Coordination",
+      "preview": "We have observed packaging quality issues on recent shipments. Please conduct internal quality check before CNY shutdown."
+    }
+  },
+  "SUP004": {
+    "narrative": {
+      "default": "Riyadh Home Decor maintains excellent performance with OTIF at 97% (up from 96%). Local KSA supply chain is highly efficient with same-day delivery capabilities. Supplier is a benchmark for regional performance.",
+      "revised": null
+    },
+    "hypotheses": {
+      "original": "No issues detected - top performing local supplier",
+      "revised": null
+    },
+    "evidence": {
+      "shipmentDelays": [],
+      "complianceHolds": [],
+      "asnErrors": []
+    },
+    "kpiChange": {
+      "metric": "OTIF",
+      "from": 96,
+      "to": 97,
+      "changeDate": "Jan 19",
+      "isPositive": true
+    },
+    "plan": {
+      "expectedOtifRecovery": null,
+      "recoveryTimeline": null,
+      "actions": []
+    },
+    "communication": null
+  }
+}
