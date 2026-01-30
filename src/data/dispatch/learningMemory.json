@@ -1,0 +1,166 @@
+{
+  "supplierFingerprints": [
+    {
+      "supplier_id": "DSUP001",
+      "factory_id": "FAC001",
+      "name": "SuratApparelWorks - Surat Unit-1",
+      "riskFingerprint": {
+        "recurring_delay_stage": "QA/AQL",
+        "category_sensitivity": "Denim",
+        "typical_slip_window_days": 5,
+        "peak_risk_season": "Dec-Feb",
+        "common_issues": [
+          "Quality holds during denim wash process",
+          "Subcontractor bottlenecks during peak",
+          "Material delays from Arvind Mills"
+        ]
+      },
+      "reliabilityTrend": {
+        "6_month_avg": 78,
+        "3_month_avg": 72,
+        "current": 68,
+        "trend": "declining"
+      },
+      "complianceReadiness": {
+        "arabic_labeling_issues": 2,
+        "care_instruction_issues": 0,
+        "last_audit_date": "2024-01-10",
+        "audit_score": 82
+      },
+      "learnedWeights": {
+        "quality_risk_weight": 0.35,
+        "material_risk_weight": 0.28,
+        "capacity_risk_weight": 0.22,
+        "logistics_risk_weight": 0.15
+      },
+      "agentAdjustments": [
+        { "date": "2024-01-15", "adjustment": "Increased quality_risk_weight by +0.12 due to repeated QA holds on denim" },
+        { "date": "2024-01-22", "adjustment": "Added subcontractor_bottleneck as recurring pattern" }
+      ],
+      "accountabilityActions": {
+        "current_tier": "Watch",
+        "inspection_cadence": "Every shipment",
+        "recommended_allocation_change": "Reduce by 15%",
+        "escalation_history": [
+          { "date": "2024-01-18", "action": "Increased inspection frequency", "reason": "3 consecutive quality holds" }
+        ]
+      }
+    },
+    {
+      "supplier_id": "DSUP001",
+      "factory_id": "FAC002",
+      "name": "SuratApparelWorks - Tiruppur Unit-2",
+      "riskFingerprint": {
+        "recurring_delay_stage": null,
+        "category_sensitivity": "Knits",
+        "typical_slip_window_days": 2,
+        "peak_risk_season": null,
+        "common_issues": []
+      },
+      "reliabilityTrend": {
+        "6_month_avg": 88,
+        "3_month_avg": 89,
+        "current": 91,
+        "trend": "improving"
+      },
+      "complianceReadiness": {
+        "arabic_labeling_issues": 0,
+        "care_instruction_issues": 0,
+        "last_audit_date": "2024-01-05",
+        "audit_score": 94
+      },
+      "learnedWeights": {
+        "quality_risk_weight": 0.20,
+        "material_risk_weight": 0.25,
+        "capacity_risk_weight": 0.30,
+        "logistics_risk_weight": 0.25
+      },
+      "agentAdjustments": [],
+      "accountabilityActions": {
+        "current_tier": "Preferred",
+        "inspection_cadence": "Random sample",
+        "recommended_allocation_change": "Increase by 20%",
+        "escalation_history": []
+      }
+    },
+    {
+      "supplier_id": "DSUP002",
+      "factory_id": "FAC003",
+      "name": "GuangZhou Textile Co - Dongguan Factory",
+      "riskFingerprint": {
+        "recurring_delay_stage": "Logistics",
+        "category_sensitivity": "Fashion Accessories",
+        "typical_slip_window_days": 3,
+        "peak_risk_season": "Chinese New Year",
+        "common_issues": [
+          "Port congestion at Shenzhen",
+          "Holiday shutdown delays"
+        ]
+      },
+      "reliabilityTrend": {
+        "6_month_avg": 85,
+        "3_month_avg": 86,
+        "current": 85,
+        "trend": "stable"
+      },
+      "complianceReadiness": {
+        "arabic_labeling_issues": 0,
+        "care_instruction_issues": 1,
+        "last_audit_date": "2023-12-20",
+        "audit_score": 91
+      },
+      "learnedWeights": {
+        "quality_risk_weight": 0.22,
+        "material_risk_weight": 0.23,
+        "capacity_risk_weight": 0.20,
+        "logistics_risk_weight": 0.35
+      },
+      "agentAdjustments": [
+        { "date": "2024-01-08", "adjustment": "Increased logistics_risk_weight by +0.10 for CNY period" }
+      ],
+      "accountabilityActions": {
+        "current_tier": "Standard",
+        "inspection_cadence": "Every 3rd shipment",
+        "recommended_allocation_change": null,
+        "escalation_history": []
+      }
+    },
+    {
+      "supplier_id": "DSUP003",
+      "factory_id": "FAC004",
+      "name": "Al-Futtaim Manufacturing - Al Quoz Facility",
+      "riskFingerprint": {
+        "recurring_delay_stage": null,
+        "category_sensitivity": null,
+        "typical_slip_window_days": 0,
+        "peak_risk_season": null,
+        "common_issues": []
+      },
+      "reliabilityTrend": {
+        "6_month_avg": 96,
+        "3_month_avg": 97,
+        "current": 96,
+        "trend": "stable"
+      },
+      "complianceReadiness": {
+        "arabic_labeling_issues": 0,
+        "care_instruction_issues": 0,
+        "last_audit_date": "2024-01-15",
+        "audit_score": 98
+      },
+      "learnedWeights": {
+        "quality_risk_weight": 0.25,
+        "material_risk_weight": 0.25,
+        "capacity_risk_weight": 0.25,
+        "logistics_risk_weight": 0.25
+      },
+      "agentAdjustments": [],
+      "accountabilityActions": {
+        "current_tier": "Preferred",
+        "inspection_cadence": "Random sample",
+        "recommended_allocation_change": "Increase allocation",
+        "escalation_history": []
+      }
+    }
+  ]
+}

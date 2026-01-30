@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { GlobalTopBar } from '@/components/GlobalTopBar';
 import { SupplierHealthRadar } from '@/components/SupplierHealthRadar';
 import { ExplainPanel } from '@/components/ExplainPanel';
@@ -5,9 +6,14 @@ import { EnforcePlan } from '@/components/EnforcePlan';
 import { BottomDrawer } from '@/components/BottomDrawer';
 import { PolicyControlsPanel } from '@/components/PolicyControlsPanel';
 import { AgentDecisionTimeline } from '@/components/AgentDecisionTimeline';
+import { DispatchReadinessView } from '@/components/dispatch/DispatchReadinessView';
 import { useAppStore } from '@/store/appStore';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Activity, Package } from 'lucide-react';
 
-const Index = () => {
+type AgentView = 'performance' | 'dispatch';
+
+const PerformanceAgentView = () => {
   const { investigationStatus } = useAppStore();
   
   return (
@@ -82,6 +88,41 @@ const Index = () => {
 
       {/* Bottom Drawer */}
       <BottomDrawer />
+    </div>
+  );
+};
+
+const Index = () => {
+  const [activeView, setActiveView] = useState<AgentView>('performance');
+  
+  return (
+    <div className="relative">
+      {/* Agent Switcher - Fixed Tab Bar */}
+      <div className="fixed top-0 left-0 right-0 z-[60] bg-background border-b">
+        <div className="flex justify-center py-2">
+          <Tabs value={activeView} onValueChange={(v) => setActiveView(v as AgentView)}>
+            <TabsList className="grid grid-cols-2 w-[500px]">
+              <TabsTrigger value="performance" className="flex items-center gap-2">
+                <Activity className="w-4 h-4" />
+                <span className="text-xs font-semibold">BUC4: Supplier Performance Agent</span>
+              </TabsTrigger>
+              <TabsTrigger value="dispatch" className="flex items-center gap-2">
+                <Package className="w-4 h-4" />
+                <span className="text-xs font-semibold">BUC5: Dispatch Readiness Agent</span>
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+      </div>
+      
+      {/* Content with extra top padding for tab bar */}
+      <div className="pt-12">
+        {activeView === 'performance' ? (
+          <PerformanceAgentView />
+        ) : (
+          <DispatchReadinessView />
+        )}
+      </div>
     </div>
   );
 };

@@ -1,0 +1,62 @@
+{
+  "quality": [
+    {
+      "po_id": "MAX-PL-10421",
+      "hold_rate": 7.8,
+      "rework_rate": 4.2,
+      "aql_level": "2.5",
+      "inspection_notes": [
+        { "date": "2024-01-25", "issue": "Stitching defects on back pocket", "severity": "major", "qty_affected": 120 },
+        { "date": "2024-01-27", "issue": "Color variation in wash", "severity": "minor", "qty_affected": 85 },
+        { "date": "2024-01-29", "issue": "Button alignment off-spec", "severity": "major", "qty_affected": 95 }
+      ],
+      "threshold_breach": true
+    },
+    {
+      "po_id": "MAX-PL-10422",
+      "hold_rate": 3.5,
+      "rework_rate": 1.8,
+      "aql_level": "2.5",
+      "inspection_notes": [
+        { "date": "2024-01-28", "issue": "Minor thread loose ends", "severity": "minor", "qty_affected": 45 }
+      ],
+      "threshold_breach": true
+    },
+    {
+      "po_id": "MAX-PL-10423",
+      "hold_rate": 5.2,
+      "rework_rate": 2.9,
+      "aql_level": "2.5",
+      "inspection_notes": [
+        { "date": "2024-01-30", "issue": "Collar measurement variance", "severity": "major", "qty_affected": 110 }
+      ],
+      "threshold_breach": true
+    },
+    {
+      "po_id": "MAX-PL-10425",
+      "hold_rate": 0,
+      "rework_rate": 0,
+      "aql_level": "2.5",
+      "inspection_notes": [],
+      "threshold_breach": false
+    },
+    {
+      "po_id": "CP-PL-5521",
+      "hold_rate": 1.2,
+      "rework_rate": 0.5,
+      "aql_level": "2.5",
+      "inspection_notes": [
+        { "date": "2024-02-01", "issue": "Minor scratches on hardware", "severity": "minor", "qty_affected": 28 }
+      ],
+      "threshold_breach": false
+    },
+    {
+      "po_id": "HC-LO-3341",
+      "hold_rate": 0.8,
+      "rework_rate": 0.3,
+      "aql_level": "2.5",
+      "inspection_notes": [],
+      "threshold_breach": false
+    }
+  ]
+}

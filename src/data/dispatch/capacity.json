@@ -1,0 +1,104 @@
+{
+  "capacity": [
+    {
+      "factory_id": "FAC001",
+      "factory_name": "Surat Unit-1",
+      "lines": [
+        { "line_id": "L1", "utilization": 92, "status": "overloaded" },
+        { "line_id": "L2", "utilization": 88, "status": "high" },
+        { "line_id": "L3", "utilization": 95, "status": "overloaded" },
+        { "line_id": "L4", "utilization": 78, "status": "normal" },
+        { "line_id": "L5", "utilization": 85, "status": "high" },
+        { "line_id": "L6", "utilization": 91, "status": "overloaded" },
+        { "line_id": "L7", "utilization": 82, "status": "normal" },
+        { "line_id": "L8", "utilization": 76, "status": "normal" }
+      ],
+      "overall_utilization": 86,
+      "absenteeism_rate": 12,
+      "overtime_possible": true,
+      "overtime_capacity_pct": 15,
+      "subcontractor_dependency": 25,
+      "subcontractor_status": "bottleneck",
+      "capacity_shortfall_pct": 18
+    },
+    {
+      "factory_id": "FAC002",
+      "factory_name": "Tiruppur Unit-2",
+      "lines": [
+        { "line_id": "L1", "utilization": 72, "status": "normal" },
+        { "line_id": "L2", "utilization": 68, "status": "normal" },
+        { "line_id": "L3", "utilization": 75, "status": "normal" },
+        { "line_id": "L4", "utilization": 70, "status": "normal" },
+        { "line_id": "L5", "utilization": 65, "status": "available" },
+        { "line_id": "L6", "utilization": 60, "status": "available" }
+      ],
+      "overall_utilization": 68,
+      "absenteeism_rate": 5,
+      "overtime_possible": true,
+      "overtime_capacity_pct": 20,
+      "subcontractor_dependency": 8,
+      "subcontractor_status": "healthy",
+      "capacity_shortfall_pct": 0
+    },
+    {
+      "factory_id": "FAC003",
+      "factory_name": "Dongguan Factory",
+      "lines": [
+        { "line_id": "L1", "utilization": 78, "status": "normal" },
+        { "line_id": "L2", "utilization": 75, "status": "normal" },
+        { "line_id": "L3", "utilization": 80, "status": "normal" },
+        { "line_id": "L4", "utilization": 72, "status": "normal" },
+        { "line_id": "L5", "utilization": 77, "status": "normal" },
+        { "line_id": "L6", "utilization": 74, "status": "normal" },
+        { "line_id": "L7", "utilization": 70, "status": "normal" },
+        { "line_id": "L8", "utilization": 68, "status": "normal" },
+        { "line_id": "L9", "utilization": 65, "status": "available" },
+        { "line_id": "L10", "utilization": 62, "status": "available" },
+        { "line_id": "L11", "utilization": 58, "status": "available" },
+        { "line_id": "L12", "utilization": 55, "status": "available" }
+      ],
+      "overall_utilization": 69,
+      "absenteeism_rate": 4,
+      "overtime_possible": true,
+      "overtime_capacity_pct": 25,
+      "subcontractor_dependency": 5,
+      "subcontractor_status": "healthy",
+      "capacity_shortfall_pct": 0
+    },
+    {
+      "factory_id": "FAC004",
+      "factory_name": "Al Quoz Facility",
+      "lines": [
+        { "line_id": "L1", "utilization": 65, "status": "normal" },
+        { "line_id": "L2", "utilization": 60, "status": "available" },
+        { "line_id": "L3", "utilization": 55, "status": "available" },
+        { "line_id": "L4", "utilization": 50, "status": "available" }
+      ],
+      "overall_utilization": 58,
+      "absenteeism_rate": 2,
+      "overtime_possible": true,
+      "overtime_capacity_pct": 30,
+      "subcontractor_dependency": 0,
+      "subcontractor_status": "none",
+      "capacity_shortfall_pct": 0
+    },
+    {
+      "factory_id": "FAC005",
+      "factory_name": "Riyadh Production Center",
+      "lines": [
+        { "line_id": "L1", "utilization": 70, "status": "normal" },
+        { "line_id": "L2", "utilization": 68, "status": "normal" },
+        { "line_id": "L3", "utilization": 72, "status": "normal" },
+        { "line_id": "L4", "utilization": 65, "status": "normal" },
+        { "line_id": "L5", "utilization": 60, "status": "available" }
+      ],
+      "overall_utilization": 67,
+      "absenteeism_rate": 3,
+      "overtime_possible": true,
+      "overtime_capacity_pct": 20,
+      "subcontractor_dependency": 10,
+      "subcontractor_status": "healthy",
+      "capacity_shortfall_pct": 0
+    }
+  ]
+}

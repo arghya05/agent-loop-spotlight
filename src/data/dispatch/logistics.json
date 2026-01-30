@@ -1,0 +1,79 @@
+{
+  "logistics": [
+    {
+      "po_id": "MAX-PL-10421",
+      "forwarder": "MaerskLine",
+      "booking_status": "pending",
+      "booking_ref": null,
+      "port_origin": "Mundra",
+      "port_destination": "Jebel Ali",
+      "port_congestion_flag": false,
+      "estimated_transit_days": 12,
+      "vessel_schedule": [
+        { "vessel": "Maersk Delhi", "etd": "2024-02-06", "eta": "2024-02-18" },
+        { "vessel": "Maersk Mumbai", "etd": "2024-02-09", "eta": "2024-02-21" }
+      ]
+    },
+    {
+      "po_id": "MAX-PL-10422",
+      "forwarder": "MaerskLine",
+      "booking_status": "pending",
+      "booking_ref": null,
+      "port_origin": "Mundra",
+      "port_destination": "Jebel Ali",
+      "port_congestion_flag": false,
+      "estimated_transit_days": 12,
+      "vessel_schedule": [
+        { "vessel": "Maersk Mumbai", "etd": "2024-02-09", "eta": "2024-02-21" },
+        { "vessel": "Maersk Chennai", "etd": "2024-02-12", "eta": "2024-02-24" }
+      ]
+    },
+    {
+      "po_id": "MAX-PL-10423",
+      "forwarder": "MaerskLine",
+      "booking_status": "not_started",
+      "booking_ref": null,
+      "port_origin": "Mundra",
+      "port_destination": "Jebel Ali",
+      "port_congestion_flag": false,
+      "estimated_transit_days": 12,
+      "vessel_schedule": []
+    },
+    {
+      "po_id": "MAX-PL-10425",
+      "forwarder": "MaerskLine",
+      "booking_status": "not_started",
+      "booking_ref": null,
+      "port_origin": "Mundra",
+      "port_destination": "Jebel Ali",
+      "port_congestion_flag": false,
+      "estimated_transit_days": 12,
+      "vessel_schedule": []
+    },
+    {
+      "po_id": "CP-PL-5521",
+      "forwarder": "COSCO",
+      "booking_status": "confirmed",
+      "booking_ref": "CSCO-2024-88421",
+      "port_origin": "Shenzhen",
+      "port_destination": "Jebel Ali",
+      "port_congestion_flag": true,
+      "port_congestion_notes": "Minor congestion at Shenzhen - 1 day delay expected",
+      "estimated_transit_days": 18,
+      "vessel_schedule": [
+        { "vessel": "COSCO Shipping Galaxy", "etd": "2024-02-08", "eta": "2024-02-26" }
+      ]
+    },
+    {
+      "po_id": "HC-LO-3341",
+      "forwarder": "Local Trucking",
+      "booking_status": "confirmed",
+      "booking_ref": "LOC-DXB-4421",
+      "port_origin": null,
+      "port_destination": null,
+      "port_congestion_flag": false,
+      "estimated_transit_days": 1,
+      "vessel_schedule": []
+    }
+  ]
+}
