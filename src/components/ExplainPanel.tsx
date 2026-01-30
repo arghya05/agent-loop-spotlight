@@ -563,12 +563,15 @@ export const ExplainPanel = () => {
 
   if (!selectedSupplierId) {
     return (
-      <div className="h-full flex items-center justify-center text-muted-foreground">
-        <div className="text-center">
-          <Brain className="w-12 h-12 mx-auto mb-3 opacity-50" />
-          <p className="text-sm">Select a supplier to investigate</p>
+      <Card className="card-elevated h-full flex items-center justify-center">
+        <div className="text-center p-8">
+          <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-4">
+            <Brain className="w-8 h-8 text-muted-foreground/50" />
+          </div>
+          <p className="text-sm font-medium text-muted-foreground">Select a supplier to investigate</p>
+          <p className="text-xs text-muted-foreground/70 mt-1">Click on a row in the Supplier Health Radar</p>
         </div>
-      </div>
+      </Card>
     );
   }
 
@@ -577,18 +580,21 @@ export const ExplainPanel = () => {
   return (
     <div className="flex flex-col gap-4 h-full overflow-auto scrollbar-thin pr-1">
       {/* Investigation Header */}
-      <Card className="card-elevated">
-        <CardHeader className="pb-2">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <Brain className="w-4 h-4" />
-              Investigation: {supplier?.name} → {supplier?.primaryDC}
+      <Card className="card-elevated border-t-4 border-t-primary">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <CardTitle className="text-sm font-bold flex items-center gap-2">
+              <Brain className="w-4 h-4 text-primary" />
+              <span>Investigation:</span>
+              <span className="text-primary">{supplier?.name}</span>
+              <span className="text-muted-foreground">→</span>
+              <span>{supplier?.primaryDC}</span>
             </CardTitle>
             <div className="flex items-center gap-2">
               <Badge 
                 className={`text-[10px] ${
                   investigationStatus === 'running' 
-                    ? 'bg-status-info text-white' 
+                    ? 'bg-status-info text-white animate-pulse' 
                     : investigationStatus === 'revising'
                       ? 'bg-status-warning text-white'
                       : investigationStatus === 'completed' 
@@ -596,12 +602,12 @@ export const ExplainPanel = () => {
                         : 'bg-muted text-muted-foreground'
                 }`}
               >
-                {investigationStatus === 'running' ? 'Running' : 
-                 investigationStatus === 'revising' ? 'Revising' :
+                {investigationStatus === 'running' ? 'Analyzing...' : 
+                 investigationStatus === 'revising' ? 'Revising...' :
                  investigationStatus === 'completed' ? 'Completed' : 'Pending'}
               </Badge>
               {showCompleted && (
-                <Badge variant="outline" className="text-[10px]">
+                <Badge variant="outline" className="text-[10px] font-semibold">
                   Confidence: {((hasShownRevision ? 0.91 : confidenceScore) * 100).toFixed(0)}%
                 </Badge>
               )}
@@ -616,26 +622,29 @@ export const ExplainPanel = () => {
       {/* Narrative Card */}
       {showCompleted && (
         <>
-          <Card className="card-elevated border-l-4 border-l-primary animate-fade-in">
+          <Card className="card-elevated border-l-4 border-l-primary bg-gradient-to-r from-primary/5 to-transparent">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <Sparkles className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                <div className="space-y-2">
-                  <p className="text-xs font-medium text-primary">Root Cause Analysis</p>
-                  <p className="text-sm leading-relaxed">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-4 h-4 text-primary" />
+                </div>
+                <div className="space-y-2 flex-1">
+                  <p className="text-xs font-bold text-primary uppercase tracking-wide">Root Cause Analysis</p>
+                  <p className="text-sm leading-relaxed text-foreground">
                     {hasShownRevision ? (
                       <>
-                        <strong className="text-status-success">[REVISED]</strong> OTIF fell from <strong>94% to 76%</strong> starting Jan 14. 
-                        <strong className="text-status-danger"> Primary driver: ASN mapping errors</strong> (carton count mismatches, missing SSCC barcodes) causing 
-                        GRN delays of 4-6 hours. Port dwell has <strong className="text-status-success">normalized to 1.9 days</strong> after QuickFreight stabilized operations. 
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-status-success/20 text-status-success text-xs font-semibold mr-1">REVISED</span>
+                        OTIF fell from <strong>94% to 76%</strong> starting Jan 14. 
+                        <span className="text-status-danger font-semibold"> Primary driver: ASN mapping errors</span> (carton count mismatches, missing SSCC barcodes) causing 
+                        GRN delays of 4-6 hours. Port dwell has <span className="text-status-success font-medium">normalized to 1.9 days</span> after QuickFreight stabilized. 
                         Arabic label compliance (Template V2.3) remains a secondary factor affecting 26 SKUs.
                       </>
                     ) : (
                       <>
                         OTIF fell from <strong>94% to 76%</strong> starting Jan 14. Primary drivers: 
-                        (1) port-to-DC lead time <strong>+2.3 days</strong> on Mundra→Jebel Ali due to forwarder switch to QuickFreight Logistics, 
-                        (2) DXB compliance holds from <strong>Arabic care-label nonconformance</strong> across 3 towel subcategories (Template V2.3 applied instead of approved V2.1), and 
-                        (3) ASN accuracy dropped to <strong>91.1%</strong>, causing carton count mismatches and missing SSCC barcodes, slowing receiving and triggering partial GRNs.
+                        (1) port-to-DC lead time <span className="text-status-danger font-semibold">+2.3 days</span> on Mundra→Jebel Ali due to forwarder switch, 
+                        (2) <span className="text-status-danger font-semibold">Arabic care-label nonconformance</span> across 3 towel subcategories, and 
+                        (3) ASN accuracy dropped to <span className="text-status-warning font-semibold">91.1%</span>, causing receiving delays.
                       </>
                     )}
                   </p>
@@ -648,19 +657,19 @@ export const ExplainPanel = () => {
           <HypothesisRevisionCard />
 
           {/* Evidence Cards */}
-          <div className="animate-slide-in-right">
-            <p className="section-header">Supporting Evidence</p>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">Supporting Evidence</p>
             <EvidenceCards />
           </div>
 
           {/* Root Cause Graph */}
-          <div className="animate-slide-in-right relative" style={{ animationDelay: '100ms' }}>
-            <p className="section-header">Causal Graph</p>
+          <div className="relative">
+            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">Causal Graph</p>
             <RootCauseGraph />
           </div>
 
           {/* KPI Chart */}
-          <Card className="card-elevated animate-slide-in-right" style={{ animationDelay: '200ms' }}>
+          <Card className="card-elevated">
             <CardContent className="p-4">
               <KPIChart />
             </CardContent>
