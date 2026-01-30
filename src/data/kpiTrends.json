@@ -1,26 +1,74 @@
 {
   "SUP001": {
     "daily": [
-      { "date": "2024-01-01", "otif": 94, "fillRate": 97, "compliance": 0.8, "asnAccuracy": 98.6, "leadTime": 11.0 },
-      { "date": "2024-01-02", "otif": 95, "fillRate": 97, "compliance": 0.7, "asnAccuracy": 98.8, "leadTime": 10.8 },
-      { "date": "2024-01-03", "otif": 94, "fillRate": 98, "compliance": 0.9, "asnAccuracy": 98.5, "leadTime": 11.1 },
-      { "date": "2024-01-04", "otif": 93, "fillRate": 97, "compliance": 0.8, "asnAccuracy": 98.7, "leadTime": 11.0 },
-      { "date": "2024-01-05", "otif": 94, "fillRate": 96, "compliance": 0.8, "asnAccuracy": 98.6, "leadTime": 11.2 },
-      { "date": "2024-01-06", "otif": 95, "fillRate": 97, "compliance": 0.7, "asnAccuracy": 98.9, "leadTime": 10.9 },
-      { "date": "2024-01-07", "otif": 94, "fillRate": 97, "compliance": 0.8, "asnAccuracy": 98.6, "leadTime": 11.0 },
-      { "date": "2024-01-08", "otif": 94, "fillRate": 98, "compliance": 0.9, "asnAccuracy": 98.4, "leadTime": 11.1 },
-      { "date": "2024-01-09", "otif": 93, "fillRate": 97, "compliance": 0.8, "asnAccuracy": 98.7, "leadTime": 11.0 },
-      { "date": "2024-01-10", "otif": 94, "fillRate": 97, "compliance": 0.8, "asnAccuracy": 98.5, "leadTime": 11.2 },
-      { "date": "2024-01-11", "otif": 95, "fillRate": 96, "compliance": 0.7, "asnAccuracy": 98.8, "leadTime": 10.8 },
-      { "date": "2024-01-12", "otif": 94, "fillRate": 97, "compliance": 0.8, "asnAccuracy": 98.6, "leadTime": 11.0 },
-      { "date": "2024-01-13", "otif": 94, "fillRate": 97, "compliance": 0.9, "asnAccuracy": 98.5, "leadTime": 11.1 },
-      { "date": "2024-01-14", "otif": 88, "fillRate": 93, "compliance": 2.1, "asnAccuracy": 96.2, "leadTime": 12.0, "changePoint": true },
-      { "date": "2024-01-15", "otif": 84, "fillRate": 91, "compliance": 3.5, "asnAccuracy": 94.8, "leadTime": 12.5 },
-      { "date": "2024-01-16", "otif": 81, "fillRate": 90, "compliance": 4.2, "asnAccuracy": 93.5, "leadTime": 12.8 },
-      { "date": "2024-01-17", "otif": 79, "fillRate": 89, "compliance": 5.1, "asnAccuracy": 92.3, "leadTime": 13.0 },
-      { "date": "2024-01-18", "otif": 78, "fillRate": 88, "compliance": 5.8, "asnAccuracy": 91.8, "leadTime": 13.2 },
-      { "date": "2024-01-19", "otif": 77, "fillRate": 88, "compliance": 6.0, "asnAccuracy": 91.3, "leadTime": 13.4 },
-      { "date": "2024-01-20", "otif": 76, "fillRate": 88, "compliance": 6.2, "asnAccuracy": 91.1, "leadTime": 13.5 }
-    ]
+      { "date": "2024-01-08", "otif": 94 },
+      { "date": "2024-01-09", "otif": 93 },
+      { "date": "2024-01-10", "otif": 94 },
+      { "date": "2024-01-11", "otif": 95 },
+      { "date": "2024-01-12", "otif": 94 },
+      { "date": "2024-01-13", "otif": 94 },
+      { "date": "2024-01-14", "otif": 88 },
+      { "date": "2024-01-15", "otif": 84 },
+      { "date": "2024-01-16", "otif": 81 },
+      { "date": "2024-01-17", "otif": 79 },
+      { "date": "2024-01-18", "otif": 78 },
+      { "date": "2024-01-19", "otif": 77 },
+      { "date": "2024-01-20", "otif": 76 }
+    ],
+    "changeDate": "2024-01-14"
+  },
+  "SUP002": {
+    "daily": [
+      { "date": "2024-01-08", "otif": 95 },
+      { "date": "2024-01-09", "otif": 95 },
+      { "date": "2024-01-10", "otif": 96 },
+      { "date": "2024-01-11", "otif": 95 },
+      { "date": "2024-01-12", "otif": 96 },
+      { "date": "2024-01-13", "otif": 96 },
+      { "date": "2024-01-14", "otif": 95 },
+      { "date": "2024-01-15", "otif": 96 },
+      { "date": "2024-01-16", "otif": 96 },
+      { "date": "2024-01-17", "otif": 97 },
+      { "date": "2024-01-18", "otif": 96 },
+      { "date": "2024-01-19", "otif": 96 },
+      { "date": "2024-01-20", "otif": 96 }
+    ],
+    "changeDate": null
+  },
+  "SUP003": {
+    "daily": [
+      { "date": "2024-01-08", "otif": 91 },
+      { "date": "2024-01-09", "otif": 92 },
+      { "date": "2024-01-10", "otif": 92 },
+      { "date": "2024-01-11", "otif": 91 },
+      { "date": "2024-01-12", "otif": 92 },
+      { "date": "2024-01-13", "otif": 92 },
+      { "date": "2024-01-14", "otif": 91 },
+      { "date": "2024-01-15", "otif": 92 },
+      { "date": "2024-01-16", "otif": 90 },
+      { "date": "2024-01-17", "otif": 89 },
+      { "date": "2024-01-18", "otif": 88 },
+      { "date": "2024-01-19", "otif": 89 },
+      { "date": "2024-01-20", "otif": 89 }
+    ],
+    "changeDate": "2024-01-16"
+  },
+  "SUP004": {
+    "daily": [
+      { "date": "2024-01-08", "otif": 96 },
+      { "date": "2024-01-09", "otif": 97 },
+      { "date": "2024-01-10", "otif": 96 },
+      { "date": "2024-01-11", "otif": 97 },
+      { "date": "2024-01-12", "otif": 97 },
+      { "date": "2024-01-13", "otif": 96 },
+      { "date": "2024-01-14", "otif": 97 },
+      { "date": "2024-01-15", "otif": 97 },
+      { "date": "2024-01-16", "otif": 98 },
+      { "date": "2024-01-17", "otif": 97 },
+      { "date": "2024-01-18", "otif": 97 },
+      { "date": "2024-01-19", "otif": 97 },
+      { "date": "2024-01-20", "otif": 97 }
+    ],
+    "changeDate": null
   }
 }

@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import { useAppStore, Task, TaskStatus } from '@/store/appStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   ClipboardList, 
   CheckCircle2, 
@@ -15,15 +13,30 @@ import {
   AlertCircle,
   Building2,
   Shield,
-  ChevronRight,
   Clock,
   Mail,
   TrendingUp,
   RefreshCw,
-  Lock
+  Lock,
+  PartyPopper
 } from 'lucide-react';
-import improvementPlanData from '@/data/improvementPlan.json';
+import supplierDetailsData from '@/data/supplierDetails.json';
+import suppliersData from '@/data/suppliers.json';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+
+type SupplierDetailsType = typeof supplierDetailsData;
+
+interface PlanAction {
+  id: string;
+  category: string;
+  title: string;
+  description: string;
+  owner: string;
+  dueDate: string;
+  expectedImpact: string;
+  priority: string;
+  requiresApproval: boolean;
+}
 
 const categoryIcons: Record<string, typeof Truck> = {
   'Logistics': Truck,
@@ -47,12 +60,13 @@ const ImprovementPlan = () => {
     enabledActions, 
     toggleAction, 
     planStatus,
-    approvePlan
+    selectedSupplierId
   } = useAppStore();
 
-  const plan = improvementPlanData.plans.SUP001;
+  const supplierDetails = selectedSupplierId ? (supplierDetailsData as SupplierDetailsType)[selectedSupplierId as keyof SupplierDetailsType] : null;
+  const plan = supplierDetails?.plan;
   
-  if (investigationStatus !== 'completed') {
+  if (investigationStatus !== 'completed' && investigationStatus !== 'revising') {
     return (
       <Card className="card-elevated h-full flex items-center justify-center">
         <div className="text-center p-6">
@@ -63,14 +77,35 @@ const ImprovementPlan = () => {
     );
   }
 
-  const groupedActions = plan.actions.reduce((acc, action) => {
+  // Healthy suppliers - no plan needed
+  if (!plan || !plan.actions || plan.actions.length === 0) {
+    return (
+      <Card className="card-elevated h-full">
+        <CardContent className="p-6 text-center">
+          <div className="w-16 h-16 rounded-full bg-status-success/10 flex items-center justify-center mx-auto mb-4">
+            <PartyPopper className="w-8 h-8 text-status-success" />
+          </div>
+          <p className="text-lg font-semibold text-status-success mb-2">No Action Required</p>
+          <p className="text-sm text-muted-foreground">
+            This supplier is performing above target thresholds. Continue monitoring and maintain current relationship.
+          </p>
+          <div className="mt-4 p-3 bg-status-success-bg/50 rounded-lg">
+            <p className="text-xs font-medium text-status-success">Recommendation</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Consider this supplier as a benchmark for best practices. Share learnings with underperforming suppliers.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const actions = plan.actions as PlanAction[];
+  const groupedActions = actions.reduce((acc, action) => {
     if (!acc[action.category]) acc[action.category] = [];
     acc[action.category].push(action);
     return acc;
-  }, {} as Record<string, typeof plan.actions>);
-
-  const canApprove = currentRole === 'ops_manager' || currentRole === 'category_head';
-  const canApproveAll = currentRole === 'category_head';
+  }, {} as Record<string, PlanAction[]>);
 
   return (
     <Card className="card-elevated border-t-4 border-t-status-success">
@@ -90,9 +125,11 @@ const ImprovementPlan = () => {
             {planStatus.replace('_', ' ')}
           </Badge>
         </div>
-        <p className="text-xs text-muted-foreground">
-          Recovery: OTIF → <span className="font-semibold text-status-success">{plan.expectedOtifRecovery}%</span> in {plan.recoveryTimeline}
-        </p>
+        {plan.expectedOtifRecovery && (
+          <p className="text-xs text-muted-foreground">
+            Recovery: OTIF → <span className="font-semibold text-status-success">{plan.expectedOtifRecovery}%</span> in {plan.recoveryTimeline}
+          </p>
+        )}
       </CardHeader>
       <CardContent className="space-y-4 max-h-[350px] overflow-auto scrollbar-thin">
         {Object.entries(groupedActions).map(([category, actions]) => {
@@ -152,7 +189,15 @@ const ImprovementPlan = () => {
 };
 
 const ApprovalsCard = () => {
-  const { currentRole, planStatus, approvePlan } = useAppStore();
+  const { currentRole, planStatus, approvePlan, selectedSupplierId } = useAppStore();
+  
+  const supplierDetails = selectedSupplierId ? (supplierDetailsData as SupplierDetailsType)[selectedSupplierId as keyof SupplierDetailsType] : null;
+  const plan = supplierDetails?.plan;
+  
+  // Don't show approvals for healthy suppliers
+  if (!plan || !plan.actions || plan.actions.length === 0) {
+    return null;
+  }
   
   const canApprove = (currentRole === 'ops_manager' || currentRole === 'category_head') && planStatus === 'pending_approval';
 
@@ -226,7 +271,15 @@ const ApprovalsCard = () => {
 };
 
 const TaskBoard = () => {
-  const { tasks, updateTaskStatus, planStatus } = useAppStore();
+  const { tasks, updateTaskStatus, planStatus, selectedSupplierId } = useAppStore();
+
+  const supplierDetails = selectedSupplierId ? (supplierDetailsData as SupplierDetailsType)[selectedSupplierId as keyof SupplierDetailsType] : null;
+  const plan = supplierDetails?.plan;
+  
+  // Don't show task board for healthy suppliers
+  if (!plan || !plan.actions || plan.actions.length === 0) {
+    return null;
+  }
 
   if (planStatus !== 'approved' && tasks.length === 0) {
     return (
@@ -293,9 +346,12 @@ const TaskBoard = () => {
 };
 
 const SupplierCommunication = () => {
-  const { planStatus } = useAppStore();
+  const { planStatus, selectedSupplierId } = useAppStore();
   
-  if (planStatus !== 'approved') return null;
+  const supplierDetails = selectedSupplierId ? (supplierDetailsData as SupplierDetailsType)[selectedSupplierId as keyof SupplierDetailsType] : null;
+  const communication = supplierDetails?.communication;
+  
+  if (planStatus !== 'approved' || !communication) return null;
 
   return (
     <Card className="card-elevated">
@@ -308,16 +364,15 @@ const SupplierCommunication = () => {
       <CardContent>
         <div className="p-3 bg-muted/30 rounded-lg text-xs space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-medium">To: SuratHomeTex Pvt Ltd</span>
+            <span className="font-medium">To: {communication.to}</span>
             <Badge variant="outline" className="text-[9px]">Draft</Badge>
           </div>
           <p className="text-muted-foreground">
-            Subject: Urgent: Corrective Action Required - Arabic Label Compliance & ASN Quality
+            Subject: {communication.subject}
           </p>
           <div className="p-2 bg-card rounded border text-[10px]">
-            <p>Dear Rajesh Patel,</p>
-            <p className="mt-1">We have identified critical compliance issues with recent shipments requiring immediate attention...</p>
-            <p className="mt-1 text-primary">Action Required: Rollback to Label Template V2.1 immediately</p>
+            <p>Dear {communication.contact},</p>
+            <p className="mt-1">{communication.preview}</p>
           </div>
           <Button size="sm" className="w-full mt-2">
             <Mail className="w-3.5 h-3.5 mr-1" />
@@ -330,17 +385,23 @@ const SupplierCommunication = () => {
 };
 
 const RecoveryProjection = () => {
-  const { planStatus } = useAppStore();
+  const { planStatus, selectedSupplierId } = useAppStore();
   
-  if (planStatus !== 'approved') return null;
+  const supplierDetails = selectedSupplierId ? (supplierDetailsData as SupplierDetailsType)[selectedSupplierId as keyof SupplierDetailsType] : null;
+  const plan = supplierDetails?.plan;
+  
+  if (planStatus !== 'approved' || !plan?.expectedOtifRecovery) return null;
 
+  const currentOtif = supplierDetails?.kpiChange?.to || 76;
+  const targetOtif = plan.expectedOtifRecovery;
+  
   const projectionData = [
-    { day: 0, actual: 76, projected: 76 },
-    { day: 2, actual: null, projected: 78 },
-    { day: 4, actual: null, projected: 81 },
-    { day: 7, actual: null, projected: 84 },
-    { day: 10, actual: null, projected: 87 },
-    { day: 14, actual: null, projected: 91 },
+    { day: 0, projected: currentOtif },
+    { day: 2, projected: currentOtif + (targetOtif - currentOtif) * 0.15 },
+    { day: 4, projected: currentOtif + (targetOtif - currentOtif) * 0.35 },
+    { day: 7, projected: currentOtif + (targetOtif - currentOtif) * 0.55 },
+    { day: 10, projected: currentOtif + (targetOtif - currentOtif) * 0.75 },
+    { day: 14, projected: targetOtif },
   ];
 
   return (
@@ -367,13 +428,13 @@ const RecoveryProjection = () => {
                 tickFormatter={(v) => `D${v}`}
               />
               <YAxis 
-                domain={[70, 95]} 
+                domain={[Math.min(currentOtif - 5, 70), Math.max(targetOtif + 5, 100)]} 
                 tick={{ fontSize: 9 }}
                 width={25}
               />
               <Tooltip 
                 contentStyle={{ fontSize: '10px' }}
-                formatter={(value: number) => [`${value}%`, 'OTIF']}
+                formatter={(value: number) => [`${value.toFixed(0)}%`, 'OTIF']}
               />
               <ReferenceLine y={85} stroke="#22c55e" strokeDasharray="3 3" />
               <Line 
@@ -388,8 +449,8 @@ const RecoveryProjection = () => {
           </ResponsiveContainer>
         </div>
         <div className="flex items-center justify-between mt-2 text-[10px]">
-          <span className="text-muted-foreground">Current: 76%</span>
-          <span className="text-status-success font-medium">Target: 91% (14 days)</span>
+          <span className="text-muted-foreground">Current: {currentOtif}%</span>
+          <span className="text-status-success font-medium">Target: {targetOtif}% ({plan.recoveryTimeline})</span>
         </div>
       </CardContent>
     </Card>

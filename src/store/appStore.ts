@@ -386,7 +386,21 @@ export const useAppStore = create<AppState>((set, get) => ({
     get().checkPoliciesAndEnforce();
   },
   
-  selectSupplier: (supplierId) => set({ selectedSupplierId: supplierId }),
+  selectSupplier: (supplierId) => {
+    // Reset investigation state when switching suppliers
+    set({ 
+      selectedSupplierId: supplierId,
+      investigationStatus: 'idle',
+      currentAgentStep: -1,
+      confidenceScore: 0,
+      planApproved: false,
+      planStatus: 'draft',
+      tasks: [],
+      isRevising: false,
+      revisionStep: -1,
+      hasShownRevision: false
+    });
+  },
   
   startInvestigation: () => {
     set({ 
