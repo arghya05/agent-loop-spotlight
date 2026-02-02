@@ -6,22 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
 
+import algonomyLogo from '@/assets/algonomy-logo.png';
+
 const AlgonomyLogo = () => (
-  <div className="flex items-center gap-2">
-    <svg viewBox="0 0 40 40" className="w-10 h-10" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="20" cy="20" r="20" fill="#1E1919"/>
-      <g clipPath="url(#clip0)">
-        <path d="M23.163 11V14.764C25.004 15.892 26.24 17.93 26.24 20.258C26.24 23.802 23.39 26.685 19.887 26.685C16.382 26.685 13.53 23.802 13.53 20.258C13.53 17.93 14.768 15.892 16.609 14.764V11C12.765 12.35 10 16 10 20.282C10 25.682 14.434 30.075 19.887 30.075C25.335 30.075 29.77 25.682 29.77 20.282C29.77 16 27.007 12.35 23.163 11Z" fill="white"/>
-        <path d="M21.708 17.889H18.072V8H21.708V17.889Z" fill="#F4312A"/>
-      </g>
-      <defs>
-        <clipPath id="clip0">
-          <rect width="20" height="24" fill="white" transform="translate(10 8)"/>
-        </clipPath>
-      </defs>
-    </svg>
+  <div className="flex items-center gap-3">
+    <img src={algonomyLogo} alt="Algonomy" className="h-10" />
     <div className="flex flex-col">
-      <span className="text-2xl font-bold tracking-wider text-foreground">ALGONOMY</span>
       <span className="text-xs font-medium tracking-widest text-muted-foreground uppercase">Atlas</span>
     </div>
   </div>
