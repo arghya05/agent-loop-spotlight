@@ -98,19 +98,26 @@ export const AgentActionsPanel = () => {
     }, 2400);
   };
   
-  // Auto-progress tasks when in execution mode
+  // Auto-progress tasks: move in_progress -> done, then todo -> in_progress
   useEffect(() => {
-    if (tasks.length > 0 && executionPhase === 'complete') {
-      const interval = setInterval(() => {
-        const todoTasks = tasks.filter(t => t.status === 'todo');
-        if (todoTasks.length > 0) {
-          updateTaskStatus(todoTasks[0].id, 'in_progress');
-        }
-      }, 3000);
+    if (tasks.length === 0 || !planApproved) return;
+    
+    const interval = setInterval(() => {
+      const inProgressTasks = tasks.filter(t => t.status === 'in_progress');
+      const todoTasks = tasks.filter(t => t.status === 'todo');
       
-      return () => clearInterval(interval);
-    }
-  }, [tasks, executionPhase, updateTaskStatus]);
+      // First, complete any in_progress task
+      if (inProgressTasks.length > 0) {
+        updateTaskStatus(inProgressTasks[0].id, 'done');
+      }
+      // Then, start a new task from todo
+      else if (todoTasks.length > 0) {
+        updateTaskStatus(todoTasks[0].id, 'in_progress');
+      }
+    }, 2000);
+    
+    return () => clearInterval(interval);
+  }, [tasks, planApproved, updateTaskStatus]);
   
   if (!selectedPOId) {
     return (
