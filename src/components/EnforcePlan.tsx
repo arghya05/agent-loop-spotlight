@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
+import { Progress } from '@/components/ui/progress';
 import { 
   ClipboardList, 
   CheckCircle2, 
@@ -19,7 +20,10 @@ import {
   TrendingUp,
   RefreshCw,
   Lock,
-  PartyPopper
+  PartyPopper,
+  Play,
+  Loader2,
+  Zap
 } from 'lucide-react';
 import supplierDetailsData from '@/data/supplierDetails.json';
 import suppliersData from '@/data/suppliers.json';
@@ -191,6 +195,9 @@ const ImprovementPlan = () => {
 
 const ApprovalsCard = () => {
   const { currentRole, planStatus, approvePlan, selectedSupplierId } = useAppStore();
+  const [isExecuting, setIsExecuting] = React.useState(false);
+  const [executionProgress, setExecutionProgress] = React.useState(0);
+  const [executionPhase, setExecutionPhase] = React.useState<'idle' | 'dispatching' | 'assigning' | 'notifying' | 'complete'>('idle');
   
   const supplierDetails = selectedSupplierId ? (supplierDetailsData as SupplierDetailsType)[selectedSupplierId as keyof SupplierDetailsType] : null;
   const plan = supplierDetails?.plan;
@@ -202,12 +209,38 @@ const ApprovalsCard = () => {
   
   const canApprove = (currentRole === 'ops_manager' || currentRole === 'category_head') && planStatus === 'pending_approval';
 
+  const handleExecutePlan = () => {
+    setIsExecuting(true);
+    setExecutionPhase('dispatching');
+    setExecutionProgress(0);
+    
+    // Phase 1: Dispatching tasks
+    setTimeout(() => {
+      setExecutionProgress(33);
+      setExecutionPhase('assigning');
+    }, 800);
+    
+    // Phase 2: Assigning to owners
+    setTimeout(() => {
+      setExecutionProgress(66);
+      setExecutionPhase('notifying');
+    }, 1600);
+    
+    // Phase 3: Notifying stakeholders & completing
+    setTimeout(() => {
+      setExecutionProgress(100);
+      setExecutionPhase('complete');
+      approvePlan();
+      setIsExecuting(false);
+    }, 2400);
+  };
+
   return (
     <Card className="card-elevated">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-semibold flex items-center gap-2">
           <Shield className="w-4 h-4" />
-          Approvals
+          Approvals & Execution
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -229,12 +262,54 @@ const ApprovalsCard = () => {
         </div>
 
         {planStatus === 'approved' ? (
-          <div className="flex items-center gap-2 p-3 bg-status-success-bg rounded-lg">
-            <CheckCircle2 className="w-5 h-5 text-status-success" />
-            <div>
-              <p className="text-xs font-medium text-status-success">Plan Approved</p>
-              <p className="text-[10px] text-muted-foreground">Tasks have been created</p>
-            </div>
+          <div className="space-y-2">
+            {isExecuting ? (
+              <div className="p-3 rounded-lg border bg-primary/5 border-primary/20 space-y-2">
+                <div className="flex items-center gap-2 text-xs font-medium text-primary">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Agent Executing Plan...
+                </div>
+                <Progress value={executionProgress} className="h-2" />
+                <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                  <span>
+                    {executionPhase === 'dispatching' && '📋 Creating tasks...'}
+                    {executionPhase === 'assigning' && '👤 Assigning to owners...'}
+                    {executionPhase === 'notifying' && '📧 Sending notifications...'}
+                    {executionPhase === 'complete' && '✅ Execution complete!'}
+                  </span>
+                  <span>{executionProgress}%</span>
+                </div>
+              </div>
+            ) : executionPhase === 'complete' ? (
+              <div className="p-3 rounded-lg border bg-status-success-bg/50 border-status-success/30 space-y-2">
+                <div className="flex items-center gap-2 text-xs font-medium text-status-success">
+                  <Zap className="w-4 h-4" />
+                  Agent Active — Executing Tasks
+                </div>
+                <div className="text-[10px] text-muted-foreground">
+                  Tasks have been assigned and are being tracked
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 p-3 bg-status-success-bg rounded-lg">
+                <CheckCircle2 className="w-5 h-5 text-status-success" />
+                <div>
+                  <p className="text-xs font-medium text-status-success">Plan Approved</p>
+                  <p className="text-[10px] text-muted-foreground">Ready for execution</p>
+                </div>
+              </div>
+            )}
+            
+            {executionPhase !== 'complete' && !isExecuting && (
+              <Button 
+                className="w-full"
+                size="sm"
+                onClick={handleExecutePlan}
+              >
+                <Play className="w-3.5 h-3.5 mr-1" />
+                Execute Plan
+              </Button>
+            )}
           </div>
         ) : (
           <div className="flex gap-2">
@@ -299,9 +374,10 @@ const TaskBoard = () => {
     done: tasks.filter(t => t.status === 'done')
   };
 
-  const TaskColumn = ({ title, tasks, status, color }: { title: string; tasks: Task[]; status: TaskStatus; color: string }) => (
+  const TaskColumn = ({ title, tasks, status, color, icon }: { title: string; tasks: Task[]; status: TaskStatus; color: string; icon?: React.ReactNode }) => (
     <div className="flex-1 min-w-0">
       <div className={`flex items-center gap-2 mb-3 pb-2 border-b-2 ${color}`}>
+        {icon}
         <p className="text-xs font-semibold uppercase tracking-wide">{title}</p>
         <Badge variant="secondary" className="text-[10px] h-5 px-2">{tasks.length}</Badge>
       </div>
@@ -309,7 +385,13 @@ const TaskBoard = () => {
         {tasks.map((task) => (
           <div 
             key={task.id} 
-            className="p-3 bg-card rounded-lg border text-xs cursor-pointer hover:bg-muted/50 hover:border-primary/30 transition-all shadow-sm"
+            className={`p-3 rounded-lg border text-xs cursor-pointer transition-all shadow-sm ${
+              task.status === 'in_progress' 
+                ? 'border-primary/50 bg-primary/5 ring-1 ring-primary/20' 
+                : task.status === 'done'
+                ? 'border-status-success/30 bg-status-success-bg/30'
+                : 'bg-card hover:bg-muted/50 hover:border-primary/30'
+            }`}
             onClick={() => {
               const nextStatus: Record<TaskStatus, TaskStatus> = {
                 todo: 'in_progress',
@@ -321,6 +403,12 @@ const TaskBoard = () => {
           >
             <p className="font-semibold text-foreground leading-tight mb-1">{task.title}</p>
             <p className="text-muted-foreground text-[11px]">{task.assignee}</p>
+            {task.status === 'in_progress' && (
+              <div className="mt-1.5 flex items-center gap-1 text-[9px] text-primary">
+                <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                Agent executing...
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -331,16 +419,49 @@ const TaskBoard = () => {
     <Card className="card-elevated">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-semibold flex items-center gap-2">
-          <ClipboardList className="w-4 h-4" />
-          Execution Tasks
+          <Zap className="w-4 h-4 text-primary" />
+          Agent Task Execution
+          {tasks.length > 0 && (
+            <Badge variant="outline" className="ml-auto text-[9px] animate-pulse bg-primary/10">
+              Live
+            </Badge>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>
+        {/* Progress Summary */}
+        {tasks.length > 0 && (
+          <div className="mb-3 p-2 rounded-lg bg-muted/30 space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-muted-foreground">Execution Progress</span>
+              <span className="font-semibold">
+                {Math.round((tasksByStatus.done.length / tasks.length) * 100)}%
+              </span>
+            </div>
+            <Progress 
+              value={(tasksByStatus.done.length / tasks.length) * 100} 
+              className="h-1.5"
+            />
+          </div>
+        )}
+        
         <div className="flex gap-3">
-          <TaskColumn title="To Do" tasks={tasksByStatus.todo} status="todo" color="border-muted-foreground" />
-          <TaskColumn title="In Progress" tasks={tasksByStatus.in_progress} status="in_progress" color="border-status-warning" />
-          <TaskColumn title="Done" tasks={tasksByStatus.done} status="done" color="border-status-success" />
+          <TaskColumn title="Queued" tasks={tasksByStatus.todo} status="todo" color="border-muted-foreground" icon={<Clock className="w-3 h-3" />} />
+          <TaskColumn title="Running" tasks={tasksByStatus.in_progress} status="in_progress" color="border-primary" icon={<Loader2 className="w-3 h-3 animate-spin" />} />
+          <TaskColumn title="Complete" tasks={tasksByStatus.done} status="done" color="border-status-success" icon={<CheckCircle2 className="w-3 h-3" />} />
         </div>
+        
+        {tasks.length > 0 && (
+          <div className="mt-3 p-2 bg-status-success-bg/30 rounded text-[10px] border border-status-success/20">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-3 h-3 text-status-success" />
+              <strong>Accountability Score:</strong> 
+              <span className="ml-auto font-semibold text-status-success">
+                {tasksByStatus.done.length}/{tasks.length} tasks completed
+              </span>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
