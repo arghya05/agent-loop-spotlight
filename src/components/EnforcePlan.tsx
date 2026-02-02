@@ -352,6 +352,27 @@ const TaskBoard = () => {
   const supplierDetails = selectedSupplierId ? (supplierDetailsData as SupplierDetailsType)[selectedSupplierId as keyof SupplierDetailsType] : null;
   const plan = supplierDetails?.plan;
   
+  // Auto-progress tasks: move in_progress -> done, then todo -> in_progress
+  React.useEffect(() => {
+    if (planStatus !== 'approved' || tasks.length === 0) return;
+    
+    const interval = setInterval(() => {
+      const inProgressTasks = tasks.filter(t => t.status === 'in_progress');
+      const todoTasks = tasks.filter(t => t.status === 'todo');
+      
+      // First, complete any in_progress task
+      if (inProgressTasks.length > 0) {
+        updateTaskStatus(inProgressTasks[0].id, 'done');
+      }
+      // Then, start a new task from todo
+      else if (todoTasks.length > 0) {
+        updateTaskStatus(todoTasks[0].id, 'in_progress');
+      }
+    }, 2000);
+    
+    return () => clearInterval(interval);
+  }, [planStatus, tasks, updateTaskStatus]);
+  
   // Don't show task board for healthy suppliers
   if (!plan || !plan.actions || plan.actions.length === 0) {
     return null;
