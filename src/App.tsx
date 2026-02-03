@@ -21,6 +21,15 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// Protected route wrapper
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const isLoggedIn = sessionStorage.getItem('algonomy_logged_in');
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+  return <>{children}</>;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -28,9 +37,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<Navigate to="/landing" replace />} />
+          <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
             <Route path="/landing" element={<LandingPage />} />
             <Route path="/bucket/:bucketId" element={<BucketPage />} />
             <Route path="/bucket" element={<Navigate to="/bucket/critical" replace />} />
