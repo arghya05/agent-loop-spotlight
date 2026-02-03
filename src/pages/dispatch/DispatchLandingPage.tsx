@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   Package, 
   Clock, 
@@ -27,7 +28,8 @@ import {
   FileText,
   Search,
   Database,
-  ShieldCheck
+  ShieldCheck,
+  Filter
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import dispatchVendorsData from '@/data/dispatch/vendors.json';
@@ -120,6 +122,9 @@ export const DispatchLandingPage = () => {
   const autopilotRef = useRef<NodeJS.Timeout | null>(null);
   const activityScrollRef = useRef<HTMLDivElement>(null);
   
+  // Bucket filter state
+  const [bucketFilter, setBucketFilter] = useState<string>('all');
+  
   // Calculate bucket stats
   const getBucketStats = () => {
     const stats: Record<BucketTag, { count: number; pos: number; volume: number; atRisk: number; drivers: string[] }> = {
@@ -154,11 +159,16 @@ export const DispatchLandingPage = () => {
   const totalAtRisk = vendors.reduce((sum, v) => sum + v.atRiskDollar, 0);
   const onTimePerformance = Math.round((bucketStats.Flow.pos / totalPOs) * 100);
 
-  // Attention queue: SS and AW vendors sorted by risk
-  const attentionQueue = vendors
-    .filter(v => v.bucketTag === 'SS' || v.bucketTag === 'AW')
-    .sort((a, b) => b.riskScore - a.riskScore)
-    .slice(0, 10);
+  // Filter vendors by bucket
+  const filteredVendors = bucketFilter === 'all' 
+    ? vendors 
+    : vendors.filter(v => v.bucketTag === bucketFilter);
+
+  // Attention queue: SS and AW vendors sorted by risk (respects filter)
+  const attentionQueue = (bucketFilter === 'all' 
+    ? vendors.filter(v => v.bucketTag === 'SS' || v.bucketTag === 'AW')
+    : filteredVendors
+  ).sort((a, b) => b.riskScore - a.riskScore).slice(0, 10);
 
   // Early warning signals
   const earlyWarnings = [
@@ -312,6 +322,20 @@ export const DispatchLandingPage = () => {
           <p className="text-sm text-muted-foreground">Portfolio-level manufacturing & dispatch readiness</p>
         </div>
         <div className="flex items-center gap-4">
+          {/* Bucket Filter */}
+          <Select value={bucketFilter} onValueChange={setBucketFilter}>
+            <SelectTrigger className="w-[160px]">
+              <Filter className="w-4 h-4 mr-2" />
+              <SelectValue placeholder="Filter by Bucket" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Buckets</SelectItem>
+              <SelectItem value="SS">Slipping</SelectItem>
+              <SelectItem value="AW">Watchlist</SelectItem>
+              <SelectItem value="Flow">On Track</SelectItem>
+            </SelectContent>
+          </Select>
+
           {/* Autopilot Button */}
           {!isAutopilotRunning && !autopilotComplete && attentionQueue.length > 0 && (
             <Button 
