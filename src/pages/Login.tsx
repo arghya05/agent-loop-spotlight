@@ -41,7 +41,7 @@ const Login = () => {
     sessionStorage.setItem('algonomy_user', username);
     
     setIsLoading(false);
-    navigate('/');
+    navigate('/landing');
   };
 
   return (
