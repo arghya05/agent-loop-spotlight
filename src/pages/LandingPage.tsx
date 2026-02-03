@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Switch } from '@/components/ui/switch';
+import { Progress } from '@/components/ui/progress';
 import { useGovernanceStore, BucketTag } from '@/store/governanceStore';
+import { useAppStore } from '@/store/appStore';
 import { 
   Users, 
   DollarSign, 
@@ -18,7 +21,12 @@ import {
   CalendarClock,
   CheckCircle2,
   AlertTriangle,
-  XCircle
+  XCircle,
+  Zap,
+  Loader2,
+  Bot,
+  Play,
+  Square
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -49,6 +57,16 @@ const bucketConfig: Record<BucketTag, { label: string; color: string; bgColor: s
   }
 };
 
+const autopilotSteps = [
+  { id: 'scan', label: 'Scanning vendors', duration: 1500 },
+  { id: 'investigate', label: 'Running investigation', duration: 2000 },
+  { id: 'analyze', label: 'Analyzing root causes', duration: 1800 },
+  { id: 'plan', label: 'Generating plans', duration: 1500 },
+  { id: 'approve', label: 'Auto-approving plans', duration: 1200 },
+  { id: 'execute', label: 'Executing tasks', duration: 2000 },
+  { id: 'complete', label: 'Workflow complete', duration: 500 }
+];
+
 const formatCurrency = (value: number) => {
   if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
   if (value >= 1000) return `$${(value / 1000).toFixed(0)}K`;
@@ -62,13 +80,157 @@ const formatDate = (dateStr: string) => {
 
 export const LandingPage = () => {
   const navigate = useNavigate();
-  const { vendors, getBucketStats, getAttentionQueue, policyControls, lastRefresh } = useGovernanceStore();
+  const { vendors, getBucketStats, getAttentionQueue, policyControls, lastRefresh, approvePlan, getPlanByVendorId } = useGovernanceStore();
+  const { addAuditEntry, addToolTrace, currentRole } = useAppStore();
+  
+  // Autopilot state
+  const [isAutopilotRunning, setIsAutopilotRunning] = useState(false);
+  const [autopilotStep, setAutopilotStep] = useState(-1);
+  const [autopilotComplete, setAutopilotComplete] = useState(false);
+  const [currentVendorIndex, setCurrentVendorIndex] = useState(0);
+  const [processedVendors, setProcessedVendors] = useState<string[]>([]);
+  const autopilotRef = useRef<NodeJS.Timeout | null>(null);
   
   const bucketStats = getBucketStats();
   const attentionQueue = getAttentionQueue();
   const totalSpend = vendors.reduce((sum, v) => sum + v.totals.tradedDollar, 0);
   const totalPOs = vendors.reduce((sum, v) => sum + v.totals.totalPOs, 0);
   const needsAttention = attentionQueue.length;
+
+  // Autopilot workflow effect
+  useEffect(() => {
+    if (isAutopilotRunning && autopilotStep < autopilotSteps.length - 1) {
+      const currentStepConfig = autopilotSteps[autopilotStep + 1];
+      
+      autopilotRef.current = setTimeout(() => {
+        const nextStep = autopilotStep + 1;
+        setAutopilotStep(nextStep);
+        
+        // Add tool trace for each step
+        addToolTrace({
+          timestamp: new Date().toISOString(),
+          toolName: 'Autopilot Agent',
+          action: autopilotSteps[nextStep].label,
+          dataSources: ['vendor_db', 'metrics_engine', 'plan_generator'],
+          duration: autopilotSteps[nextStep].duration
+        });
+
+        // Process vendor on specific steps
+        if (nextStep === 1 && currentVendorIndex < attentionQueue.length) {
+          const vendor = attentionQueue[currentVendorIndex];
+          addAuditEntry({
+            timestamp: new Date().toISOString(),
+            actor: 'Autopilot Agent',
+            role: currentRole,
+            decision: `Investigation started for ${vendor.name}`,
+            toolsUsed: ['kpi_monitor', 'compliance_checker', 'root_cause_builder'],
+            details: `Auto-processing vendor ${currentVendorIndex + 1} of ${attentionQueue.length}`
+          });
+        }
+
+        // Auto-approve plans
+        if (nextStep === 4) {
+          attentionQueue.forEach(vendor => {
+            const plan = getPlanByVendorId(vendor.id);
+            if (plan && plan.status === 'pending') {
+              approvePlan(plan.id, 'Autopilot Agent', currentRole);
+            }
+          });
+          
+          addAuditEntry({
+            timestamp: new Date().toISOString(),
+            actor: 'Autopilot Agent',
+            role: currentRole,
+            decision: `Auto-approved ${attentionQueue.length} improvement plans`,
+            toolsUsed: ['plan_approval_engine'],
+            details: 'Bulk approval completed'
+          });
+        }
+
+        // Mark vendors as processed on execute step
+        if (nextStep === 5) {
+          setProcessedVendors(attentionQueue.map(v => v.id));
+          
+          addAuditEntry({
+            timestamp: new Date().toISOString(),
+            actor: 'Autopilot Agent',
+            role: currentRole,
+            decision: `Executing tasks for ${attentionQueue.length} vendors`,
+            toolsUsed: ['task_dispatcher', 'notification_service'],
+            details: 'All remediation tasks dispatched'
+          });
+        }
+
+        // Complete
+        if (nextStep === autopilotSteps.length - 1) {
+          setTimeout(() => {
+            setIsAutopilotRunning(false);
+            setAutopilotComplete(true);
+            
+            addAuditEntry({
+              timestamp: new Date().toISOString(),
+              actor: 'Autopilot Agent',
+              role: currentRole,
+              decision: 'Autopilot workflow completed',
+              toolsUsed: ['workflow_orchestrator'],
+              details: `Processed ${attentionQueue.length} vendors, approved plans, dispatched tasks`
+            });
+          }, 500);
+        }
+      }, currentStepConfig?.duration || 1500);
+
+      return () => {
+        if (autopilotRef.current) {
+          clearTimeout(autopilotRef.current);
+        }
+      };
+    }
+  }, [isAutopilotRunning, autopilotStep, currentVendorIndex, attentionQueue, addToolTrace, addAuditEntry, approvePlan, getPlanByVendorId]);
+
+  const startAutopilot = () => {
+    setIsAutopilotRunning(true);
+    setAutopilotStep(0);
+    setAutopilotComplete(false);
+    setCurrentVendorIndex(0);
+    setProcessedVendors([]);
+    
+    addAuditEntry({
+      timestamp: new Date().toISOString(),
+      actor: 'User',
+      role: currentRole,
+      decision: 'Autopilot mode initiated',
+      toolsUsed: ['autopilot_orchestrator'],
+      details: `Processing ${attentionQueue.length} vendors in attention queue`
+    });
+    
+    addToolTrace({
+      timestamp: new Date().toISOString(),
+      toolName: 'Autopilot Agent',
+      action: autopilotSteps[0].label,
+      dataSources: ['vendor_db', 'attention_queue'],
+      duration: autopilotSteps[0].duration
+    });
+  };
+
+  const stopAutopilot = () => {
+    if (autopilotRef.current) {
+      clearTimeout(autopilotRef.current);
+    }
+    setIsAutopilotRunning(false);
+    
+    addAuditEntry({
+      timestamp: new Date().toISOString(),
+      actor: 'User',
+      role: currentRole,
+      decision: 'Autopilot mode stopped',
+      toolsUsed: [],
+      details: `Stopped at step: ${autopilotSteps[autopilotStep]?.label || 'initial'}`
+    });
+  };
+
+  const autopilotProgress = autopilotStep >= 0 
+    ? ((autopilotStep + 1) / autopilotSteps.length) * 100 
+    : 0;
 
   return (
     <div className="p-6 space-y-6">
@@ -78,11 +240,114 @@ export const LandingPage = () => {
           <h1 className="text-2xl font-bold text-foreground">Supplier Governance Home</h1>
           <p className="text-sm text-muted-foreground">Portfolio overview and exception management</p>
         </div>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Clock className="w-3.5 h-3.5" />
-          <span>Last refresh: {formatDate(lastRefresh)}</span>
+        <div className="flex items-center gap-4">
+          {/* Autopilot Button */}
+          {!isAutopilotRunning && !autopilotComplete && attentionQueue.length > 0 && (
+            <Button 
+              onClick={startAutopilot}
+              className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 gap-2"
+            >
+              <Bot className="w-4 h-4" />
+              <Zap className="w-3 h-3" />
+              Run Autopilot
+              <Badge variant="secondary" className="ml-1 bg-white/20 text-white">
+                {attentionQueue.length}
+              </Badge>
+            </Button>
+          )}
+          
+          {isAutopilotRunning && (
+            <Button 
+              onClick={stopAutopilot}
+              variant="destructive"
+              className="gap-2"
+            >
+              <Square className="w-4 h-4" />
+              Stop Autopilot
+            </Button>
+          )}
+          
+          {autopilotComplete && (
+            <Button 
+              onClick={() => {
+                setAutopilotComplete(false);
+                setAutopilotStep(-1);
+                setProcessedVendors([]);
+              }}
+              variant="outline"
+              className="gap-2 border-status-success text-status-success"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              Autopilot Complete
+            </Button>
+          )}
+          
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Clock className="w-3.5 h-3.5" />
+            <span>Last refresh: {formatDate(lastRefresh)}</span>
+          </div>
         </div>
       </div>
+
+      {/* Autopilot Progress Panel */}
+      {(isAutopilotRunning || autopilotComplete) && (
+        <Card className={cn(
+          "card-elevated border-2 transition-all",
+          isAutopilotRunning && "border-primary/50 bg-primary/5",
+          autopilotComplete && "border-status-success/50 bg-status-success-bg"
+        )}>
+          <CardContent className="pt-4">
+            <div className="flex items-center gap-4 mb-4">
+              <div className={cn(
+                "w-10 h-10 rounded-full flex items-center justify-center",
+                isAutopilotRunning && "bg-primary text-white",
+                autopilotComplete && "bg-status-success text-white"
+              )}>
+                {isAutopilotRunning ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <CheckCircle2 className="w-5 h-5" />
+                )}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-1">
+                  <p className="font-semibold text-foreground">
+                    {isAutopilotRunning ? 'Autopilot Running' : 'Autopilot Complete'}
+                  </p>
+                  <span className="text-sm text-muted-foreground">
+                    {processedVendors.length}/{attentionQueue.length} vendors processed
+                  </span>
+                </div>
+                <Progress value={autopilotProgress} className="h-2" />
+              </div>
+            </div>
+            
+            {/* Step indicators */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-2">
+              {autopilotSteps.map((step, index) => (
+                <div
+                  key={step.id}
+                  className={cn(
+                    "flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all",
+                    autopilotStep > index && "bg-status-success text-white",
+                    autopilotStep === index && isAutopilotRunning && "bg-primary text-white animate-pulse",
+                    autopilotStep < index && "bg-muted text-muted-foreground"
+                  )}
+                >
+                  {autopilotStep > index ? (
+                    <CheckCircle2 className="w-3 h-3" />
+                  ) : autopilotStep === index && isAutopilotRunning ? (
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                  ) : (
+                    <span className="w-3 h-3 rounded-full bg-current opacity-30" />
+                  )}
+                  {step.label}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Portfolio Summary */}
       <div className="grid grid-cols-4 gap-4">
@@ -227,74 +492,101 @@ export const LandingPage = () => {
                 <TableHead className="w-[100px] text-right">$ Traded</TableHead>
                 <TableHead className="w-[90px]">Last Review</TableHead>
                 <TableHead className="w-[90px]">Next Due</TableHead>
+                <TableHead className="w-[100px]">Status</TableHead>
                 <TableHead className="w-[160px]">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {attentionQueue.map((vendor) => (
-                <TableRow key={vendor.id} className="hover:bg-muted/50">
-                  <TableCell className="font-medium">{vendor.name}</TableCell>
-                  <TableCell>
-                    <Badge 
-                      variant="outline" 
-                      className={cn("text-xs", bucketConfig[vendor.bucketTag].color)}
-                    >
-                      {bucketConfig[vendor.bucketTag].label.split(' ')[0]}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right font-mono">
-                    <span className={cn(
-                      "font-semibold",
-                      vendor.compositeScore < 60 ? "text-status-danger" : 
-                      vendor.compositeScore < 75 ? "text-orange-600" : "text-status-warning"
-                    )}>
-                      {vendor.compositeScore.toFixed(1)}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {vendor.riskDrivers.slice(0, 3).map((driver, i) => (
-                        <Badge key={i} variant="secondary" className="text-[10px] px-1.5 py-0">
-                          {driver}
-                        </Badge>
-                      ))}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right font-mono text-sm">
-                    {formatCurrency(vendor.totals.tradedDollar)}
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground">
-                    {formatDate(vendor.lastReviewDate)}
-                  </TableCell>
-                  <TableCell className="text-xs">
-                    <span className={cn(
-                      new Date(vendor.nextReviewDue) < new Date() ? "text-status-danger font-medium" : "text-muted-foreground"
-                    )}>
-                      {formatDate(vendor.nextReviewDue)}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <Button 
-                        size="sm" 
+              {attentionQueue.map((vendor) => {
+                const isProcessed = processedVendors.includes(vendor.id);
+                
+                return (
+                  <TableRow key={vendor.id} className={cn(
+                    "hover:bg-muted/50",
+                    isProcessed && "bg-status-success-bg/30"
+                  )}>
+                    <TableCell className="font-medium">{vendor.name}</TableCell>
+                    <TableCell>
+                      <Badge 
                         variant="outline" 
-                        className="h-7 text-xs"
-                        onClick={() => navigate(`/vendor/${vendor.id}`)}
+                        className={cn("text-xs", bucketConfig[vendor.bucketTag].color)}
                       >
-                        Review
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        className="h-7 text-xs"
-                        onClick={() => navigate(`/investigate/${vendor.id}`)}
-                      >
-                        <Search className="w-3 h-3 mr-1" />
-                        Investigate
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                        {bucketConfig[vendor.bucketTag].label.split(' ')[0]}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right font-mono">
+                      <span className={cn(
+                        "font-semibold",
+                        vendor.compositeScore < 60 ? "text-status-danger" : 
+                        vendor.compositeScore < 75 ? "text-orange-600" : "text-status-warning"
+                      )}>
+                        {vendor.compositeScore.toFixed(1)}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-wrap gap-1">
+                        {vendor.riskDrivers.slice(0, 3).map((driver, i) => (
+                          <Badge key={i} variant="secondary" className="text-[10px] px-1.5 py-0">
+                            {driver}
+                          </Badge>
+                        ))}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right font-mono text-sm">
+                      {formatCurrency(vendor.totals.tradedDollar)}
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground">
+                      {formatDate(vendor.lastReviewDate)}
+                    </TableCell>
+                    <TableCell className="text-xs">
+                      <span className={cn(
+                        new Date(vendor.nextReviewDue) < new Date() ? "text-status-danger font-medium" : "text-muted-foreground"
+                      )}>
+                        {formatDate(vendor.nextReviewDue)}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      {isProcessed ? (
+                        <Badge className="bg-status-success text-white text-[10px]">
+                          <CheckCircle2 className="w-3 h-3 mr-1" />
+                          Processed
+                        </Badge>
+                      ) : isAutopilotRunning ? (
+                        <Badge variant="outline" className="text-[10px] animate-pulse">
+                          <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                          Queued
+                        </Badge>
+                      ) : (
+                        <Badge variant="secondary" className="text-[10px]">
+                          Pending
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="h-7 text-xs"
+                          onClick={() => navigate(`/vendor/${vendor.id}`)}
+                          disabled={isAutopilotRunning}
+                        >
+                          Review
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          className="h-7 text-xs"
+                          onClick={() => navigate(`/investigate/${vendor.id}`)}
+                          disabled={isAutopilotRunning}
+                        >
+                          <Search className="w-3 h-3 mr-1" />
+                          Investigate
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </CardContent>
