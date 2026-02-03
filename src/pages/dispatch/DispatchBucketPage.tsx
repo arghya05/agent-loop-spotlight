@@ -280,7 +280,14 @@ export const DispatchBucketPage = () => {
                         size="sm" 
                         variant="outline"
                         className="h-7 text-xs"
-                        onClick={() => {}}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          import('sonner').then(({ toast }) => {
+                            toast.success(`Nudge sent to ${vendor.name}`, {
+                              description: `Reminder email dispatched to ${vendor.owner} regarding ${vendor.openPOCount} at-risk POs.`
+                            });
+                          });
+                        }}
                       >
                         <Send className="w-3 h-3 mr-1" />
                         Nudge
