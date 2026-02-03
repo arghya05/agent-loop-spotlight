@@ -295,11 +295,48 @@ export const DispatchVendorPage = () => {
               </div>
 
               <div className="pt-3 space-y-2">
-                <Button className="w-full" size="sm">
+                <Button 
+                  className="w-full" 
+                  size="sm"
+                  onClick={() => {
+                    import('sonner').then(({ toast }) => {
+                      toast.success('Message sent to supplier', {
+                        description: `Communication dispatched to ${vendor.name} regarding ${vendor.openPOCount} open POs`
+                      });
+                    });
+                    addAuditEntry({
+                      timestamp: new Date().toISOString(),
+                      actor: 'User',
+                      role: currentRole,
+                      decision: `Sent message to ${vendor.name}`,
+                      toolsUsed: ['supplier_portal'],
+                      details: 'Supplier message dispatched'
+                    });
+                  }}
+                >
                   <Send className="w-4 h-4 mr-2" />
                   Message Supplier
                 </Button>
-                <Button variant="outline" className="w-full" size="sm">
+                <Button 
+                  variant="outline" 
+                  className="w-full" 
+                  size="sm"
+                  onClick={() => {
+                    import('sonner').then(({ toast }) => {
+                      toast.success('Review scheduled', {
+                        description: `Calendar invite sent for ${vendor.name} dispatch review`
+                      });
+                    });
+                    addAuditEntry({
+                      timestamp: new Date().toISOString(),
+                      actor: 'User',
+                      role: currentRole,
+                      decision: `Scheduled review for ${vendor.name}`,
+                      toolsUsed: ['calendar_scheduler'],
+                      details: 'Review meeting scheduled'
+                    });
+                  }}
+                >
                   <Calendar className="w-4 h-4 mr-2" />
                   Schedule Review
                 </Button>
@@ -540,11 +577,49 @@ export const DispatchVendorPage = () => {
                 </div>
               </ScrollArea>
               <div className="mt-3 flex gap-2">
-                <Button size="sm" variant="outline" className="flex-1 text-xs">
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="flex-1 text-xs"
+                  onClick={() => {
+                    import('sonner').then(({ toast }) => {
+                      toast.success('Reminder sent', {
+                        description: `Follow-up email dispatched to ${vendor.name}`
+                      });
+                    });
+                    addAuditEntry({
+                      timestamp: new Date().toISOString(),
+                      actor: 'User',
+                      role: currentRole,
+                      decision: `Sent reminder to ${vendor.name}`,
+                      toolsUsed: ['email_dispatcher'],
+                      details: 'Reminder email sent'
+                    });
+                  }}
+                >
                   <Send className="w-3 h-3 mr-1" />
                   Send Reminder
                 </Button>
-                <Button size="sm" variant="outline" className="flex-1 text-xs">
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="flex-1 text-xs"
+                  onClick={() => {
+                    import('sonner').then(({ toast }) => {
+                      toast.success('Issue escalated', {
+                        description: `${vendor.name} escalated to senior management`
+                      });
+                    });
+                    addAuditEntry({
+                      timestamp: new Date().toISOString(),
+                      actor: 'User',
+                      role: currentRole,
+                      decision: `Escalated ${vendor.name}`,
+                      toolsUsed: ['escalation_engine'],
+                      details: 'Issue escalated to management'
+                    });
+                  }}
+                >
                   <AlertTriangle className="w-3 h-3 mr-1" />
                   Escalate
                 </Button>
