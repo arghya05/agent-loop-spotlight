@@ -22,7 +22,7 @@ const AlgonomyLogo = () => (
     </svg>
     <div className="flex flex-col">
       <span className="text-2xl font-bold tracking-wider text-foreground">ALGONOMY</span>
-      <span className="text-xs font-medium tracking-widest text-muted-foreground uppercase">Atlas</span>
+      <span className="text-[9px] font-medium tracking-wide text-muted-foreground">Autonomous Retailer Supplier OS</span>
     </div>
   </div>
 );
