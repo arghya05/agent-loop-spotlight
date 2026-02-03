@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -19,8 +19,12 @@ import {
   Calendar,
   Send,
   Zap,
-  Factory
+  Factory,
+  Bot,
+  Play,
+  Loader2
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import dispatchVendorsData from '@/data/dispatch/vendors.json';
 import dispatchSettingsData from '@/data/dispatch/settings.json';
@@ -89,6 +93,62 @@ export const DispatchLandingPage = () => {
   const navigate = useNavigate();
   const vendors = dispatchVendorsData.vendors as DispatchVendor[];
   const settings = dispatchSettingsData;
+  
+  // Autopilot state
+  const [autopilotRunning, setAutopilotRunning] = useState(false);
+  const [autopilotStep, setAutopilotStep] = useState(0);
+  const [processedVendors, setProcessedVendors] = useState<string[]>([]);
+  
+  const autopilotSteps = [
+    'Scanning attention queue...',
+    'Analyzing risk patterns...',
+    'Generating intervention plans...',
+    'Dispatching nudge notifications...',
+    'Updating vendor statuses...',
+    'Logging audit trail...'
+  ];
+  
+  const runAutopilot = () => {
+    setAutopilotRunning(true);
+    setAutopilotStep(0);
+    setProcessedVendors([]);
+    
+    toast.info('Autopilot Started', {
+      description: 'Processing attention queue autonomously...'
+    });
+  };
+  
+  useEffect(() => {
+    if (!autopilotRunning) return;
+    
+    const attentionVendors = vendors
+      .filter(v => v.bucketTag === 'SS' || v.bucketTag === 'AW')
+      .sort((a, b) => b.riskScore - a.riskScore);
+    
+    if (autopilotStep < autopilotSteps.length) {
+      const timer = setTimeout(() => {
+        setAutopilotStep(prev => prev + 1);
+        
+        // Add processed vendor at certain steps
+        if (autopilotStep === 2 && attentionVendors[0]) {
+          setProcessedVendors(prev => [...prev, attentionVendors[0].id]);
+        }
+        if (autopilotStep === 3 && attentionVendors[1]) {
+          setProcessedVendors(prev => [...prev, attentionVendors[1].id]);
+        }
+        if (autopilotStep === 4 && attentionVendors[2]) {
+          setProcessedVendors(prev => [...prev, attentionVendors[2].id]);
+        }
+      }, 1200);
+      return () => clearTimeout(timer);
+    } else {
+      // Autopilot complete
+      setAutopilotRunning(false);
+      toast.success('Autopilot Complete', {
+        description: `Processed ${processedVendors.length + 1} vendors. 4 nudges sent, 3 plans approved.`
+      });
+    }
+  }, [autopilotRunning, autopilotStep, vendors, processedVendors.length]);
 
   // Calculate bucket stats
   const getBucketStats = () => {
@@ -148,11 +208,53 @@ export const DispatchLandingPage = () => {
           <h1 className="text-2xl font-bold text-foreground">Dispatch Readiness Home</h1>
           <p className="text-sm text-muted-foreground">Portfolio-level manufacturing & dispatch readiness</p>
         </div>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Clock className="w-3.5 h-3.5" />
-          <span>Last refresh: {formatDate(settings.lastRefresh)}</span>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Clock className="w-3.5 h-3.5" />
+            <span>Last refresh: {formatDate(settings.lastRefresh)}</span>
+          </div>
+          <Button
+            onClick={runAutopilot}
+            disabled={autopilotRunning}
+            className="bg-status-success hover:bg-status-success/90 text-white"
+          >
+            {autopilotRunning ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Running...
+              </>
+            ) : (
+              <>
+                <Bot className="w-4 h-4 mr-2" />
+                Run Autopilot
+              </>
+            )}
+          </Button>
         </div>
       </div>
+      
+      {/* Autopilot Progress */}
+      {autopilotRunning && (
+        <Card className="border-status-success/30 bg-status-success/5">
+          <CardContent className="py-4">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Bot className="w-5 h-5 text-status-success animate-pulse" />
+                <span className="font-medium text-status-success">Autopilot Active</span>
+              </div>
+              <div className="flex-1">
+                <Progress value={(autopilotStep / autopilotSteps.length) * 100} className="h-2" />
+              </div>
+              <span className="text-sm text-muted-foreground">
+                {autopilotSteps[autopilotStep] || 'Completing...'}
+              </span>
+              <Badge variant="secondary" className="text-xs">
+                {processedVendors.length} vendors processed
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Portfolio KPIs */}
       <div className="grid grid-cols-5 gap-4">
