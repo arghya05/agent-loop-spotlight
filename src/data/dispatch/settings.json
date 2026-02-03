@@ -1,0 +1,27 @@
+{
+  "bucketThresholds": {
+    "flow": {"maxRiskScore": 25, "label": "Flow (On Track)", "description": "Low risk, all milestones on schedule"},
+    "aw": {"minRiskScore": 26, "maxRiskScore": 60, "label": "AW (Attention/Watchlist)", "description": "Early warning, risk rising but recoverable"},
+    "ss": {"minRiskScore": 61, "label": "SS (Slipping Schedule)", "description": "High probability of missing ex-factory date"}
+  },
+  "reviewFrequency": {
+    "flow": 30,
+    "aw": 14,
+    "ss": 7
+  },
+  "criticalMilestones": ["Fabric In", "Cutting", "Sewing", "Ex-Factory"],
+  "defaultLeadTimes": {
+    "orderToFabric": 10,
+    "fabricToCutting": 5,
+    "cuttingToSewing": 7,
+    "sewingToInspection": 8,
+    "inspectionToPackaging": 5,
+    "packagingToExFactory": 3
+  },
+  "notificationRules": {
+    "milestoneDelayThreshold": 2,
+    "escalationAfterDays": 3,
+    "supplierResponseSLA": 48
+  },
+  "lastRefresh": "2024-01-20T12:00:00Z"
+}

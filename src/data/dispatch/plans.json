@@ -1,0 +1,36 @@
+{
+  "plans": [
+    {
+      "id": "DP001",
+      "vendorId": "DV001",
+      "poIds": ["PO001", "PO002"],
+      "status": "pending",
+      "createdAt": "2024-01-20T10:00:00Z",
+      "actions": [
+        {"id": "A1", "category": "PRODUCTION", "title": "Add overtime shift for sewing lines", "priority": "critical", "owner": "Supplier", "dueDate": "2024-01-22", "expectedImpact": "Recover 3 days", "enabled": true},
+        {"id": "A2", "category": "PRODUCTION", "title": "Prioritize PO-001 over PO-002 SKUs", "priority": "high", "owner": "Supplier", "dueDate": "2024-01-21", "expectedImpact": "Ensure critical PO first", "enabled": true},
+        {"id": "A3", "category": "QC", "title": "Pre-book third-party inspector", "priority": "high", "owner": "Retailer", "dueDate": "2024-01-25", "expectedImpact": "Reduce inspection queue", "enabled": true},
+        {"id": "A4", "category": "LOGISTICS", "title": "Pre-book container slot at Mundra", "priority": "medium", "owner": "Retailer", "dueDate": "2024-01-28", "expectedImpact": "Secure dispatch capacity", "enabled": true},
+        {"id": "A5", "category": "CONTINGENCY", "title": "Identify backup factory for overflow", "priority": "low", "owner": "Sourcing", "dueDate": "2024-01-25", "expectedImpact": "Risk mitigation", "enabled": false}
+      ],
+      "approvals": [],
+      "tasksCreated": []
+    },
+    {
+      "id": "DP002",
+      "vendorId": "DV003",
+      "poIds": ["PO005", "PO006"],
+      "status": "draft",
+      "createdAt": "2024-01-21T08:00:00Z",
+      "actions": [
+        {"id": "B1", "category": "PRODUCTION", "title": "Activate secondary production line", "priority": "critical", "owner": "Supplier", "dueDate": "2024-01-22", "expectedImpact": "Recover 5 days", "enabled": true},
+        {"id": "B2", "category": "QC", "title": "Deploy additional QC team for rework", "priority": "critical", "owner": "Supplier", "dueDate": "2024-01-22", "expectedImpact": "Clear inspection backlog", "enabled": true},
+        {"id": "B3", "category": "LOGISTICS", "title": "Arrange partial shipment for completed units", "priority": "high", "owner": "Retailer", "dueDate": "2024-01-26", "expectedImpact": "Reduce $ at risk", "enabled": true},
+        {"id": "B4", "category": "CONTINGENCY", "title": "Split remaining qty to backup factory", "priority": "high", "owner": "Sourcing", "dueDate": "2024-01-24", "expectedImpact": "Ensure delivery", "enabled": true},
+        {"id": "B5", "category": "POLICY", "title": "Hold new PO releases until recovery", "priority": "medium", "owner": "Category Head", "dueDate": "2024-01-23", "expectedImpact": "Prevent overload", "enabled": true}
+      ],
+      "approvals": [],
+      "tasksCreated": []
+    }
+  ]
+}

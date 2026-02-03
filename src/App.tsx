@@ -13,6 +13,9 @@ import { SettingsPage } from "@/pages/SettingsPage";
 import { AdminAgentsPage } from "@/pages/AdminAgentsPage";
 import { ConnectorsPage } from "@/pages/ConnectorsPage";
 import { AnalyticsPage } from "@/pages/AnalyticsPage";
+import { DispatchLandingPage } from "@/pages/dispatch/DispatchLandingPage";
+import { DispatchBucketPage } from "@/pages/dispatch/DispatchBucketPage";
+import { DispatchVendorPage } from "@/pages/dispatch/DispatchVendorPage";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -38,6 +41,10 @@ const App = () => (
             <Route path="/admin/agents" element={<AdminAgentsPage />} />
             <Route path="/connectors" element={<ConnectorsPage />} />
             <Route path="/analytics" element={<AnalyticsPage />} />
+            {/* Dispatch Readiness Agent Routes */}
+            <Route path="/dispatch/landing" element={<DispatchLandingPage />} />
+            <Route path="/dispatch/bucket/:bucketId" element={<DispatchBucketPage />} />
+            <Route path="/dispatch/vendor/:vendorId" element={<DispatchVendorPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
