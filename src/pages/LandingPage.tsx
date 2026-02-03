@@ -26,31 +26,40 @@ import {
   Loader2,
   Bot,
   Play,
-  Square
+  Square,
+  Wrench
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const bucketConfig: Record<BucketTag, { label: string; color: string; bgColor: string; icon: React.ReactNode }> = {
+const bucketConfig: Record<BucketTag, { label: string; shortLabel: string; planType: string; color: string; bgColor: string; icon: React.ReactNode }> = {
   good: { 
-    label: 'Good Performers', 
+    label: 'On Track', 
+    shortLabel: 'On Track',
+    planType: 'Maintain Plan',
     color: 'text-status-success', 
     bgColor: 'bg-status-success-bg border-status-success/20',
     icon: <CheckCircle2 className="w-5 h-5" />
   },
   average: { 
-    label: 'Average Performance', 
+    label: 'Watchlist', 
+    shortLabel: 'Watchlist',
+    planType: 'Quick Fix Plan',
     color: 'text-status-warning', 
     bgColor: 'bg-status-warning-bg border-status-warning/20',
     icon: <AlertTriangle className="w-5 h-5" />
   },
   needs_review: { 
-    label: 'Needs Review', 
+    label: 'At Risk', 
+    shortLabel: 'At Risk',
+    planType: 'Recovery Plan',
     color: 'text-orange-600', 
     bgColor: 'bg-orange-50 border-orange-200',
     icon: <AlertCircle className="w-5 h-5" />
   },
   critical: { 
-    label: 'Critical Misses', 
+    label: 'Breached', 
+    shortLabel: 'Breached',
+    planType: 'Contain + Escalate',
     color: 'text-status-danger', 
     bgColor: 'bg-status-danger-bg border-status-danger/20',
     icon: <XCircle className="w-5 h-5" />
@@ -234,6 +243,37 @@ export const LandingPage = () => {
 
   return (
     <div className="p-6 space-y-6">
+      {/* Guided Demo Mode Banner */}
+      <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-lg p-4">
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 text-sm font-semibold text-primary">
+            <Zap className="w-4 h-4" />
+            Guided Demo
+          </div>
+          <div className="flex items-center gap-4 text-sm text-foreground">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center">1</span>
+              <span>Choose bucket</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-muted text-muted-foreground text-xs font-bold flex items-center justify-center">2</span>
+              <span>Pick vendor</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-muted text-muted-foreground text-xs font-bold flex items-center justify-center">3</span>
+              <span>Approve plan</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-muted text-muted-foreground text-xs font-bold flex items-center justify-center">4</span>
+              <span>See audit trail</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -566,15 +606,16 @@ export const LandingPage = () => {
                       <div className="flex items-center gap-1">
                         <Button 
                           size="sm" 
-                          variant="outline" 
-                          className="h-7 text-xs"
+                          className="h-7 text-xs bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
                           onClick={() => navigate(`/vendor/${vendor.id}`)}
                           disabled={isAutopilotRunning}
                         >
-                          Review
+                          <Wrench className="w-3 h-3 mr-1" />
+                          Fix Now
                         </Button>
                         <Button 
                           size="sm" 
+                          variant="outline" 
                           className="h-7 text-xs"
                           onClick={() => navigate(`/investigate/${vendor.id}`)}
                           disabled={isAutopilotRunning}

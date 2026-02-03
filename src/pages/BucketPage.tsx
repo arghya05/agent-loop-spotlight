@@ -16,35 +16,40 @@ import {
   AlertCircle,
   XCircle,
   Clock,
-  CalendarClock
+  CalendarClock,
+  Wrench
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
-const bucketConfig: Record<BucketTag, { label: string; color: string; bgColor: string; icon: React.ReactNode; description: string }> = {
+const bucketConfig: Record<BucketTag, { label: string; planType: string; color: string; bgColor: string; icon: React.ReactNode; description: string }> = {
   good: { 
-    label: 'Good Performers', 
+    label: 'On Track', 
+    planType: 'Maintain Plan',
     color: 'text-status-success', 
     bgColor: 'bg-status-success-bg',
     icon: <CheckCircle2 className="w-5 h-5" />,
     description: 'Composite score ≥ 90 with no critical compliance breaches'
   },
   average: { 
-    label: 'Average Performance', 
+    label: 'Watchlist', 
+    planType: 'Quick Fix Plan',
     color: 'text-status-warning', 
     bgColor: 'bg-status-warning-bg',
     icon: <AlertTriangle className="w-5 h-5" />,
     description: 'Composite score 75-89 or minor compliance breaches'
   },
   needs_review: { 
-    label: 'Needs Review', 
+    label: 'At Risk', 
+    planType: 'Recovery Plan',
     color: 'text-orange-600', 
     bgColor: 'bg-orange-50',
     icon: <AlertCircle className="w-5 h-5" />,
     description: 'Composite score 60-74 or repeated metric drift'
   },
   critical: { 
-    label: 'Critical Misses', 
+    label: 'Breached', 
+    planType: 'Contain + Escalate',
     color: 'text-status-danger', 
     bgColor: 'bg-status-danger-bg',
     icon: <XCircle className="w-5 h-5" />,
@@ -261,14 +266,15 @@ export const BucketPage = () => {
                     <div className="flex items-center gap-1">
                       <Button 
                         size="sm" 
-                        variant="outline" 
-                        className="h-7 text-xs"
+                        className="h-7 text-xs bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
                         onClick={() => navigate(`/vendor/${vendor.id}`)}
                       >
-                        Review
+                        <Wrench className="w-3 h-3 mr-1" />
+                        Fix Now
                       </Button>
                       <Button 
                         size="sm" 
+                        variant="outline" 
                         className="h-7 text-xs"
                         onClick={() => navigate(`/investigate/${vendor.id}`)}
                       >
