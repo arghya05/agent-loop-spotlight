@@ -1,0 +1,92 @@
+[
+  {
+    "id": "erp",
+    "name": "ERP System (SAP S/4HANA)",
+    "description": "PO creation, milestone updates, and shipment tracking",
+    "icon": "Database",
+    "status": "connected",
+    "lastSync": "2024-01-20T11:30:00Z",
+    "config": {
+      "system": "SAP S/4HANA",
+      "syncInterval": "2 hours",
+      "endpoint": "sap.landmark.ae/api/v2"
+    }
+  },
+  {
+    "id": "factory_portal",
+    "name": "Factory Portal Integration",
+    "description": "Real-time milestone updates and photo evidence from factories",
+    "icon": "Factory",
+    "status": "connected",
+    "lastSync": "2024-01-20T10:45:00Z",
+    "config": {
+      "portal": "Landmark Factory Connect",
+      "activeFactories": "42",
+      "responseRate": "87%"
+    }
+  },
+  {
+    "id": "wms",
+    "name": "WMS Integration (Manhattan)",
+    "description": "Warehouse receiving, gate-in tracking, and hold status",
+    "icon": "Warehouse",
+    "status": "connected",
+    "lastSync": "2024-01-20T08:00:00Z",
+    "config": {
+      "system": "Manhattan WMS",
+      "warehouses": "Jebel Ali, Dubai DC, Riyadh DC",
+      "syncInterval": "4 hours"
+    }
+  },
+  {
+    "id": "forwarder",
+    "name": "Freight Forwarder API",
+    "description": "Shipment booking, ETAs, and container tracking",
+    "icon": "Ship",
+    "status": "connected",
+    "lastSync": "2024-01-20T09:00:00Z",
+    "config": {
+      "provider": "Maersk + DHL",
+      "trackingEnabled": "Yes",
+      "bookingIntegration": "Active"
+    }
+  },
+  {
+    "id": "quality_system",
+    "name": "QC/Inspection System",
+    "description": "Inspection results, defect rates, and hold notifications",
+    "icon": "ClipboardCheck",
+    "status": "connected",
+    "lastSync": "2024-01-20T07:30:00Z",
+    "config": {
+      "system": "QIMAone",
+      "inspectionTypes": "Pre-ship, In-line, Final",
+      "alertThreshold": "5% defect rate"
+    }
+  },
+  {
+    "id": "supplier_email",
+    "name": "Supplier Email Integration",
+    "description": "Automated supplier communications and response tracking",
+    "icon": "Mail",
+    "status": "connected",
+    "lastSync": "2024-01-20T09:00:00Z",
+    "config": {
+      "provider": "Microsoft Exchange",
+      "sender": "dispatch-ops@landmark.ae",
+      "templateCount": "12"
+    }
+  },
+  {
+    "id": "planning_system",
+    "name": "Demand Planning System",
+    "description": "Forecast data and allocation priorities",
+    "icon": "TrendingUp",
+    "status": "disconnected",
+    "lastSync": null,
+    "config": {
+      "system": "Blue Yonder",
+      "status": "Pending configuration"
+    }
+  }
+]

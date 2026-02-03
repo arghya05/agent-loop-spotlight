@@ -1,0 +1,86 @@
+[
+  {
+    "id": "milestone_tracker",
+    "agentName": "Milestone Tracker Agent",
+    "description": "Monitors PO milestone progress and flags delays against planned dates",
+    "active": true,
+    "schedule": "Every 4 hours",
+    "lastRun": "2024-01-20T08:00:00Z",
+    "nextRun": "2024-01-20T12:00:00Z",
+    "lastOutcome": "success",
+    "logs": [
+      { "time": "2024-01-20T08:00:00Z", "status": "success", "duration": 45, "summary": "Checked 342 POs across 28 vendors. 12 milestone delays detected." },
+      { "time": "2024-01-20T04:00:00Z", "status": "success", "duration": 38, "summary": "Checked 340 POs. 8 new delays flagged." },
+      { "time": "2024-01-20T00:00:00Z", "status": "success", "duration": 42, "summary": "Overnight check: 5 cutting delays, 2 fabric delays." }
+    ]
+  },
+  {
+    "id": "readiness_risk",
+    "agentName": "Readiness Risk Agent",
+    "description": "Calculates dispatch readiness scores and predicts slippage probability",
+    "active": true,
+    "schedule": "Every 6 hours",
+    "lastRun": "2024-01-20T06:00:00Z",
+    "nextRun": "2024-01-20T12:00:00Z",
+    "lastOutcome": "success",
+    "logs": [
+      { "time": "2024-01-20T06:00:00Z", "status": "success", "duration": 62, "summary": "Risk scores updated for 342 POs. 18 moved to SS bucket." },
+      { "time": "2024-01-20T00:00:00Z", "status": "success", "duration": 58, "summary": "Daily risk recalc complete. 5 vendors escalated to AW." }
+    ]
+  },
+  {
+    "id": "supplier_comms",
+    "agentName": "Supplier Communication Agent",
+    "description": "Sends automated milestone requests, follow-ups, and escalations to suppliers",
+    "active": true,
+    "schedule": "Daily at 09:00",
+    "lastRun": "2024-01-20T09:00:00Z",
+    "nextRun": "2024-01-21T09:00:00Z",
+    "lastOutcome": "success",
+    "logs": [
+      { "time": "2024-01-20T09:00:00Z", "status": "success", "duration": 28, "summary": "Sent 15 milestone update requests, 8 follow-ups, 3 escalations." },
+      { "time": "2024-01-19T09:00:00Z", "status": "success", "duration": 25, "summary": "Sent 12 requests. 2 supplier responses received." }
+    ]
+  },
+  {
+    "id": "plan_recommendation",
+    "agentName": "Plan Recommendation Agent",
+    "description": "Generates contingency and recovery plans for at-risk POs",
+    "active": true,
+    "schedule": "On-demand",
+    "lastRun": "2024-01-20T10:30:00Z",
+    "nextRun": "2024-01-20T14:00:00Z",
+    "lastOutcome": "success",
+    "logs": [
+      { "time": "2024-01-20T10:30:00Z", "status": "success", "duration": 18, "summary": "Generated 4 recovery plans for SS bucket vendors." },
+      { "time": "2024-01-19T15:00:00Z", "status": "success", "duration": 22, "summary": "Created contingency plan for SuratHomeTex - split shipment recommended." }
+    ]
+  },
+  {
+    "id": "sla_rules",
+    "agentName": "SLA Rules Engine",
+    "description": "Enforces response SLAs and triggers escalation workflows",
+    "active": true,
+    "schedule": "Continuous",
+    "lastRun": "2024-01-20T11:45:00Z",
+    "nextRun": "2024-01-20T12:00:00Z",
+    "lastOutcome": "warning",
+    "logs": [
+      { "time": "2024-01-20T11:45:00Z", "status": "warning", "duration": 5, "summary": "3 suppliers breached 48h response SLA. Escalation triggered." },
+      { "time": "2024-01-20T11:30:00Z", "status": "success", "duration": 4, "summary": "SLA check passed for 25 pending responses." }
+    ]
+  },
+  {
+    "id": "capacity_monitor",
+    "agentName": "Capacity Monitor Agent",
+    "description": "Tracks factory capacity utilization and flags production bottlenecks",
+    "active": false,
+    "schedule": "Weekly",
+    "lastRun": "2024-01-15T06:00:00Z",
+    "nextRun": "2024-01-22T06:00:00Z",
+    "lastOutcome": "success",
+    "logs": [
+      { "time": "2024-01-15T06:00:00Z", "status": "success", "duration": 120, "summary": "Weekly capacity audit complete. 2 factories at 95%+ utilization." }
+    ]
+  }
+]
