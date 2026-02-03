@@ -262,9 +262,9 @@ const DispatchSettings = () => {
             <CardContent>
               <div className="grid grid-cols-3 gap-6">
                 {[
-                  { bucket: 'Flow', key: 'flow', days: reviewFrequency.flow, color: 'text-status-success', description: 'Low-risk POs on track' },
-                  { bucket: 'AW (Watchlist)', key: 'aw', days: reviewFrequency.aw, color: 'text-status-warning', description: 'Early warning signals' },
-                  { bucket: 'SS (Slipping)', key: 'ss', days: reviewFrequency.ss, color: 'text-status-danger', description: 'High risk of delay' }
+                  { bucket: 'On Track', key: 'flow', days: reviewFrequency.flow, color: 'text-status-success', description: 'Low-risk POs on track' },
+                  { bucket: 'Watchlist', key: 'aw', days: reviewFrequency.aw, color: 'text-status-warning', description: 'Early warning signals' },
+                  { bucket: 'Slipping', key: 'ss', days: reviewFrequency.ss, color: 'text-status-danger', description: 'High risk of delay' }
                 ].map(({ bucket, key, days, color, description }) => (
                   <div key={bucket} className="p-4 rounded-lg border border-border text-center">
                     <p className={`text-sm font-semibold ${color} mb-1`}>{bucket}</p>

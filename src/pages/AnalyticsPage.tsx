@@ -24,9 +24,9 @@ const DISPATCH_COLORS = ['#dc2626', '#eab308', '#16a34a']; // SS, AW, Flow
 // Dispatch Analytics
 const DispatchAnalyticsPage = () => {
   const dispatchPieData = [
-    { name: 'SS (Slipping)', value: 18, color: '#dc2626' },
-    { name: 'AW (Watchlist)', value: 45, color: '#eab308' },
-    { name: 'Flow (On Track)', value: 279, color: '#16a34a' }
+    { name: 'Slipping', value: 18, color: '#dc2626' },
+    { name: 'Watchlist', value: 45, color: '#eab308' },
+    { name: 'On Track', value: 279, color: '#16a34a' }
   ];
 
   const riskByCategory = [
@@ -107,9 +107,9 @@ const DispatchAnalyticsPage = () => {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Buckets</SelectItem>
-            <SelectItem value="ss">SS (Slipping Schedule)</SelectItem>
-            <SelectItem value="aw">AW (Watchlist)</SelectItem>
-            <SelectItem value="flow">Flow (On Track)</SelectItem>
+            <SelectItem value="ss">Slipping</SelectItem>
+            <SelectItem value="aw">Watchlist</SelectItem>
+            <SelectItem value="flow">On Track</SelectItem>
           </SelectContent>
         </Select>
       </div>
