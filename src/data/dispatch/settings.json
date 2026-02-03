@@ -1,8 +1,8 @@
 {
   "bucketThresholds": {
-    "flow": {"maxRiskScore": 25, "label": "Flow (On Track)", "description": "Low risk, all milestones on schedule"},
-    "aw": {"minRiskScore": 26, "maxRiskScore": 60, "label": "AW (Attention/Watchlist)", "description": "Early warning, risk rising but recoverable"},
-    "ss": {"minRiskScore": 61, "label": "SS (Slipping Schedule)", "description": "High probability of missing ex-factory date"}
+    "flow": {"maxRiskScore": 25, "label": "On Track", "description": "Low risk, all milestones on schedule"},
+    "aw": {"minRiskScore": 26, "maxRiskScore": 60, "label": "Watchlist", "description": "Early warning, risk rising but recoverable"},
+    "ss": {"minRiskScore": 61, "label": "Slipping", "description": "High probability of missing ex-factory date"}
   },
   "reviewFrequency": {
     "flow": 30,

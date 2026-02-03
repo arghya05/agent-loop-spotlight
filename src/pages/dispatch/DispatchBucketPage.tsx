@@ -45,24 +45,24 @@ interface DispatchVendor {
 
 const bucketConfig: Record<string, { label: string; fullLabel: string; color: string; bgColor: string; icon: React.ReactNode; description: string }> = {
   flow: { 
-    label: 'Flow', 
-    fullLabel: 'Flow (On Track)',
+    label: 'On Track', 
+    fullLabel: 'On Track',
     color: 'text-status-success', 
     bgColor: 'bg-status-success-bg',
     icon: <CheckCircle2 className="w-5 h-5" />,
     description: 'Low risk, all milestones on schedule. Risk score ≤ 25.'
   },
   aw: { 
-    label: 'AW', 
-    fullLabel: 'Attention / Watchlist',
+    label: 'Watchlist', 
+    fullLabel: 'Watchlist',
     color: 'text-status-warning', 
     bgColor: 'bg-status-warning-bg',
     icon: <AlertTriangle className="w-5 h-5" />,
     description: 'Early warning, risk rising but recoverable. Risk score 26-60.'
   },
   ss: { 
-    label: 'SS', 
-    fullLabel: 'Slipping Schedule',
+    label: 'Slipping', 
+    fullLabel: 'Slipping',
     color: 'text-status-danger', 
     bgColor: 'bg-status-danger-bg',
     icon: <XCircle className="w-5 h-5" />,

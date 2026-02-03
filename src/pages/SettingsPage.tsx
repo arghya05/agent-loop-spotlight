@@ -80,7 +80,7 @@ const DispatchSettings = () => {
                 Dispatch Readiness Bucket Configuration
               </CardTitle>
               <p className="text-xs text-muted-foreground">
-                Define risk score ranges for Flow, AW (Watchlist), and SS (Slipping Schedule) buckets
+                Define risk score ranges for On Track, Watchlist, and Slipping buckets
               </p>
             </CardHeader>
             <CardContent className="space-y-6">

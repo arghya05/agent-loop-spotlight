@@ -57,8 +57,8 @@ interface DispatchVendor {
 
 const bucketConfig: Record<BucketTag, { label: string; fullLabel: string; color: string; bgColor: string; icon: React.ReactNode; description: string; planType: string }> = {
   Flow: { 
-    label: 'Flow', 
-    fullLabel: 'Flow (On Track)',
+    label: 'On Track', 
+    fullLabel: 'On Track',
     color: 'text-status-success', 
     bgColor: 'bg-status-success-bg border-status-success/20',
     icon: <CheckCircle2 className="w-5 h-5" />,
@@ -66,8 +66,8 @@ const bucketConfig: Record<BucketTag, { label: string; fullLabel: string; color:
     planType: 'Maintain Plan'
   },
   AW: { 
-    label: 'AW', 
-    fullLabel: 'Attention / Watchlist',
+    label: 'Watchlist', 
+    fullLabel: 'Watchlist',
     color: 'text-status-warning', 
     bgColor: 'bg-status-warning-bg border-status-warning/20',
     icon: <AlertTriangle className="w-5 h-5" />,
@@ -75,8 +75,8 @@ const bucketConfig: Record<BucketTag, { label: string; fullLabel: string; color:
     planType: 'Recovery Plan'
   },
   SS: { 
-    label: 'SS', 
-    fullLabel: 'Slipping Schedule',
+    label: 'Slipping', 
+    fullLabel: 'Slipping',
     color: 'text-status-danger', 
     bgColor: 'bg-status-danger-bg border-status-danger/20',
     icon: <XCircle className="w-5 h-5" />,
