@@ -28,8 +28,8 @@ const agentTabs = [
     label: 'Dispatch Readiness Agent',
     shortLabel: 'Dispatch Readiness',
     icon: Truck,
-    active: false,
-    badge: 'Coming Soon'
+    active: true,
+    badge: null
   },
   { 
     id: 'supplier-onboarding', 
@@ -56,11 +56,12 @@ export const AppLayout = () => {
   const location = useLocation();
 
   const handleTabChange = (tabId: string) => {
+    setActiveAgent(tabId);
     if (tabId === 'supplier-performance') {
-      setActiveAgent(tabId);
       navigate('/landing');
+    } else if (tabId === 'dispatch-readiness') {
+      navigate('/dispatch/landing');
     }
-    // Other tabs are disabled/coming soon
   };
 
   return (
