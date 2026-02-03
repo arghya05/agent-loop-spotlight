@@ -27,8 +27,13 @@ import {
   Bot,
   Play,
   Square,
-  Wrench
+  Wrench,
+  FileText,
+  Send,
+  Database,
+  ShieldCheck
 } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 
 const bucketConfig: Record<BucketTag, { label: string; shortLabel: string; planType: string; color: string; bgColor: string; icon: React.ReactNode }> = {
@@ -98,7 +103,9 @@ export const LandingPage = () => {
   const [autopilotComplete, setAutopilotComplete] = useState(false);
   const [currentVendorIndex, setCurrentVendorIndex] = useState(0);
   const [processedVendors, setProcessedVendors] = useState<string[]>([]);
+  const [activityLog, setActivityLog] = useState<{time: string; icon: string; message: string; vendor?: string; type: 'info' | 'action' | 'success'}[]>([]);
   const autopilotRef = useRef<NodeJS.Timeout | null>(null);
+  const activityScrollRef = useRef<HTMLDivElement>(null);
   
   const bucketStats = getBucketStats();
   const attentionQueue = getAttentionQueue();
@@ -106,7 +113,13 @@ export const LandingPage = () => {
   const totalPOs = vendors.reduce((sum, v) => sum + v.totals.totalPOs, 0);
   const needsAttention = attentionQueue.length;
 
-  // Autopilot workflow effect
+  // Helper to add activity log entry
+  const addActivityLog = (icon: string, message: string, vendor?: string, type: 'info' | 'action' | 'success' = 'info') => {
+    const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    setActivityLog(prev => [...prev, { time, icon, message, vendor, type }]);
+  };
+
+  // Autopilot workflow effect with detailed activity logging
   useEffect(() => {
     if (isAutopilotRunning && autopilotStep < autopilotSteps.length - 1) {
       const currentStepConfig = autopilotSteps[autopilotStep + 1];
@@ -124,27 +137,82 @@ export const LandingPage = () => {
           duration: autopilotSteps[nextStep].duration
         });
 
-        // Process vendor on specific steps
-        if (nextStep === 1 && currentVendorIndex < attentionQueue.length) {
-          const vendor = attentionQueue[currentVendorIndex];
+        // Step-specific detailed activity logging
+        if (nextStep === 0) {
+          // Scanning
+          addActivityLog('database', `Connecting to vendor database...`, undefined, 'info');
+          setTimeout(() => {
+            addActivityLog('search', `Found ${attentionQueue.length} vendors requiring attention`, undefined, 'info');
+            attentionQueue.forEach((vendor, idx) => {
+              setTimeout(() => {
+                addActivityLog('alert', `Queued: ${vendor.name} (Score: ${vendor.compositeScore.toFixed(1)})`, vendor.name, 'info');
+              }, idx * 200);
+            });
+          }, 500);
+        }
+
+        if (nextStep === 1) {
+          // Investigation
+          attentionQueue.forEach((vendor, idx) => {
+            setTimeout(() => {
+              addActivityLog('search', `Investigating ${vendor.name}...`, vendor.name, 'action');
+            }, idx * 400);
+            setTimeout(() => {
+              addActivityLog('chart', `Analyzed ${vendor.riskDrivers.length} risk drivers for ${vendor.name}`, vendor.name, 'info');
+            }, idx * 400 + 200);
+          });
+          
           addAuditEntry({
             timestamp: new Date().toISOString(),
             actor: 'Autopilot Agent',
             role: currentRole,
-            decision: `Investigation started for ${vendor.name}`,
+            decision: `Investigation started for all vendors`,
             toolsUsed: ['kpi_monitor', 'compliance_checker', 'root_cause_builder'],
-            details: `Auto-processing vendor ${currentVendorIndex + 1} of ${attentionQueue.length}`
+            details: `Auto-processing ${attentionQueue.length} vendors`
           });
         }
 
-        // Auto-approve plans
+        if (nextStep === 2) {
+          // Analyzing root causes
+          attentionQueue.forEach((vendor, idx) => {
+            setTimeout(() => {
+              addActivityLog('lightbulb', `Root cause analysis: ${vendor.name}`, vendor.name, 'action');
+            }, idx * 300);
+            setTimeout(() => {
+              const causes = vendor.riskDrivers.slice(0, 2).join(', ') || 'Metric drift detected';
+              addActivityLog('target', `Identified: ${causes}`, vendor.name, 'info');
+            }, idx * 300 + 150);
+          });
+        }
+
+        if (nextStep === 3) {
+          // Generating plans
+          attentionQueue.forEach((vendor, idx) => {
+            const planType = bucketConfig[vendor.bucketTag].planType;
+            setTimeout(() => {
+              addActivityLog('file', `Generating ${planType} for ${vendor.name}...`, vendor.name, 'action');
+            }, idx * 350);
+            setTimeout(() => {
+              addActivityLog('checklist', `Plan ready: 3 remediation tasks queued`, vendor.name, 'success');
+            }, idx * 350 + 200);
+          });
+        }
+
         if (nextStep === 4) {
-          attentionQueue.forEach(vendor => {
+          // Auto-approving
+          attentionQueue.forEach((vendor, idx) => {
             const plan = getPlanByVendorId(vendor.id);
             if (plan && plan.status === 'pending') {
               approvePlan(plan.id, 'Autopilot Agent', currentRole);
             }
+            setTimeout(() => {
+              addActivityLog('shield', `Auto-approved plan for ${vendor.name}`, vendor.name, 'success');
+            }, idx * 250);
           });
+          
+          setTimeout(() => {
+            addActivityLog('check', `All ${attentionQueue.length} plans approved`, undefined, 'success');
+          }, attentionQueue.length * 250 + 100);
           
           addAuditEntry({
             timestamp: new Date().toISOString(),
@@ -156,9 +224,20 @@ export const LandingPage = () => {
           });
         }
 
-        // Mark vendors as processed on execute step
         if (nextStep === 5) {
-          setProcessedVendors(attentionQueue.map(v => v.id));
+          // Executing tasks
+          attentionQueue.forEach((vendor, idx) => {
+            setTimeout(() => {
+              addActivityLog('play', `Dispatching tasks for ${vendor.name}...`, vendor.name, 'action');
+            }, idx * 400);
+            setTimeout(() => {
+              addActivityLog('mail', `Notifying supplier: ${vendor.name}`, vendor.name, 'info');
+            }, idx * 400 + 150);
+            setTimeout(() => {
+              addActivityLog('check', `${vendor.name} remediation initiated`, vendor.name, 'success');
+              setProcessedVendors(prev => [...prev, vendor.id]);
+            }, idx * 400 + 300);
+          });
           
           addAuditEntry({
             timestamp: new Date().toISOString(),
@@ -173,6 +252,7 @@ export const LandingPage = () => {
         // Complete
         if (nextStep === autopilotSteps.length - 1) {
           setTimeout(() => {
+            addActivityLog('trophy', `Workflow complete! Processed ${attentionQueue.length} vendors`, undefined, 'success');
             setIsAutopilotRunning(false);
             setAutopilotComplete(true);
             
@@ -196,12 +276,23 @@ export const LandingPage = () => {
     }
   }, [isAutopilotRunning, autopilotStep, currentVendorIndex, attentionQueue, addToolTrace, addAuditEntry, approvePlan, getPlanByVendorId]);
 
+  // Auto-scroll activity log
+  useEffect(() => {
+    if (activityScrollRef.current) {
+      activityScrollRef.current.scrollTop = activityScrollRef.current.scrollHeight;
+    }
+  }, [activityLog]);
+
   const startAutopilot = () => {
     setIsAutopilotRunning(true);
     setAutopilotStep(0);
     setAutopilotComplete(false);
     setCurrentVendorIndex(0);
     setProcessedVendors([]);
+    setActivityLog([]); // Clear previous activity log
+    
+    // Initial activity log entry
+    addActivityLog('rocket', 'Autopilot initiated - starting vendor governance workflow', undefined, 'action');
     
     addAuditEntry({
       timestamp: new Date().toISOString(),
@@ -363,7 +454,7 @@ export const LandingPage = () => {
             </div>
             
             {/* Step indicators */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-2">
+            <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-3 border-b border-border/50">
               {autopilotSteps.map((step, index) => (
                 <div
                   key={step.id}
@@ -384,6 +475,74 @@ export const LandingPage = () => {
                   {step.label}
                 </div>
               ))}
+            </div>
+
+            {/* Real-time Activity Log */}
+            <div className="bg-background/50 rounded-lg border border-border/50 overflow-hidden">
+              <div className="flex items-center justify-between px-3 py-2 bg-muted/30 border-b border-border/50">
+                <div className="flex items-center gap-2 text-xs font-medium text-foreground">
+                  <FileText className="w-3.5 h-3.5 text-primary" />
+                  Live Activity Feed
+                </div>
+                <Badge variant="secondary" className="text-[10px]">
+                  {activityLog.length} events
+                </Badge>
+              </div>
+              <ScrollArea className="h-[180px]" ref={activityScrollRef}>
+                <div className="p-2 space-y-1">
+                  {activityLog.length === 0 ? (
+                    <div className="flex items-center justify-center h-32 text-xs text-muted-foreground">
+                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      Initializing...
+                    </div>
+                  ) : (
+                    activityLog.map((entry, i) => (
+                      <div 
+                        key={i} 
+                        className={cn(
+                          "flex items-start gap-2 px-2 py-1.5 rounded text-xs transition-all",
+                          entry.type === 'action' && "bg-primary/5",
+                          entry.type === 'success' && "bg-status-success/5",
+                          i === activityLog.length - 1 && "animate-pulse"
+                        )}
+                      >
+                        <span className="text-muted-foreground font-mono w-16 flex-shrink-0">
+                          {entry.time}
+                        </span>
+                        <span className={cn(
+                          "w-5 h-5 rounded flex items-center justify-center flex-shrink-0",
+                          entry.type === 'action' && "bg-primary/10 text-primary",
+                          entry.type === 'success' && "bg-status-success/10 text-status-success",
+                          entry.type === 'info' && "bg-muted text-muted-foreground"
+                        )}>
+                          {entry.icon === 'database' && <Database className="w-3 h-3" />}
+                          {entry.icon === 'search' && <Search className="w-3 h-3" />}
+                          {entry.icon === 'alert' && <AlertCircle className="w-3 h-3" />}
+                          {entry.icon === 'chart' && <TrendingDown className="w-3 h-3" />}
+                          {entry.icon === 'lightbulb' && <Zap className="w-3 h-3" />}
+                          {entry.icon === 'target' && <AlertTriangle className="w-3 h-3" />}
+                          {entry.icon === 'file' && <FileText className="w-3 h-3" />}
+                          {entry.icon === 'checklist' && <CheckCircle2 className="w-3 h-3" />}
+                          {entry.icon === 'shield' && <ShieldCheck className="w-3 h-3" />}
+                          {entry.icon === 'check' && <CheckCircle2 className="w-3 h-3" />}
+                          {entry.icon === 'play' && <Play className="w-3 h-3" />}
+                          {entry.icon === 'mail' && <Send className="w-3 h-3" />}
+                          {entry.icon === 'trophy' && <CheckCircle2 className="w-3 h-3" />}
+                          {entry.icon === 'rocket' && <Zap className="w-3 h-3" />}
+                        </span>
+                        <span className="flex-1 text-foreground">
+                          {entry.message}
+                        </span>
+                        {entry.vendor && (
+                          <Badge variant="outline" className="text-[9px] px-1.5 py-0">
+                            {entry.vendor.split(' ')[0]}
+                          </Badge>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+              </ScrollArea>
             </div>
           </CardContent>
         </Card>
