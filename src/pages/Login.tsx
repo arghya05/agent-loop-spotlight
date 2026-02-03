@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
-import algonomyLogo from '@/assets/algonomy-logo.png';
+import AlgonomyLogo from '@/components/AlgonomyLogo';
 
-const AlgonomyLogo = () => (
+const LogoBranding = () => (
   <div className="flex flex-col items-center gap-3">
-    <img src={algonomyLogo} alt="Algonomy" className="h-12" />
-    <span className="text-sm font-medium tracking-wide text-muted-foreground">Autonomous Retailer-Supplier OS</span>
+    <AlgonomyLogo className="h-12" />
+    <span className="text-sm font-medium tracking-wide text-muted-foreground">Retailer-Supplier OS</span>
   </div>
 );
 
@@ -52,7 +52,7 @@ const Login = () => {
       <Card className="w-full max-w-md relative z-10 bg-card/95 backdrop-blur-sm border-border/50 shadow-2xl">
         <CardHeader className="text-center space-y-4 pb-2">
           <div className="flex justify-center">
-            <AlgonomyLogo />
+            <LogoBranding />
           </div>
           <div>
             <CardTitle className="text-xl font-semibold">Welcome back</CardTitle>
