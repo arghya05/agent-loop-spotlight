@@ -65,14 +65,11 @@ export const GlobalTopBar = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-header text-header-foreground border-b border-border/10">
       <div className="flex items-center justify-between h-14 px-4">
-        {/* Left: Logo & Title */}
+        {/* Left: Title only (no logo - logo is in main tab bar) */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <Zap className="w-5 h-5 text-primary-foreground" />
-            </div>
             <div>
-              <h1 className="text-sm font-semibold leading-tight">Landmark Supplier Performance Agent</h1>
+              <h1 className="text-sm font-semibold leading-tight">Supplier Performance Agent</h1>
               <p className="text-[10px] text-header-foreground/60 leading-tight">Dubai / GCC Region</p>
             </div>
           </div>
