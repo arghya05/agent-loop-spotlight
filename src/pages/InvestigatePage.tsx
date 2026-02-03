@@ -486,7 +486,7 @@ export const InvestigatePage = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  {plan.status === 'pending' && !isExecuting && (
+                  {(plan.status === 'pending' || plan.status === 'draft') && !isExecuting && (
                     <Button 
                       className="w-full" 
                       onClick={handleApprovePlan}
