@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Search, Calendar, MapPin, RefreshCw } from 'lucide-react';
+import { Search, Calendar, MapPin, RefreshCw, LogOut } from 'lucide-react';
 import AlgonomyLogo from '@/components/AlgonomyLogo';
 import { useNavigate } from 'react-router-dom';
 
@@ -102,6 +102,20 @@ export const AppTopBar = () => {
           >
             <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
             Refresh
+          </Button>
+
+          <Button 
+            size="sm" 
+            variant="ghost"
+            onClick={() => {
+              sessionStorage.removeItem('algonomy_logged_in');
+              sessionStorage.removeItem('algonomy_user');
+              navigate('/login');
+            }}
+            className="h-8 text-xs text-header-foreground hover:bg-header-foreground/10"
+          >
+            <LogOut className="w-3.5 h-3.5 mr-1.5" />
+            Logout
           </Button>
         </div>
       </div>
