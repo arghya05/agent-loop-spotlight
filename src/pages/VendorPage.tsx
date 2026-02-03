@@ -25,10 +25,14 @@ import {
   Clock,
   Package,
   DollarSign,
-  Zap
+  Zap,
+  Play,
+  Loader2,
+  Eye
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
 const bucketConfig: Record<BucketTag, { label: string; color: string; bgColor: string; icon: React.ReactNode }> = {
@@ -65,13 +69,71 @@ const MiniSparkline = ({ data, color }: { data: number[]; color: string }) => {
 export const VendorPage = () => {
   const { vendorId } = useParams<{ vendorId: string }>();
   const navigate = useNavigate();
-  const { getVendorById, getPlanByVendorId, approvePlan, togglePlanAction } = useGovernanceStore();
+  const { getVendorById, getPlanByVendorId, approvePlan, togglePlanAction, updatePlanStatus } = useGovernanceStore();
   const { currentRole, addAuditEntry } = useAppStore();
   const [showPlanBuilder, setShowPlanBuilder] = useState(false);
   const [isReviewing, setIsReviewing] = useState(false);
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [executionStep, setExecutionStep] = useState(0);
 
   const vendor = getVendorById(vendorId || '');
   const plan = getPlanByVendorId(vendorId || '');
+
+  const executionSteps = [
+    'Validating plan actions...',
+    'Dispatching tasks to owners...',
+    'Sending notifications...',
+    'Updating system records...',
+    'Execution complete!'
+  ];
+
+  useEffect(() => {
+    if (isExecuting && executionStep < executionSteps.length) {
+      const timer = setTimeout(() => {
+        setExecutionStep(prev => prev + 1);
+      }, 800);
+      return () => clearTimeout(timer);
+    } else if (isExecuting && executionStep >= executionSteps.length && plan) {
+      setIsExecuting(false);
+      updatePlanStatus(plan.id, 'executing');
+      toast.success('Plan execution started', {
+        description: `${plan.actions.filter(a => a.enabled).length} tasks dispatched to respective owners`
+      });
+      addAuditEntry({
+        timestamp: new Date().toISOString(),
+        actor: currentRole === 'ops_manager' ? 'Ops Manager' : 'Category Head',
+        role: currentRole,
+        decision: `Plan executed for ${vendor?.name}`,
+        toolsUsed: ['plan_execution', 'task_dispatch'],
+        details: `${plan.actions.filter(a => a.enabled).length} actions dispatched`
+      });
+    }
+  }, [isExecuting, executionStep]);
+
+  const handleReviewPlan = () => {
+    if (plan) {
+      updatePlanStatus(plan.id, 'pending');
+      toast.success('Plan moved to review', {
+        description: 'You can now review and modify actions before execution'
+      });
+      addAuditEntry({
+        timestamp: new Date().toISOString(),
+        actor: currentRole === 'ops_manager' ? 'Ops Manager' : 'Category Head',
+        role: currentRole,
+        decision: `Plan review started for ${vendor?.name}`,
+        toolsUsed: ['plan_review'],
+        details: `${plan.actions.length} actions under review`
+      });
+    }
+  };
+
+  const handleExecutePlan = () => {
+    if (plan) {
+      approvePlan(plan.id, currentRole === 'ops_manager' ? 'Ops Manager' : 'Category Head', currentRole);
+      setIsExecuting(true);
+      setExecutionStep(0);
+    }
+  };
 
   if (!vendor) {
     return (
@@ -438,8 +500,18 @@ export const VendorPage = () => {
             <CardContent>
               {plan ? (
                 <div className="space-y-3">
+                  {/* Status Header */}
                   <div className="flex items-center justify-between">
-                    <Badge variant="outline" className="text-xs">
+                    <Badge 
+                      variant="outline" 
+                      className={cn(
+                        "text-xs font-semibold",
+                        plan.status === 'draft' && "bg-muted text-muted-foreground",
+                        plan.status === 'pending' && "bg-status-warning-bg text-status-warning border-status-warning",
+                        plan.status === 'approved' && "bg-status-success-bg text-status-success border-status-success",
+                        plan.status === 'executing' && "bg-primary/10 text-primary border-primary"
+                      )}
+                    >
                       {plan.status.toUpperCase()}
                     </Badge>
                     <span className="text-xs text-muted-foreground">
@@ -447,55 +519,95 @@ export const VendorPage = () => {
                     </span>
                   </div>
                   
-                  <div className="space-y-2 max-h-48 overflow-auto">
+                  {/* Actions List */}
+                  <div className="space-y-2 max-h-52 overflow-auto">
                     {plan.actions.map((action) => (
                       <div 
                         key={action.id}
                         className={cn(
-                          "p-2 rounded border text-sm",
-                          action.enabled ? "bg-muted/50" : "bg-muted/20 opacity-60"
+                          "p-2.5 rounded-lg border text-sm transition-all",
+                          action.enabled ? "bg-muted/50 border-border" : "bg-muted/20 opacity-60 border-transparent"
                         )}
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <Badge variant="secondary" className="text-[9px] px-1">
+                            <div className="flex items-center gap-1.5 mb-1">
+                              <Badge variant="secondary" className="text-[9px] px-1.5 py-0 font-medium">
                                 {action.category}
                               </Badge>
                               <Badge 
                                 variant={action.priority === 'critical' ? 'destructive' : 'outline'}
-                                className="text-[9px] px-1"
+                                className="text-[9px] px-1.5 py-0"
                               >
                                 {action.priority}
                               </Badge>
                             </div>
-                            <p className="text-xs">{action.title}</p>
+                            <p className="text-xs leading-relaxed">{action.title}</p>
                           </div>
                           <Switch 
                             checked={action.enabled}
                             onCheckedChange={() => togglePlanAction(plan.id, action.id)}
-                            disabled={plan.status === 'approved'}
+                            disabled={plan.status === 'approved' || plan.status === 'executing'}
                           />
                         </div>
                       </div>
                     ))}
                   </div>
 
-                  {plan.status === 'pending' && (
+                  {/* Execution Progress */}
+                  {isExecuting && (
+                    <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Loader2 className="w-4 h-4 text-primary animate-spin" />
+                        <span className="text-xs font-medium text-primary">Executing Plan...</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {executionSteps[Math.min(executionStep, executionSteps.length - 1)]}
+                      </p>
+                      <div className="mt-2 h-1.5 rounded-full bg-muted overflow-hidden">
+                        <div 
+                          className="h-full bg-primary transition-all duration-500"
+                          style={{ width: `${((executionStep + 1) / executionSteps.length) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Action Buttons based on status */}
+                  {plan.status === 'draft' && !isExecuting && (
                     <Button 
                       className="w-full" 
-                      onClick={handleApprovePlan}
+                      variant="outline"
+                      onClick={handleReviewPlan}
                       disabled={currentRole === 'viewer'}
                     >
-                      <Zap className="w-4 h-4 mr-2" />
-                      Approve & Execute
+                      <Eye className="w-4 h-4 mr-2" />
+                      Review Plan
                     </Button>
                   )}
+
+                  {plan.status === 'pending' && !isExecuting && (
+                    <div className="space-y-2">
+                      <Button 
+                        className="w-full bg-gradient-to-r from-primary to-primary/80" 
+                        onClick={handleExecutePlan}
+                        disabled={currentRole === 'viewer'}
+                      >
+                        <Play className="w-4 h-4 mr-2" />
+                        Execute Plan
+                      </Button>
+                      <p className="text-[10px] text-center text-muted-foreground">
+                        Toggle actions above before executing
+                      </p>
+                    </div>
+                  )}
                   
-                  {plan.status === 'approved' && (
-                    <div className="flex items-center gap-2 text-status-success">
-                      <CheckCircle2 className="w-4 h-4" />
-                      <span className="text-sm">Plan approved and executing</span>
+                  {(plan.status === 'approved' || plan.status === 'executing') && !isExecuting && (
+                    <div className="flex items-center gap-2 p-2 rounded-lg bg-status-success-bg">
+                      <CheckCircle2 className="w-4 h-4 text-status-success" />
+                      <span className="text-sm text-status-success font-medium">
+                        {plan.status === 'executing' ? 'Plan executing' : 'Plan approved'}
+                      </span>
                     </div>
                   )}
                 </div>
