@@ -330,7 +330,23 @@ export const VendorPage = () => {
                   <Search className="w-4 h-4 mr-2" />
                   Investigate
                 </Button>
-                <Button variant="ghost" className="w-full text-muted-foreground">
+                <Button 
+                  variant="ghost" 
+                  className="w-full text-muted-foreground"
+                  onClick={() => {
+                    toast.success('Review scheduled', {
+                      description: `Calendar invite sent for ${vendor.name} vendor review`
+                    });
+                    addAuditEntry({
+                      timestamp: new Date().toISOString(),
+                      actor: currentRole === 'ops_manager' ? 'Ops Manager' : 'Category Head',
+                      role: currentRole,
+                      decision: `Scheduled review for ${vendor.name}`,
+                      toolsUsed: ['calendar_scheduler'],
+                      details: 'Review meeting scheduled'
+                    });
+                  }}
+                >
                   <CalendarClock className="w-4 h-4 mr-2" />
                   Schedule Review
                 </Button>
@@ -479,11 +495,45 @@ export const VendorPage = () => {
                 )}
                 
                 <div className="flex gap-2 pt-2">
-                  <Button size="sm" variant="outline" className="flex-1 text-xs">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="flex-1 text-xs"
+                    onClick={() => {
+                      toast.success('Reminder sent', {
+                        description: `Follow-up email dispatched to ${vendor.name}`
+                      });
+                      addAuditEntry({
+                        timestamp: new Date().toISOString(),
+                        actor: currentRole === 'ops_manager' ? 'Ops Manager' : 'Category Head',
+                        role: currentRole,
+                        decision: `Sent reminder to ${vendor.name}`,
+                        toolsUsed: ['email_dispatcher'],
+                        details: 'Reminder email sent'
+                      });
+                    }}
+                  >
                     <Send className="w-3.5 h-3.5 mr-1" />
                     Send Reminder
                   </Button>
-                  <Button size="sm" variant="outline" className="flex-1 text-xs">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="flex-1 text-xs"
+                    onClick={() => {
+                      toast.success('Vendor letter generated', {
+                        description: `Formal letter prepared for ${vendor.name}`
+                      });
+                      addAuditEntry({
+                        timestamp: new Date().toISOString(),
+                        actor: currentRole === 'ops_manager' ? 'Ops Manager' : 'Category Head',
+                        role: currentRole,
+                        decision: `Generated vendor letter for ${vendor.name}`,
+                        toolsUsed: ['document_generator'],
+                        details: 'Formal vendor letter generated'
+                      });
+                    }}
+                  >
                     <FileText className="w-3.5 h-3.5 mr-1" />
                     Vendor Letter
                   </Button>
