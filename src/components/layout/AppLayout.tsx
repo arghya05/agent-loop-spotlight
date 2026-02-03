@@ -17,8 +17,7 @@ import {
 const agentTabs = [
   { 
     id: 'supplier-performance', 
-    label: 'Supplier Performance Explainer + Improvement Agent',
-    shortLabel: 'Supplier Performance',
+    label: 'Supplier Performance',
     icon: TrendingUp,
     active: true,
     badge: null,
@@ -26,8 +25,7 @@ const agentTabs = [
   },
   { 
     id: 'dispatch-readiness', 
-    label: 'Dispatch Readiness Agent',
-    shortLabel: 'Dispatch Readiness',
+    label: 'Dispatch Readiness',
     icon: Truck,
     active: true,
     badge: null,
@@ -35,20 +33,18 @@ const agentTabs = [
   },
   { 
     id: 'supplier-onboarding', 
-    label: 'Supplier Onboarding Agent',
-    shortLabel: 'Supplier Onboarding',
+    label: 'Supplier Onboarding',
     icon: Factory,
     active: false,
-    badge: 'Coming Soon',
+    badge: 'Soon',
     basePath: null
   },
   { 
     id: 'compliance-monitor', 
-    label: 'Compliance Monitor Agent',
-    shortLabel: 'Compliance Monitor',
+    label: 'Compliance Monitor',
     icon: ShieldCheck,
     active: false,
-    badge: 'Coming Soon',
+    badge: 'Soon',
     basePath: null
   }
 ];
@@ -82,7 +78,7 @@ export const AppLayout = () => {
       <AppTopBar />
       
       {/* Agent Tabs Bar */}
-      <div className="fixed top-14 left-0 right-0 z-40 h-12 bg-muted/50 border-b border-border flex items-center px-4">
+      <div className="fixed top-14 left-0 right-0 z-40 h-11 bg-muted/30 border-b border-border flex items-center px-4 backdrop-blur-sm">
         <div className="flex items-center gap-1">
           {agentTabs.map((tab) => {
             const Icon = tab.icon;
@@ -94,19 +90,18 @@ export const AppLayout = () => {
                 onClick={() => tab.active && handleTabChange(tab.id)}
                 disabled={!tab.active}
                 className={cn(
-                  "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
+                  "flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all whitespace-nowrap",
                   isActive 
                     ? "bg-primary text-primary-foreground shadow-sm" 
                     : tab.active 
-                      ? "text-foreground/70 hover:bg-muted hover:text-foreground"
-                      : "text-muted-foreground/50 cursor-not-allowed"
+                      ? "text-foreground/80 hover:bg-muted hover:text-foreground"
+                      : "text-muted-foreground/40 cursor-not-allowed"
                 )}
               >
-                <Icon className="w-4 h-4" />
-                <span className="hidden lg:inline">{tab.label}</span>
-                <span className="lg:hidden">{tab.shortLabel}</span>
+                <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+                <span>{tab.label}</span>
                 {tab.badge && (
-                  <Badge variant="secondary" className="text-[9px] px-1.5 py-0 bg-muted-foreground/20">
+                  <Badge variant="outline" className="text-[8px] px-1 py-0 h-4 border-muted-foreground/30 text-muted-foreground/60 font-normal ml-1">
                     {tab.badge}
                   </Badge>
                 )}
@@ -117,9 +112,9 @@ export const AppLayout = () => {
         
         {/* Active Agent Indicator */}
         <div className="ml-auto flex items-center gap-2">
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-status-success/10 text-status-success text-xs font-medium">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-status-success/10 text-status-success text-[10px] font-medium">
             <Zap className="w-3 h-3" />
-            <span>Agent Active</span>
+            <span>Active</span>
           </div>
         </div>
       </div>
