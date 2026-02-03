@@ -134,7 +134,7 @@ const Index = () => {
             </svg>
             <div className="flex flex-col">
               <span className="text-sm font-bold tracking-wider">ALGONOMY</span>
-              <span className="text-[10px] font-medium tracking-widest text-muted-foreground uppercase">Atlas</span>
+              <span className="text-[8px] font-medium tracking-wide text-muted-foreground">Autonomous Retailer Supplier OS</span>
             </div>
           </div>
           
