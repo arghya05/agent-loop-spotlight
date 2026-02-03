@@ -28,16 +28,13 @@ export const AppTopBar = () => {
       <div className="flex items-center justify-between h-full px-4">
         {/* Left: Logo */}
         <div 
-          className="flex items-center gap-3 cursor-pointer" 
+          className="flex items-center gap-2 cursor-pointer" 
           onClick={() => navigate('/landing')}
         >
           <AlgonomyLogo className="h-8" />
-          <div className="flex flex-col">
-            <span className="text-sm font-bold tracking-wider">ALGONOMY</span>
-            <span className="text-[8px] font-medium tracking-wide text-header-foreground/60">
-              Retailer-Supplier OS
-            </span>
-          </div>
+          <span className="text-[10px] font-medium tracking-wide text-header-foreground/60">
+            Retailer-Supplier OS
+          </span>
         </div>
 
         {/* Center: Search + Filters */}
