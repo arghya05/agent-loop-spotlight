@@ -1,0 +1,85 @@
+{
+  "scoring": {
+    "weights": {
+      "otif": 0.35,
+      "fillRate": 0.25,
+      "quality": 0.20,
+      "compliance": 0.20
+    },
+    "thresholds": {
+      "good": 90,
+      "average": 75,
+      "needsReview": 60,
+      "critical": 0
+    }
+  },
+  "bucketRules": {
+    "good": {
+      "minScore": 90,
+      "maxComplianceBreach": false,
+      "reviewFrequencyDays": 30
+    },
+    "average": {
+      "minScore": 75,
+      "maxScore": 89,
+      "allowMinorBreaches": true,
+      "reviewFrequencyDays": 14
+    },
+    "needsReview": {
+      "minScore": 60,
+      "maxScore": 74,
+      "reviewFrequencyDays": 7
+    },
+    "critical": {
+      "maxScore": 59,
+      "orOtifBelow": 70,
+      "orCriticalBreach": true,
+      "reviewFrequencyDays": 3
+    }
+  },
+  "metricApplicability": {
+    "default": {
+      "otif": true,
+      "fillRate": true,
+      "quality": true,
+      "compliance": true
+    },
+    "complianceTypes": [
+      { "id": "arabic_labeling", "name": "Arabic Labeling", "enabled": true, "severity": "critical" },
+      { "id": "care_instructions", "name": "Care Instructions", "enabled": true, "severity": "warning" },
+      { "id": "country_origin", "name": "Country of Origin", "enabled": true, "severity": "warning" },
+      { "id": "size_standards", "name": "Size Standards", "enabled": true, "severity": "warning" },
+      { "id": "safety_labels", "name": "Safety Labels", "enabled": true, "severity": "critical" }
+    ]
+  },
+  "policyControls": [
+    {
+      "id": "compliance_freeze",
+      "name": "Compliance Failure Auto-Freeze",
+      "description": "Freeze new PO releases when compliance failures exceed threshold",
+      "enabled": true,
+      "threshold": 2,
+      "consecutiveDays": 3,
+      "triggeredCount": 2
+    },
+    {
+      "id": "asn_gate",
+      "name": "ASN Quality Gate",
+      "description": "Enforce ASN validation gate when accuracy drops below threshold",
+      "enabled": true,
+      "threshold": 95,
+      "consecutiveDays": 2,
+      "triggeredCount": 1
+    },
+    {
+      "id": "critical_hold",
+      "name": "Release Hold on Critical Breach",
+      "description": "Hold all releases for vendors with critical compliance breaches",
+      "enabled": true,
+      "threshold": 1,
+      "consecutiveDays": 1,
+      "triggeredCount": 2
+    }
+  ],
+  "lastRefresh": "2024-01-20T10:15:00Z"
+}

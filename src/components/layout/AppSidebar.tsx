@@ -1,0 +1,152 @@
+import { useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { useGovernanceStore } from '@/store/governanceStore';
+import {
+  LayoutDashboard,
+  Box,
+  Users,
+  BarChart3,
+  Plug,
+  Settings,
+  Shield,
+  ChevronLeft,
+  ChevronRight,
+  AlertCircle
+} from 'lucide-react';
+
+interface SidebarProps {
+  collapsed: boolean;
+  onToggle: () => void;
+}
+
+const navItems = [
+  { 
+    label: 'Governance Home', 
+    path: '/landing', 
+    icon: LayoutDashboard,
+    description: 'Portfolio overview'
+  },
+  { 
+    label: 'Buckets', 
+    path: '/bucket', 
+    icon: Box,
+    description: 'Performance buckets'
+  },
+  { 
+    label: 'Vendors', 
+    path: '/vendors', 
+    icon: Users,
+    description: 'Vendor directory'
+  },
+  { 
+    label: 'Analytics', 
+    path: '/analytics', 
+    icon: BarChart3,
+    description: 'Reports & exports'
+  },
+  { 
+    label: 'Connectors', 
+    path: '/connectors', 
+    icon: Plug,
+    description: 'Integrations'
+  },
+  { 
+    label: 'Settings', 
+    path: '/settings', 
+    icon: Settings,
+    description: 'Configuration'
+  },
+  { 
+    label: 'Admin', 
+    path: '/admin/agents', 
+    icon: Shield,
+    description: 'Agent management'
+  }
+];
+
+export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
+  const location = useLocation();
+  const { getAttentionQueue } = useGovernanceStore();
+  const attentionCount = getAttentionQueue().length;
+  
+  const isActive = (path: string) => {
+    if (path === '/landing') return location.pathname === '/landing' || location.pathname === '/';
+    if (path === '/bucket') return location.pathname.startsWith('/bucket');
+    if (path === '/admin/agents') return location.pathname.startsWith('/admin');
+    return location.pathname.startsWith(path);
+  };
+
+  return (
+    <aside 
+      className={cn(
+        "fixed left-0 top-14 bottom-0 z-40 flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300",
+        collapsed ? "w-16" : "w-56"
+      )}
+    >
+      <ScrollArea className="flex-1 py-4">
+        <nav className="flex flex-col gap-1 px-2">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={cn(
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
+                "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                isActive(item.path) 
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground" 
+                  : "text-sidebar-foreground/70"
+              )}
+            >
+              <item.icon className="w-5 h-5 flex-shrink-0" />
+              {!collapsed && (
+                <div className="flex items-center justify-between flex-1">
+                  <span>{item.label}</span>
+                  {item.path === '/landing' && attentionCount > 0 && (
+                    <Badge 
+                      variant="destructive" 
+                      className="h-5 min-w-[20px] px-1.5 text-[10px] flex items-center justify-center"
+                    >
+                      {attentionCount}
+                    </Badge>
+                  )}
+                </div>
+              )}
+              {collapsed && item.path === '/landing' && attentionCount > 0 && (
+                <Badge 
+                  variant="destructive" 
+                  className="absolute left-10 top-1 h-4 min-w-[16px] px-1 text-[9px]"
+                >
+                  {attentionCount}
+                </Badge>
+              )}
+            </NavLink>
+          ))}
+        </nav>
+      </ScrollArea>
+
+      {/* Collapse Toggle */}
+      <div className="p-2 border-t border-sidebar-border">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onToggle}
+          className="w-full justify-center text-sidebar-foreground/70 hover:text-sidebar-foreground"
+        >
+          {collapsed ? (
+            <ChevronRight className="w-4 h-4" />
+          ) : (
+            <>
+              <ChevronLeft className="w-4 h-4 mr-2" />
+              <span className="text-xs">Collapse</span>
+            </>
+          )}
+        </Button>
+      </div>
+    </aside>
+  );
+};

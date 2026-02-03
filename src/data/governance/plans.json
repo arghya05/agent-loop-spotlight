@@ -1,0 +1,112 @@
+{
+  "plans": [
+    {
+      "id": "PLN001",
+      "vendorId": "VND001",
+      "status": "pending",
+      "createdAt": "2024-01-20T10:00:00Z",
+      "actions": [
+        {
+          "id": "ACT001",
+          "category": "LOGISTICS",
+          "title": "Expedite shipments via QuickFreight backup lane",
+          "priority": "high",
+          "owner": "Logistics Team",
+          "dueDate": "2024-01-25",
+          "expectedImpact": "+8% OTIF recovery",
+          "enabled": true
+        },
+        {
+          "id": "ACT002",
+          "category": "LOGISTICS",
+          "title": "Pre-clear customs documentation",
+          "priority": "high",
+          "owner": "Customs Team",
+          "dueDate": "2024-01-24",
+          "expectedImpact": "-2 days lead time",
+          "enabled": true
+        },
+        {
+          "id": "ACT003",
+          "category": "SUPPLIER",
+          "title": "Arabic labeling correction at source",
+          "priority": "critical",
+          "owner": "Supplier QA",
+          "dueDate": "2024-01-23",
+          "expectedImpact": "-5% compliance failures",
+          "enabled": true
+        },
+        {
+          "id": "ACT004",
+          "category": "SUPPLIER",
+          "title": "Implement SKU-level ASN validation",
+          "priority": "high",
+          "owner": "IT Integration",
+          "dueDate": "2024-01-28",
+          "expectedImpact": "+6% ASN accuracy",
+          "enabled": true
+        },
+        {
+          "id": "ACT005",
+          "category": "POLICY",
+          "title": "Freeze new PO releases until compliance resolved",
+          "priority": "critical",
+          "owner": "Category Head",
+          "dueDate": "2024-01-21",
+          "expectedImpact": "Risk mitigation",
+          "enabled": true
+        }
+      ],
+      "approvals": []
+    },
+    {
+      "id": "PLN002",
+      "vendorId": "VND007",
+      "status": "draft",
+      "createdAt": "2024-01-19T14:00:00Z",
+      "actions": [
+        {
+          "id": "ACT006",
+          "category": "LOGISTICS",
+          "title": "Switch to priority shipping lane",
+          "priority": "critical",
+          "owner": "Logistics Team",
+          "dueDate": "2024-01-22",
+          "expectedImpact": "+12% OTIF recovery",
+          "enabled": true
+        },
+        {
+          "id": "ACT007",
+          "category": "SUPPLIER",
+          "title": "Mandatory labeling audit at factory",
+          "priority": "critical",
+          "owner": "Quality Team",
+          "dueDate": "2024-01-24",
+          "expectedImpact": "-4% compliance failures",
+          "enabled": true
+        },
+        {
+          "id": "ACT008",
+          "category": "SUPPLIER",
+          "title": "Size chart standardization training",
+          "priority": "high",
+          "owner": "Supplier Development",
+          "dueDate": "2024-01-26",
+          "expectedImpact": "Quality improvement",
+          "enabled": true
+        },
+        {
+          "id": "ACT009",
+          "category": "POLICY",
+          "title": "Escalate to Category Head for vendor review",
+          "priority": "critical",
+          "owner": "Ops Manager",
+          "dueDate": "2024-01-21",
+          "expectedImpact": "Executive oversight",
+          "enabled": true
+        }
+      ],
+      "approvals": []
+    }
+  ]
+}

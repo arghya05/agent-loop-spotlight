@@ -1,0 +1,79 @@
+{
+  "agents": [
+    {
+      "id": "AGT001",
+      "agentName": "Compliance Agent",
+      "description": "Monitors vendor compliance with labeling, documentation, and regulatory requirements",
+      "active": true,
+      "schedule": "Every 4 hours",
+      "lastRun": "2024-01-20T08:00:00Z",
+      "nextRun": "2024-01-20T12:00:00Z",
+      "lastOutcome": "success",
+      "logs": [
+        { "time": "2024-01-20T08:00:00Z", "status": "success", "duration": 45, "summary": "Scanned 8 vendors, found 2 compliance breaches" },
+        { "time": "2024-01-20T04:00:00Z", "status": "success", "duration": 42, "summary": "Scanned 8 vendors, found 2 compliance breaches" },
+        { "time": "2024-01-20T00:00:00Z", "status": "success", "duration": 48, "summary": "Scanned 8 vendors, found 3 compliance breaches" }
+      ]
+    },
+    {
+      "id": "AGT002",
+      "agentName": "SCM Metrics Agent",
+      "description": "Calculates and updates OTIF, Fill Rate, Quality, and Lead Time metrics",
+      "active": true,
+      "schedule": "Daily at 06:00",
+      "lastRun": "2024-01-20T06:00:00Z",
+      "nextRun": "2024-01-21T06:00:00Z",
+      "lastOutcome": "success",
+      "logs": [
+        { "time": "2024-01-20T06:00:00Z", "status": "success", "duration": 120, "summary": "Updated metrics for 8 vendors, 2 critical alerts generated" },
+        { "time": "2024-01-19T06:00:00Z", "status": "success", "duration": 115, "summary": "Updated metrics for 8 vendors, 2 critical alerts generated" },
+        { "time": "2024-01-18T06:00:00Z", "status": "success", "duration": 118, "summary": "Updated metrics for 8 vendors, 1 critical alert generated" }
+      ]
+    },
+    {
+      "id": "AGT003",
+      "agentName": "Plan Recommendation Agent",
+      "description": "Generates improvement plans based on root cause analysis and playbook templates",
+      "active": true,
+      "schedule": "On-demand + Daily at 09:00",
+      "lastRun": "2024-01-20T09:00:00Z",
+      "nextRun": "2024-01-21T09:00:00Z",
+      "lastOutcome": "success",
+      "logs": [
+        { "time": "2024-01-20T09:00:00Z", "status": "success", "duration": 85, "summary": "Generated 2 improvement plans for critical vendors" },
+        { "time": "2024-01-19T09:00:00Z", "status": "success", "duration": 78, "summary": "Generated 1 improvement plan for critical vendor" },
+        { "time": "2024-01-18T09:00:00Z", "status": "success", "duration": 82, "summary": "No new plans required" }
+      ]
+    },
+    {
+      "id": "AGT004",
+      "agentName": "Coordination Agent",
+      "description": "Orchestrates communications, follow-ups, and escalations across stakeholders",
+      "active": true,
+      "schedule": "Every 2 hours",
+      "lastRun": "2024-01-20T10:00:00Z",
+      "nextRun": "2024-01-20T12:00:00Z",
+      "lastOutcome": "success",
+      "logs": [
+        { "time": "2024-01-20T10:00:00Z", "status": "success", "duration": 32, "summary": "Sent 3 follow-up emails, 1 escalation to Category Head" },
+        { "time": "2024-01-20T08:00:00Z", "status": "success", "duration": 28, "summary": "Sent 2 reminder emails" },
+        { "time": "2024-01-20T06:00:00Z", "status": "success", "duration": 25, "summary": "No pending communications" }
+      ]
+    },
+    {
+      "id": "AGT005",
+      "agentName": "Bucket Assignment Agent",
+      "description": "Recalculates composite scores and assigns vendors to performance buckets",
+      "active": true,
+      "schedule": "Daily at 07:00",
+      "lastRun": "2024-01-20T07:00:00Z",
+      "nextRun": "2024-01-21T07:00:00Z",
+      "lastOutcome": "success",
+      "logs": [
+        { "time": "2024-01-20T07:00:00Z", "status": "success", "duration": 55, "summary": "Recalculated scores, 1 vendor moved to Critical" },
+        { "time": "2024-01-19T07:00:00Z", "status": "success", "duration": 52, "summary": "Recalculated scores, no bucket changes" },
+        { "time": "2024-01-18T07:00:00Z", "status": "success", "duration": 58, "summary": "Recalculated scores, 1 vendor moved to Needs Review" }
+      ]
+    }
+  ]
+}
