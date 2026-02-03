@@ -477,73 +477,176 @@ export const LandingPage = () => {
               ))}
             </div>
 
-            {/* Real-time Activity Log */}
-            <div className="bg-background/50 rounded-lg border border-border/50 overflow-hidden">
-              <div className="flex items-center justify-between px-3 py-2 bg-muted/30 border-b border-border/50">
-                <div className="flex items-center gap-2 text-xs font-medium text-foreground">
-                  <FileText className="w-3.5 h-3.5 text-primary" />
-                  Live Activity Feed
+            {/* Real-time Activity Log - show during running */}
+            {isAutopilotRunning && (
+              <div className="bg-background/50 rounded-lg border border-border/50 overflow-hidden">
+                <div className="flex items-center justify-between px-3 py-2 bg-muted/30 border-b border-border/50">
+                  <div className="flex items-center gap-2 text-xs font-medium text-foreground">
+                    <FileText className="w-3.5 h-3.5 text-primary" />
+                    Live Activity Feed
+                  </div>
+                  <Badge variant="secondary" className="text-[10px]">
+                    {activityLog.length} events
+                  </Badge>
                 </div>
-                <Badge variant="secondary" className="text-[10px]">
-                  {activityLog.length} events
-                </Badge>
-              </div>
-              <ScrollArea className="h-[180px]" ref={activityScrollRef}>
-                <div className="p-2 space-y-1">
-                  {activityLog.length === 0 ? (
-                    <div className="flex items-center justify-center h-32 text-xs text-muted-foreground">
-                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                      Initializing...
-                    </div>
-                  ) : (
-                    activityLog.map((entry, i) => (
-                      <div 
-                        key={i} 
-                        className={cn(
-                          "flex items-start gap-2 px-2 py-1.5 rounded text-xs transition-all",
-                          entry.type === 'action' && "bg-primary/5",
-                          entry.type === 'success' && "bg-status-success/5",
-                          i === activityLog.length - 1 && "animate-pulse"
-                        )}
-                      >
-                        <span className="text-muted-foreground font-mono w-16 flex-shrink-0">
-                          {entry.time}
-                        </span>
-                        <span className={cn(
-                          "w-5 h-5 rounded flex items-center justify-center flex-shrink-0",
-                          entry.type === 'action' && "bg-primary/10 text-primary",
-                          entry.type === 'success' && "bg-status-success/10 text-status-success",
-                          entry.type === 'info' && "bg-muted text-muted-foreground"
-                        )}>
-                          {entry.icon === 'database' && <Database className="w-3 h-3" />}
-                          {entry.icon === 'search' && <Search className="w-3 h-3" />}
-                          {entry.icon === 'alert' && <AlertCircle className="w-3 h-3" />}
-                          {entry.icon === 'chart' && <TrendingDown className="w-3 h-3" />}
-                          {entry.icon === 'lightbulb' && <Zap className="w-3 h-3" />}
-                          {entry.icon === 'target' && <AlertTriangle className="w-3 h-3" />}
-                          {entry.icon === 'file' && <FileText className="w-3 h-3" />}
-                          {entry.icon === 'checklist' && <CheckCircle2 className="w-3 h-3" />}
-                          {entry.icon === 'shield' && <ShieldCheck className="w-3 h-3" />}
-                          {entry.icon === 'check' && <CheckCircle2 className="w-3 h-3" />}
-                          {entry.icon === 'play' && <Play className="w-3 h-3" />}
-                          {entry.icon === 'mail' && <Send className="w-3 h-3" />}
-                          {entry.icon === 'trophy' && <CheckCircle2 className="w-3 h-3" />}
-                          {entry.icon === 'rocket' && <Zap className="w-3 h-3" />}
-                        </span>
-                        <span className="flex-1 text-foreground">
-                          {entry.message}
-                        </span>
-                        {entry.vendor && (
-                          <Badge variant="outline" className="text-[9px] px-1.5 py-0">
-                            {entry.vendor.split(' ')[0]}
-                          </Badge>
-                        )}
+                <ScrollArea className="h-[180px]" ref={activityScrollRef}>
+                  <div className="p-2 space-y-1">
+                    {activityLog.length === 0 ? (
+                      <div className="flex items-center justify-center h-32 text-xs text-muted-foreground">
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                        Initializing...
                       </div>
-                    ))
-                  )}
+                    ) : (
+                      activityLog.map((entry, i) => (
+                        <div 
+                          key={i} 
+                          className={cn(
+                            "flex items-start gap-2 px-2 py-1.5 rounded text-xs transition-all",
+                            entry.type === 'action' && "bg-primary/5",
+                            entry.type === 'success' && "bg-status-success/5",
+                            i === activityLog.length - 1 && "animate-pulse"
+                          )}
+                        >
+                          <span className="text-muted-foreground font-mono w-16 flex-shrink-0">
+                            {entry.time}
+                          </span>
+                          <span className={cn(
+                            "w-5 h-5 rounded flex items-center justify-center flex-shrink-0",
+                            entry.type === 'action' && "bg-primary/10 text-primary",
+                            entry.type === 'success' && "bg-status-success/10 text-status-success",
+                            entry.type === 'info' && "bg-muted text-muted-foreground"
+                          )}>
+                            {entry.icon === 'database' && <Database className="w-3 h-3" />}
+                            {entry.icon === 'search' && <Search className="w-3 h-3" />}
+                            {entry.icon === 'alert' && <AlertCircle className="w-3 h-3" />}
+                            {entry.icon === 'chart' && <TrendingDown className="w-3 h-3" />}
+                            {entry.icon === 'lightbulb' && <Zap className="w-3 h-3" />}
+                            {entry.icon === 'target' && <AlertTriangle className="w-3 h-3" />}
+                            {entry.icon === 'file' && <FileText className="w-3 h-3" />}
+                            {entry.icon === 'checklist' && <CheckCircle2 className="w-3 h-3" />}
+                            {entry.icon === 'shield' && <ShieldCheck className="w-3 h-3" />}
+                            {entry.icon === 'check' && <CheckCircle2 className="w-3 h-3" />}
+                            {entry.icon === 'play' && <Play className="w-3 h-3" />}
+                            {entry.icon === 'mail' && <Send className="w-3 h-3" />}
+                            {entry.icon === 'trophy' && <CheckCircle2 className="w-3 h-3" />}
+                            {entry.icon === 'rocket' && <Zap className="w-3 h-3" />}
+                          </span>
+                          <span className="flex-1 text-foreground">
+                            {entry.message}
+                          </span>
+                          {entry.vendor && (
+                            <Badge variant="outline" className="text-[9px] px-1.5 py-0">
+                              {entry.vendor.split(' ')[0]}
+                            </Badge>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </ScrollArea>
+              </div>
+            )}
+
+            {/* Completion Summary - show after complete */}
+            {autopilotComplete && (
+              <div className="space-y-4">
+                {/* Summary Stats */}
+                <div className="grid grid-cols-4 gap-3">
+                  <div className="p-3 rounded-lg bg-status-success/10 border border-status-success/20 text-center">
+                    <p className="text-2xl font-bold text-status-success">{processedVendors.length}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase">Vendors Processed</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-primary/10 border border-primary/20 text-center">
+                    <p className="text-2xl font-bold text-primary">{processedVendors.length}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase">Plans Approved</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-status-info/10 border border-status-info/20 text-center">
+                    <p className="text-2xl font-bold text-status-info">{processedVendors.length * 3}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase">Tasks Dispatched</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-status-warning/10 border border-status-warning/20 text-center">
+                    <p className="text-2xl font-bold text-status-warning">{processedVendors.length}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase">Notifications Sent</p>
+                  </div>
                 </div>
-              </ScrollArea>
-            </div>
+
+                {/* Processed Vendors List */}
+                <div className="bg-background/50 rounded-lg border border-border/50 overflow-hidden">
+                  <div className="flex items-center justify-between px-3 py-2 bg-muted/30 border-b border-border/50">
+                    <div className="flex items-center gap-2 text-xs font-medium text-foreground">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-status-success" />
+                      Vendors Remediated
+                    </div>
+                  </div>
+                  <div className="p-3 space-y-2">
+                    {attentionQueue.map((vendor) => (
+                      <div key={vendor.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
+                        <div className="flex items-center gap-3">
+                          <CheckCircle2 className="w-4 h-4 text-status-success" />
+                          <div>
+                            <p className="text-sm font-medium text-foreground">{vendor.name}</p>
+                            <p className="text-[10px] text-muted-foreground">
+                              {bucketConfig[vendor.bucketTag].planType} • 3 tasks • Supplier notified
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge className="bg-status-success/10 text-status-success border-status-success/20 text-[10px]">
+                            Remediation Active
+                          </Badge>
+                          <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            className="h-7 text-xs"
+                            onClick={() => navigate(`/vendor/${vendor.id}`)}
+                          >
+                            View Details
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center justify-between pt-2 border-t border-border/50">
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        // Scroll to bottom drawer / audit trail
+                        const drawer = document.querySelector('[data-drawer-content]');
+                        if (drawer) drawer.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                    >
+                      <FileText className="w-4 h-4 mr-2" />
+                      View Full Audit Trail
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => navigate('/bucket/critical')}
+                    >
+                      <AlertCircle className="w-4 h-4 mr-2" />
+                      View Breached Bucket
+                    </Button>
+                  </div>
+                  <Button 
+                    size="sm"
+                    onClick={() => {
+                      setAutopilotComplete(false);
+                      setAutopilotStep(-1);
+                      setProcessedVendors([]);
+                      setActivityLog([]);
+                    }}
+                  >
+                    <CheckCircle2 className="w-4 h-4 mr-2" />
+                    Dismiss Summary
+                  </Button>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
