@@ -35,7 +35,7 @@ export const AppTopBar = () => {
           <div className="flex flex-col">
             <span className="text-sm font-bold tracking-wider">ALGONOMY</span>
             <span className="text-[8px] font-medium tracking-wide text-header-foreground/60">
-              Supplier OS
+              Retailer-Supplier OS
             </span>
           </div>
         </div>
