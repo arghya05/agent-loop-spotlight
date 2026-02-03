@@ -57,7 +57,7 @@ const Login = () => {
           <div>
             <CardTitle className="text-xl font-semibold">Welcome back</CardTitle>
             <CardDescription className="text-muted-foreground">
-              Sign in to access your dashboard
+              Sign in to access the agents platform
             </CardDescription>
           </div>
         </CardHeader>
