@@ -45,6 +45,10 @@ const App = () => (
             <Route path="/dispatch/landing" element={<DispatchLandingPage />} />
             <Route path="/dispatch/bucket/:bucketId" element={<DispatchBucketPage />} />
             <Route path="/dispatch/vendor/:vendorId" element={<DispatchVendorPage />} />
+            <Route path="/dispatch/analytics" element={<AnalyticsPage />} />
+            <Route path="/dispatch/connectors" element={<ConnectorsPage />} />
+            <Route path="/dispatch/settings" element={<SettingsPage />} />
+            <Route path="/dispatch/admin/agents" element={<AdminAgentsPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

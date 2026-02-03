@@ -101,25 +101,25 @@ const dispatchNavItems = [
   },
   { 
     label: 'Analytics', 
-    path: '/analytics', 
+    path: '/dispatch/analytics', 
     icon: BarChart3,
     description: 'Reports & exports'
   },
   { 
     label: 'Connectors', 
-    path: '/connectors', 
+    path: '/dispatch/connectors', 
     icon: Plug,
     description: 'Integrations'
   },
   { 
     label: 'Settings', 
-    path: '/settings', 
+    path: '/dispatch/settings', 
     icon: Settings,
     description: 'Configuration'
   },
   { 
     label: 'Admin', 
-    path: '/admin/agents', 
+    path: '/dispatch/admin/agents', 
     icon: Shield,
     description: 'Agent management'
   }
