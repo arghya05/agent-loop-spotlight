@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { AppSidebar } from './AppSidebar';
@@ -21,7 +21,8 @@ const agentTabs = [
     shortLabel: 'Supplier Performance',
     icon: TrendingUp,
     active: true,
-    badge: null
+    badge: null,
+    basePath: '/landing'
   },
   { 
     id: 'dispatch-readiness', 
@@ -29,7 +30,8 @@ const agentTabs = [
     shortLabel: 'Dispatch Readiness',
     icon: Truck,
     active: true,
-    badge: null
+    badge: null,
+    basePath: '/dispatch'
   },
   { 
     id: 'supplier-onboarding', 
@@ -37,7 +39,8 @@ const agentTabs = [
     shortLabel: 'Supplier Onboarding',
     icon: Factory,
     active: false,
-    badge: 'Coming Soon'
+    badge: 'Coming Soon',
+    basePath: null
   },
   { 
     id: 'compliance-monitor', 
@@ -45,7 +48,8 @@ const agentTabs = [
     shortLabel: 'Compliance Monitor',
     icon: ShieldCheck,
     active: false,
-    badge: 'Coming Soon'
+    badge: 'Coming Soon',
+    basePath: null
   }
 ];
 
@@ -54,6 +58,15 @@ export const AppLayout = () => {
   const [activeAgent, setActiveAgent] = useState('supplier-performance');
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Sync active agent with current route
+  useEffect(() => {
+    if (location.pathname.startsWith('/dispatch')) {
+      setActiveAgent('dispatch-readiness');
+    } else {
+      setActiveAgent('supplier-performance');
+    }
+  }, [location.pathname]);
 
   const handleTabChange = (tabId: string) => {
     setActiveAgent(tabId);

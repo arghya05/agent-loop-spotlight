@@ -1,11 +1,10 @@
-import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { useGovernanceStore } from '@/store/governanceStore';
+import { useAgentContext } from '@/hooks/useAgentContext';
 import {
   LayoutDashboard,
   Box,
@@ -16,7 +15,11 @@ import {
   Shield,
   ChevronLeft,
   ChevronRight,
-  AlertCircle
+  Truck,
+  Package,
+  AlertTriangle,
+  CheckCircle2,
+  TrendingUp
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -24,7 +27,8 @@ interface SidebarProps {
   onToggle: () => void;
 }
 
-const navItems = [
+// Supplier Performance nav items
+const supplierNavItems = [
   { 
     label: 'Governance Home', 
     path: '/landing', 
@@ -69,14 +73,72 @@ const navItems = [
   }
 ];
 
+// Dispatch Readiness nav items
+const dispatchNavItems = [
+  { 
+    label: 'Readiness Home', 
+    path: '/dispatch/landing', 
+    icon: Truck,
+    description: 'Portfolio readiness'
+  },
+  { 
+    label: 'SS (Slipping)', 
+    path: '/dispatch/bucket/ss', 
+    icon: AlertTriangle,
+    description: 'High risk POs'
+  },
+  { 
+    label: 'AW (Watchlist)', 
+    path: '/dispatch/bucket/aw', 
+    icon: Package,
+    description: 'Early warning'
+  },
+  { 
+    label: 'Flow (On Track)', 
+    path: '/dispatch/bucket/flow', 
+    icon: CheckCircle2,
+    description: 'Low risk POs'
+  },
+  { 
+    label: 'Analytics', 
+    path: '/analytics', 
+    icon: BarChart3,
+    description: 'Reports & exports'
+  },
+  { 
+    label: 'Connectors', 
+    path: '/connectors', 
+    icon: Plug,
+    description: 'Integrations'
+  },
+  { 
+    label: 'Settings', 
+    path: '/settings', 
+    icon: Settings,
+    description: 'Configuration'
+  },
+  { 
+    label: 'Admin', 
+    path: '/admin/agents', 
+    icon: Shield,
+    description: 'Agent management'
+  }
+];
+
 export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
   const location = useLocation();
+  const agentContext = useAgentContext();
   const { getAttentionQueue } = useGovernanceStore();
   const attentionCount = getAttentionQueue().length;
   
+  // Select nav items based on agent context
+  const navItems = agentContext === 'dispatch-readiness' ? dispatchNavItems : supplierNavItems;
+  
   const isActive = (path: string) => {
     if (path === '/landing') return location.pathname === '/landing' || location.pathname === '/';
-    if (path === '/bucket') return location.pathname.startsWith('/bucket');
+    if (path === '/dispatch/landing') return location.pathname === '/dispatch/landing' || location.pathname === '/dispatch';
+    if (path === '/bucket') return location.pathname.startsWith('/bucket') && !location.pathname.startsWith('/dispatch');
+    if (path.startsWith('/dispatch/bucket/')) return location.pathname === path;
     if (path === '/admin/agents') return location.pathname.startsWith('/admin');
     return location.pathname.startsWith(path);
   };

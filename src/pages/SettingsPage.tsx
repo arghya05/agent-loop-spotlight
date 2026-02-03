@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useGovernanceStore } from '@/store/governanceStore';
 import { useAppStore } from '@/store/appStore';
+import { useAgentContext, getAgentLabel } from '@/hooks/useAgentContext';
 import { 
   Settings as SettingsIcon,
   Scale,
@@ -17,10 +18,337 @@ import {
   Calendar,
   Save,
   RotateCcw,
-  AlertCircle
+  AlertCircle,
+  Truck,
+  TrendingUp,
+  CheckCircle2,
+  Clock,
+  Package
 } from 'lucide-react';
+import dispatchSettings from '@/data/dispatch/settings.json';
 
-export const SettingsPage = () => {
+// Dispatch-specific settings component
+const DispatchSettings = () => {
+  const [bucketThresholds, setBucketThresholds] = useState(dispatchSettings.bucketThresholds);
+  const [reviewFrequency, setReviewFrequency] = useState(dispatchSettings.reviewFrequency);
+  const [notificationRules, setNotificationRules] = useState(dispatchSettings.notificationRules);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  const handleSave = () => {
+    setHasChanges(false);
+    // In real app, would persist to backend
+  };
+
+  return (
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Truck className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Dispatch Readiness Settings</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Configure bucket thresholds, milestone tracking, and SLA rules</p>
+        </div>
+        {hasChanges && (
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => setHasChanges(false)}>
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Reset
+            </Button>
+            <Button onClick={handleSave}>
+              <Save className="w-4 h-4 mr-2" />
+              Save Changes
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <Tabs defaultValue="buckets" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="buckets">Bucket Thresholds</TabsTrigger>
+          <TabsTrigger value="milestones">Milestone Model</TabsTrigger>
+          <TabsTrigger value="frequency">Review Frequency</TabsTrigger>
+          <TabsTrigger value="notifications">Notification & SLA</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="buckets" className="space-y-6">
+          <Card className="card-elevated">
+            <CardHeader>
+              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <Target className="w-4 h-4" />
+                Dispatch Readiness Bucket Configuration
+              </CardTitle>
+              <p className="text-xs text-muted-foreground">
+                Define risk score ranges for Flow, AW (Watchlist), and SS (Slipping Schedule) buckets
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-3 gap-6">
+                {/* Flow Bucket */}
+                <div className="p-4 rounded-lg border-2 border-status-success/30 bg-status-success/5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <CheckCircle2 className="w-5 h-5 text-status-success" />
+                    <div>
+                      <p className="font-semibold text-status-success">{bucketThresholds.flow.label}</p>
+                      <p className="text-xs text-muted-foreground">{bucketThresholds.flow.description}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Max Risk Score</Label>
+                      <Input
+                        type="number"
+                        value={bucketThresholds.flow.maxRiskScore}
+                        onChange={(e) => {
+                          setBucketThresholds({
+                            ...bucketThresholds,
+                            flow: { ...bucketThresholds.flow, maxRiskScore: parseInt(e.target.value) || 0 }
+                          });
+                          setHasChanges(true);
+                        }}
+                        className="text-center text-lg font-mono mt-1"
+                      />
+                    </div>
+                    <p className="text-xs text-center text-muted-foreground">Score ≤ {bucketThresholds.flow.maxRiskScore}</p>
+                  </div>
+                </div>
+
+                {/* AW Bucket */}
+                <div className="p-4 rounded-lg border-2 border-status-warning/30 bg-status-warning/5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <AlertCircle className="w-5 h-5 text-status-warning" />
+                    <div>
+                      <p className="font-semibold text-status-warning">{bucketThresholds.aw.label}</p>
+                      <p className="text-xs text-muted-foreground">{bucketThresholds.aw.description}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Min Score</Label>
+                        <Input
+                          type="number"
+                          value={bucketThresholds.aw.minRiskScore}
+                          onChange={(e) => {
+                            setBucketThresholds({
+                              ...bucketThresholds,
+                              aw: { ...bucketThresholds.aw, minRiskScore: parseInt(e.target.value) || 0 }
+                            });
+                            setHasChanges(true);
+                          }}
+                          className="text-center font-mono mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Max Score</Label>
+                        <Input
+                          type="number"
+                          value={bucketThresholds.aw.maxRiskScore}
+                          onChange={(e) => {
+                            setBucketThresholds({
+                              ...bucketThresholds,
+                              aw: { ...bucketThresholds.aw, maxRiskScore: parseInt(e.target.value) || 0 }
+                            });
+                            setHasChanges(true);
+                          }}
+                          className="text-center font-mono mt-1"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-xs text-center text-muted-foreground">
+                      Score {bucketThresholds.aw.minRiskScore} – {bucketThresholds.aw.maxRiskScore}
+                    </p>
+                  </div>
+                </div>
+
+                {/* SS Bucket */}
+                <div className="p-4 rounded-lg border-2 border-status-danger/30 bg-status-danger/5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <AlertCircle className="w-5 h-5 text-status-danger" />
+                    <div>
+                      <p className="font-semibold text-status-danger">{bucketThresholds.ss.label}</p>
+                      <p className="text-xs text-muted-foreground">{bucketThresholds.ss.description}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Min Risk Score</Label>
+                      <Input
+                        type="number"
+                        value={bucketThresholds.ss.minRiskScore}
+                        onChange={(e) => {
+                          setBucketThresholds({
+                            ...bucketThresholds,
+                            ss: { ...bucketThresholds.ss, minRiskScore: parseInt(e.target.value) || 0 }
+                          });
+                          setHasChanges(true);
+                        }}
+                        className="text-center text-lg font-mono mt-1"
+                      />
+                    </div>
+                    <p className="text-xs text-center text-muted-foreground">Score ≥ {bucketThresholds.ss.minRiskScore}</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="milestones" className="space-y-6">
+          <div className="grid grid-cols-2 gap-6">
+            <Card className="card-elevated">
+              <CardHeader>
+                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <Package className="w-4 h-4" />
+                  Critical Milestones
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {dispatchSettings.criticalMilestones.map((milestone, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                        {idx + 1}
+                      </div>
+                      <span className="text-sm font-medium">{milestone}</span>
+                    </div>
+                    <Badge variant="secondary">Critical</Badge>
+                  </div>
+                ))}
+                <p className="text-xs text-muted-foreground pt-2">
+                  Missing any critical milestone triggers immediate bucket escalation
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="card-elevated">
+              <CardHeader>
+                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  Default Lead Times (Days)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {Object.entries(dispatchSettings.defaultLeadTimes).map(([key, value]) => (
+                  <div key={key} className="flex items-center justify-between p-2 rounded-lg">
+                    <span className="text-sm text-muted-foreground capitalize">
+                      {key.replace(/([A-Z])/g, ' → $1').replace('To', '→')}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        value={value}
+                        className="w-16 h-8 text-center text-sm font-mono"
+                        onChange={() => setHasChanges(true)}
+                      />
+                      <span className="text-xs text-muted-foreground">days</span>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="frequency" className="space-y-6">
+          <Card className="card-elevated">
+            <CardHeader>
+              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <Calendar className="w-4 h-4" />
+                Review Frequency by Bucket
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-3 gap-6">
+                {[
+                  { bucket: 'Flow', key: 'flow', days: reviewFrequency.flow, color: 'text-status-success', description: 'Low-risk POs on track' },
+                  { bucket: 'AW (Watchlist)', key: 'aw', days: reviewFrequency.aw, color: 'text-status-warning', description: 'Early warning signals' },
+                  { bucket: 'SS (Slipping)', key: 'ss', days: reviewFrequency.ss, color: 'text-status-danger', description: 'High risk of delay' }
+                ].map(({ bucket, key, days, color, description }) => (
+                  <div key={bucket} className="p-4 rounded-lg border border-border text-center">
+                    <p className={`text-sm font-semibold ${color} mb-1`}>{bucket}</p>
+                    <p className="text-xs text-muted-foreground mb-3">{description}</p>
+                    <Input
+                      type="number"
+                      value={days}
+                      onChange={(e) => {
+                        setReviewFrequency({ ...reviewFrequency, [key]: parseInt(e.target.value) || 0 });
+                        setHasChanges(true);
+                      }}
+                      className="w-20 mx-auto text-center text-2xl font-bold"
+                    />
+                    <p className="text-xs text-muted-foreground mt-2">days</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="notifications" className="space-y-6">
+          <Card className="card-elevated">
+            <CardHeader>
+              <CardTitle className="text-sm font-semibold">SLA & Notification Rules</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="p-4 rounded-lg border border-border">
+                  <Label className="text-xs text-muted-foreground">Milestone Delay Threshold</Label>
+                  <p className="text-sm text-muted-foreground mt-1 mb-2">
+                    Days late before triggering alert
+                  </p>
+                  <Input
+                    type="number"
+                    value={notificationRules.milestoneDelayThreshold}
+                    onChange={(e) => {
+                      setNotificationRules({ ...notificationRules, milestoneDelayThreshold: parseInt(e.target.value) || 0 });
+                      setHasChanges(true);
+                    }}
+                    className="text-center text-lg font-mono"
+                  />
+                </div>
+                <div className="p-4 rounded-lg border border-border">
+                  <Label className="text-xs text-muted-foreground">Escalation After</Label>
+                  <p className="text-sm text-muted-foreground mt-1 mb-2">
+                    Days without response before escalating
+                  </p>
+                  <Input
+                    type="number"
+                    value={notificationRules.escalationAfterDays}
+                    onChange={(e) => {
+                      setNotificationRules({ ...notificationRules, escalationAfterDays: parseInt(e.target.value) || 0 });
+                      setHasChanges(true);
+                    }}
+                    className="text-center text-lg font-mono"
+                  />
+                </div>
+                <div className="p-4 rounded-lg border border-border">
+                  <Label className="text-xs text-muted-foreground">Supplier Response SLA</Label>
+                  <p className="text-sm text-muted-foreground mt-1 mb-2">
+                    Hours for supplier to respond
+                  </p>
+                  <Input
+                    type="number"
+                    value={notificationRules.supplierResponseSLA}
+                    onChange={(e) => {
+                      setNotificationRules({ ...notificationRules, supplierResponseSLA: parseInt(e.target.value) || 0 });
+                      setHasChanges(true);
+                    }}
+                    className="text-center text-lg font-mono"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+// Supplier Performance settings component (original)
+const SupplierPerformanceSettings = () => {
   const { scoringSettings, updateScoringSettings, vendors, policyControls, updatePolicyControl } = useGovernanceStore();
   const { addAuditEntry, currentRole } = useAppStore();
   
@@ -84,7 +412,10 @@ export const SettingsPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+          <div className="flex items-center gap-2 mb-1">
+            <TrendingUp className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Supplier Performance Settings</h1>
+          </div>
           <p className="text-sm text-muted-foreground">Governance configuration and scoring rules</p>
         </div>
         {hasChanges && (
@@ -308,4 +639,15 @@ export const SettingsPage = () => {
       </Tabs>
     </div>
   );
+};
+
+// Main Settings Page that switches based on context
+export const SettingsPage = () => {
+  const agentContext = useAgentContext();
+  
+  if (agentContext === 'dispatch-readiness') {
+    return <DispatchSettings />;
+  }
+  
+  return <SupplierPerformanceSettings />;
 };
