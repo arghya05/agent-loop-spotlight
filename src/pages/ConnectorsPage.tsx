@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useAgentContext } from '@/hooks/useAgentContext';
+import { toast } from 'sonner';
 import { 
   Mail,
   Link,
@@ -17,7 +19,8 @@ import {
   ClipboardCheck,
   TrendingUp,
   Truck,
-  Warehouse
+  Warehouse,
+  Loader2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import dispatchConnectors from '@/data/dispatch/connectors.json';
@@ -36,7 +39,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 // Supplier Performance connectors (original)
-const supplierConnectors = [
+const initialSupplierConnectors = [
   {
     id: 'email',
     name: 'Retailer Email Integration',
@@ -100,6 +103,75 @@ const formatDate = (dateStr: string | null) => {
 
 // Dispatch Readiness Connectors Page
 const DispatchConnectorsPage = () => {
+  const [connectors, setConnectors] = useState(dispatchConnectors);
+  const [syncingId, setSyncingId] = useState<string | null>(null);
+  const [configuringId, setConfiguringId] = useState<string | null>(null);
+
+  const handleSyncNow = async (connector: typeof connectors[0]) => {
+    setSyncingId(connector.id);
+    
+    // Simulate sync
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    setConnectors(prev => prev.map(c => 
+      c.id === connector.id 
+        ? { ...c, lastSync: new Date().toISOString() }
+        : c
+    ));
+    
+    setSyncingId(null);
+    toast.success(`${connector.name} synced successfully`, {
+      description: `Data refreshed at ${new Date().toLocaleTimeString()}`
+    });
+  };
+
+  const handleConfigure = async (connector: typeof connectors[0]) => {
+    setConfiguringId(connector.id);
+    
+    // Simulate config opening
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    setConfiguringId(null);
+    toast.success(`${connector.name} configuration opened`, {
+      description: 'Settings panel ready for changes'
+    });
+  };
+
+  const handleDisconnect = (connector: typeof connectors[0]) => {
+    setConnectors(prev => prev.map(c => 
+      c.id === connector.id 
+        ? { ...c, status: 'disconnected', lastSync: null }
+        : c
+    ));
+    toast.success(`${connector.name} disconnected`, {
+      description: 'Integration has been removed'
+    });
+  };
+
+  const handleConnect = async (connector: typeof connectors[0]) => {
+    setSyncingId(connector.id);
+    
+    // Simulate connection
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    setConnectors(prev => prev.map(c => 
+      c.id === connector.id 
+        ? { ...c, status: 'connected', lastSync: new Date().toISOString() }
+        : c
+    ));
+    
+    setSyncingId(null);
+    toast.success(`${connector.name} connected successfully`, {
+      description: 'Integration is now active'
+    });
+  };
+
+  const handleAddConnector = () => {
+    toast.success('Add Connector', {
+      description: 'Connector marketplace opening...'
+    });
+  };
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -111,7 +183,7 @@ const DispatchConnectorsPage = () => {
           </div>
           <p className="text-sm text-muted-foreground">System integrations for dispatch readiness tracking</p>
         </div>
-        <Button>
+        <Button onClick={handleAddConnector}>
           <Plug className="w-4 h-4 mr-2" />
           Add Connector
         </Button>
@@ -119,9 +191,11 @@ const DispatchConnectorsPage = () => {
 
       {/* Connector Cards */}
       <div className="grid grid-cols-2 gap-6">
-        {dispatchConnectors.map((connector) => {
+        {connectors.map((connector) => {
           const Icon = iconMap[connector.icon] || Database;
           const isConnected = connector.status === 'connected';
+          const isSyncing = syncingId === connector.id;
+          const isConfiguring = configuringId === connector.id;
 
           return (
             <Card key={connector.id} className="card-elevated">
@@ -182,21 +256,58 @@ const DispatchConnectorsPage = () => {
                 <div className="flex items-center gap-2 pt-2">
                   {isConnected ? (
                     <>
-                      <Button size="sm" variant="outline" className="flex-1">
-                        <RefreshCw className="w-4 h-4 mr-2" />
-                        Sync Now
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => handleSyncNow(connector)}
+                        disabled={isSyncing}
+                      >
+                        {isSyncing ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                          <RefreshCw className="w-4 h-4 mr-2" />
+                        )}
+                        {isSyncing ? 'Syncing...' : 'Sync Now'}
                       </Button>
-                      <Button size="sm" variant="outline" className="flex-1">
-                        <Settings className="w-4 h-4 mr-2" />
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => handleConfigure(connector)}
+                        disabled={isConfiguring}
+                      >
+                        {isConfiguring ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                          <Settings className="w-4 h-4 mr-2" />
+                        )}
                         Configure
                       </Button>
-                      <Button size="sm" variant="ghost" className="text-status-danger">
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        className="text-status-danger"
+                        onClick={() => handleDisconnect(connector)}
+                      >
                         Disconnect
                       </Button>
                     </>
                   ) : (
-                    <Button size="sm" className="flex-1">
-                      Connect
+                    <Button 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => handleConnect(connector)}
+                      disabled={isSyncing}
+                    >
+                      {isSyncing ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Connecting...
+                        </>
+                      ) : (
+                        'Connect'
+                      )}
                     </Button>
                   )}
                 </div>
@@ -211,6 +322,75 @@ const DispatchConnectorsPage = () => {
 
 // Supplier Performance Connectors Page (original)
 const SupplierPerformanceConnectorsPage = () => {
+  const [connectors, setConnectors] = useState(initialSupplierConnectors);
+  const [syncingId, setSyncingId] = useState<string | null>(null);
+  const [configuringId, setConfiguringId] = useState<string | null>(null);
+
+  const handleSyncNow = async (connector: typeof connectors[0]) => {
+    setSyncingId(connector.id);
+    
+    // Simulate sync
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    setConnectors(prev => prev.map(c => 
+      c.id === connector.id 
+        ? { ...c, lastSync: new Date().toISOString() }
+        : c
+    ));
+    
+    setSyncingId(null);
+    toast.success(`${connector.name} synced successfully`, {
+      description: `Data refreshed at ${new Date().toLocaleTimeString()}`
+    });
+  };
+
+  const handleConfigure = async (connector: typeof connectors[0]) => {
+    setConfiguringId(connector.id);
+    
+    // Simulate config opening
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    setConfiguringId(null);
+    toast.success(`${connector.name} configuration opened`, {
+      description: 'Settings panel ready for changes'
+    });
+  };
+
+  const handleDisconnect = (connector: typeof connectors[0]) => {
+    setConnectors(prev => prev.map(c => 
+      c.id === connector.id 
+        ? { ...c, status: 'disconnected', lastSync: null }
+        : c
+    ));
+    toast.success(`${connector.name} disconnected`, {
+      description: 'Integration has been removed'
+    });
+  };
+
+  const handleConnect = async (connector: typeof connectors[0]) => {
+    setSyncingId(connector.id);
+    
+    // Simulate connection
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    setConnectors(prev => prev.map(c => 
+      c.id === connector.id 
+        ? { ...c, status: 'connected', lastSync: new Date().toISOString() }
+        : c
+    ));
+    
+    setSyncingId(null);
+    toast.success(`${connector.name} connected successfully`, {
+      description: 'Integration is now active'
+    });
+  };
+
+  const handleAddConnector = () => {
+    toast.success('Add Connector', {
+      description: 'Connector marketplace opening...'
+    });
+  };
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -222,7 +402,7 @@ const SupplierPerformanceConnectorsPage = () => {
           </div>
           <p className="text-sm text-muted-foreground">System integrations for supplier performance tracking</p>
         </div>
-        <Button>
+        <Button onClick={handleAddConnector}>
           <Plug className="w-4 h-4 mr-2" />
           Add Connector
         </Button>
@@ -230,9 +410,11 @@ const SupplierPerformanceConnectorsPage = () => {
 
       {/* Connector Cards */}
       <div className="grid grid-cols-2 gap-6">
-        {supplierConnectors.map((connector) => {
+        {connectors.map((connector) => {
           const Icon = connector.icon;
           const isConnected = connector.status === 'connected';
+          const isSyncing = syncingId === connector.id;
+          const isConfiguring = configuringId === connector.id;
 
           return (
             <Card key={connector.id} className="card-elevated">
@@ -293,21 +475,58 @@ const SupplierPerformanceConnectorsPage = () => {
                 <div className="flex items-center gap-2 pt-2">
                   {isConnected ? (
                     <>
-                      <Button size="sm" variant="outline" className="flex-1">
-                        <RefreshCw className="w-4 h-4 mr-2" />
-                        Sync Now
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => handleSyncNow(connector)}
+                        disabled={isSyncing}
+                      >
+                        {isSyncing ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                          <RefreshCw className="w-4 h-4 mr-2" />
+                        )}
+                        {isSyncing ? 'Syncing...' : 'Sync Now'}
                       </Button>
-                      <Button size="sm" variant="outline" className="flex-1">
-                        <Settings className="w-4 h-4 mr-2" />
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => handleConfigure(connector)}
+                        disabled={isConfiguring}
+                      >
+                        {isConfiguring ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                          <Settings className="w-4 h-4 mr-2" />
+                        )}
                         Configure
                       </Button>
-                      <Button size="sm" variant="ghost" className="text-status-danger">
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        className="text-status-danger"
+                        onClick={() => handleDisconnect(connector)}
+                      >
                         Disconnect
                       </Button>
                     </>
                   ) : (
-                    <Button size="sm" className="flex-1">
-                      Connect
+                    <Button 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => handleConnect(connector)}
+                      disabled={isSyncing}
+                    >
+                      {isSyncing ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Connecting...
+                        </>
+                      ) : (
+                        'Connect'
+                      )}
                     </Button>
                   )}
                 </div>
