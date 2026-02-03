@@ -82,19 +82,19 @@ const dispatchNavItems = [
     description: 'Portfolio readiness'
   },
   { 
-    label: 'SS (Slipping)', 
+    label: 'Slipping', 
     path: '/dispatch/bucket/ss', 
     icon: AlertTriangle,
     description: 'High risk POs'
   },
   { 
-    label: 'AW (Watchlist)', 
+    label: 'Watchlist', 
     path: '/dispatch/bucket/aw', 
     icon: Package,
     description: 'Early warning'
   },
   { 
-    label: 'Flow (On Track)', 
+    label: 'On Track', 
     path: '/dispatch/bucket/flow', 
     icon: CheckCircle2,
     description: 'Low risk POs'
