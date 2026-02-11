@@ -12,7 +12,8 @@ import {
   Factory,
   ShieldCheck,
   Zap,
-  FileText
+  FileText,
+  Headphones
 } from 'lucide-react';
 
 const agentTabs = [
@@ -55,6 +56,14 @@ const agentTabs = [
     active: true,
     badge: null,
     basePath: '/contract'
+  },
+  { 
+    id: 'supplier-portal', 
+    label: 'Portal Support',
+    icon: Headphones,
+    active: true,
+    badge: null,
+    basePath: '/support'
   }
 ];
 
@@ -74,6 +83,8 @@ export const AppLayout = () => {
       setActiveAgent('invoice-cash-ops');
     } else if (location.pathname.startsWith('/contract')) {
       setActiveAgent('contract-lifecycle');
+    } else if (location.pathname.startsWith('/support')) {
+      setActiveAgent('supplier-portal');
     } else {
       setActiveAgent('supplier-performance');
     }
@@ -91,6 +102,8 @@ export const AppLayout = () => {
       navigate('/invoice/landing');
     } else if (tabId === 'contract-lifecycle') {
       navigate('/contract/landing');
+    } else if (tabId === 'supplier-portal') {
+      navigate('/support/portal');
     }
   };
 
