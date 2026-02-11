@@ -246,8 +246,78 @@ const conversationFlows: Record<string, (state: ConversationState, userMsg: stri
       nextStep: 1,
     };
   },
-  'p2p_invoice:2': (_s, msg) => {
+  'p2p_invoice:2': (state, msg) => {
     const lower = msg.toLowerCase();
+    // Handle invoice number mention — show details about that invoice
+    const invMatch = msg.match(/INV[-\s]?(\d+)/i);
+    if (invMatch) {
+      const invId = `INV-${invMatch[1]}`;
+      if (invMatch[1] === '8842') {
+        return {
+          response: `📄 **Invoice ${invId}** — Details:\n\n- **Amount**: $12,450\n- **Submitted**: Feb 8, 2025\n- **Status**: ❌ **Rejected**\n- **Reason**: **Price mismatch** — invoiced unit price ($24.50) differs from contract price ($22.00) on 3 line items\n- **Contract**: CLM-2024-047\n- **PO**: PO-4521\n\n**Total overcharge**: $750 across 300 units\n\nWhat would you like to do?`,
+          options: [
+            { label: "See mismatched lines", value: "Show me which line items have the price mismatch" },
+            { label: "Dispute this", value: "I want to dispute this rejection" },
+            { label: "Resubmit corrected", value: "How do I resubmit a corrected invoice?" },
+          ],
+          nextStep: 2,
+          updatedInfo: { invoiceId: invId, issue: 'rejected' },
+        };
+      }
+      if (invMatch[1] === '8801') {
+        return {
+          response: `📄 **Invoice ${invId}** — Details:\n\n- **Amount**: $8,200\n- **Submitted**: Feb 5, 2025\n- **Status**: ✅ **Approved**\n- **Payment scheduled**: Feb 14, 2025\n- **Payment ref**: PAY-2025-0901\n\nThis invoice is fully approved and in the next payment run. Anything else?`,
+          options: [
+            { label: "No, thanks!", value: "No, that's all. Thank you!" },
+            { label: "Another invoice", value: "I have a question about another invoice" },
+          ],
+          nextStep: 2,
+        };
+      }
+      if (invMatch[1] === '8779') {
+        return {
+          response: `📄 **Invoice ${invId}** — Details:\n\n- **Amount**: $15,300\n- **Submitted**: Feb 3, 2025\n- **Status**: ⏳ **Pending Review**\n- **Assigned to**: AP Team (auto-matched to PO-4498)\n- **Expected decision**: Within 2 business days\n\nThe invoice is currently being validated against the PO. Anything else?`,
+          options: [
+            { label: "No, thanks!", value: "No, that's all. Thank you!" },
+            { label: "Another invoice", value: "I have a question about another invoice" },
+          ],
+          nextStep: 2,
+        };
+      }
+      return {
+        response: `I looked up **${invId}** but couldn't find it in our system. Could you double-check the number? Your recent invoices are:\n\n| Invoice | Amount | Status |\n|---------|--------|--------|\n| INV-8842 | $12,450 | ❌ Rejected |\n| INV-8801 | $8,200 | ✅ Approved |\n| INV-8779 | $15,300 | ⏳ Pending |`,
+        options: [
+          { label: "INV-8842", value: "Tell me about INV-8842" },
+          { label: "INV-8801", value: "Tell me about INV-8801" },
+          { label: "INV-8779", value: "Tell me about INV-8779" },
+        ],
+        nextStep: 2,
+      };
+    }
+    // Handle questions about the current invoice
+    if (lower.includes('problem') || lower.includes('why') || lower.includes('reason') || lower.includes('what happened') || lower.includes('what is') || lower.includes('tell me') || lower.includes('explain') || lower.includes('status')) {
+      const currentInv = state.collectedInfo.invoiceId || 'INV-8842';
+      if (currentInv === 'INV-8842') {
+        return {
+          response: `Here's what happened with **${currentInv}**:\n\n❌ **Rejected** on Feb 8, 2025\n\n**Root cause**: Price mismatch on 3 line items\n- You invoiced SKU-A100 at **$24.50/unit**\n- The contract price (CLM-2024-047) is **$22.00/unit**\n- Overcharge: **$2.50/unit × 300 units = $750**\n\nThe system auto-rejected because the price variance exceeded the 1% tolerance threshold.\n\nWhat would you like to do?`,
+          options: [
+            { label: "See line items", value: "Show me which line items have the price mismatch" },
+            { label: "Dispute this", value: "I want to dispute this rejection" },
+            { label: "Resubmit corrected", value: "How do I resubmit a corrected invoice?" },
+          ],
+          nextStep: 2,
+        };
+      }
+      return {
+        response: `Could you tell me which invoice you'd like details about?`,
+        options: [
+          { label: "INV-8842 (Rejected)", value: "Tell me about INV-8842" },
+          { label: "INV-8801 (Approved)", value: "Tell me about INV-8801" },
+          { label: "INV-8779 (Pending)", value: "Tell me about INV-8779" },
+        ],
+        nextStep: 2,
+      };
+    }
     if (lower.includes('dispute')) {
       return {
         response: "I can create a dispute case for you. I'll include the price mismatch evidence automatically.\n\n📝 **Dispute Draft**:\n- Invoice: INV-8842\n- Reason: Price variance — contract allows $22.00, invoiced at $24.50\n- Supporting docs: Contract CLM-2024-047, PO PO-4521\n\nShall I submit this dispute?",
@@ -261,7 +331,7 @@ const conversationFlows: Record<string, (state: ConversationState, userMsg: stri
         nextStep: 3,
       };
     }
-    if (lower.includes('detail') || lower.includes('line item') || lower.includes('which')) {
+    if (lower.includes('detail') || lower.includes('line item') || lower.includes('which') || lower.includes('mismatch')) {
       return {
         response: "Here are the mismatched line items:\n\n| Line | SKU | Contract Price | Invoiced Price | Diff |\n|------|-----|---------------|----------------|------|\n| 3 | SKU-A100 | $22.00 | $24.50 | +$2.50 |\n| 7 | SKU-A100 | $22.00 | $24.50 | +$2.50 |\n| 12 | SKU-A100 | $22.00 | $24.50 | +$2.50 |\n\n**Total overcharge**: $750 across 300 units\n\nThe contract price of $22.00 is from **Contract CLM-2024-047** (effective Jan 1 – Dec 31, 2025).\n\nWhat would you like to do?",
         options: [
@@ -282,13 +352,27 @@ const conversationFlows: Record<string, (state: ConversationState, userMsg: stri
         nextStep: 3,
       };
     }
+    // Handle thanks/gratitude
+    if (lower.includes('thank') || lower.includes('explains') || lower.includes('helpful') || lower.includes('got it') || lower.includes('i see')) {
+      return {
+        response: "You're welcome! Is there anything else I can help you with?",
+        options: [
+          { label: "No, all done", value: "No, that's all. Thank you!" },
+          { label: "Yes, another issue", value: "Yes, I have another question" },
+        ],
+        nextStep: 3,
+      };
+    }
     return {
-      response: "Is there anything else about this invoice I can help with?",
+      response: "I can help you further with this invoice. What would you like to know?",
       options: [
-        { label: "No, thanks!", value: "No, that's all. Thank you!" },
-        { label: "Another issue", value: "Yes, I have another question" },
+        { label: "Why was it rejected?", value: "Why was INV-8842 rejected?" },
+        { label: "See line items", value: "Show me which line items have the price mismatch" },
+        { label: "Dispute it", value: "I want to dispute this rejection" },
+        { label: "Resubmit corrected", value: "How do I resubmit a corrected invoice?" },
+        { label: "No, I'm done", value: "No, that's all. Thank you!" },
       ],
-      nextStep: 3,
+      nextStep: 2,
     };
   },
 
@@ -658,16 +742,46 @@ export const PortalTicketPage = () => {
         resolved: result.resolved || false,
       });
     } else {
-      // Fallback
+      // Smart fallback: try to re-classify intent from the message
+      const reclassified = classifyIntent(userMsg);
+      if (reclassified !== 'unknown' && reclassified !== 'greeting') {
+        // Restart with new intent
+        const newFlowKey = `${reclassified}:0`;
+        const newFlowFn = conversationFlows[newFlowKey];
+        if (newFlowFn) {
+          const newState: ConversationState = { intent: reclassified, step: 0, collectedInfo: {}, resolved: false };
+          const result = newFlowFn(newState, userMsg);
+          setMessages(prev => [...prev, {
+            role: 'agent',
+            content: result.response,
+            time: new Date().toISOString(),
+            options: result.options,
+            actionCard: result.actionCard,
+          }]);
+          setConvState({
+            intent: reclassified,
+            step: result.nextStep,
+            collectedInfo: { ...result.updatedInfo },
+            resolved: false,
+          });
+          setIsTyping(false);
+          return;
+        }
+      }
+      // True fallback — try to be helpful
       setMessages(prev => [...prev, {
         role: 'agent',
-        content: "I've noted that. Is there anything else I can help you with?",
+        content: "I want to make sure I understand correctly. Could you rephrase your question, or pick from one of these common topics?",
         time: new Date().toISOString(),
         options: [
-          { label: "No, all done", value: "No, that's all. Thank you!" },
-          { label: "Yes, another issue", value: "Yes, I have another question" },
+          { label: "Login / Access issue", value: "I have a login problem" },
+          { label: "Invoice / Payment", value: "I have an invoice question" },
+          { label: "User management", value: "I need help managing users" },
+          { label: "Generate a report", value: "I need to generate a report" },
+          { label: "Technical problem", value: "I'm experiencing a technical issue" },
         ],
       }]);
+      setConvState({ intent: 'unknown', step: 0, collectedInfo: {}, resolved: false });
     }
 
     setIsTyping(false);
