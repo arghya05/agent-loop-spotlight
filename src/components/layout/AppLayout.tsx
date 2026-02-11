@@ -40,12 +40,12 @@ const agentTabs = [
     basePath: '/onboarding'
   },
   { 
-    id: 'compliance-monitor', 
-    label: 'Compliance Monitor',
+    id: 'invoice-cash-ops', 
+    label: 'Invoice & Cash Ops',
     icon: ShieldCheck,
-    active: false,
-    badge: 'Soon',
-    basePath: null
+    active: true,
+    badge: null,
+    basePath: '/invoice'
   }
 ];
 
@@ -61,6 +61,8 @@ export const AppLayout = () => {
       setActiveAgent('dispatch-readiness');
     } else if (location.pathname.startsWith('/onboarding')) {
       setActiveAgent('supplier-onboarding');
+    } else if (location.pathname.startsWith('/invoice')) {
+      setActiveAgent('invoice-cash-ops');
     } else {
       setActiveAgent('supplier-performance');
     }
@@ -74,6 +76,8 @@ export const AppLayout = () => {
       navigate('/dispatch/landing');
     } else if (tabId === 'supplier-onboarding') {
       navigate('/onboarding/landing');
+    } else if (tabId === 'invoice-cash-ops') {
+      navigate('/invoice/landing');
     }
   };
 

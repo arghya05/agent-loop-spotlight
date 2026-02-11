@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 
-export type AgentContext = 'supplier-performance' | 'dispatch-readiness' | 'supplier-onboarding';
+export type AgentContext = 'supplier-performance' | 'dispatch-readiness' | 'supplier-onboarding' | 'invoice-cash-ops';
 
 export const useAgentContext = (): AgentContext => {
   const location = useLocation();
@@ -11,6 +11,9 @@ export const useAgentContext = (): AgentContext => {
   if (location.pathname.startsWith('/onboarding')) {
     return 'supplier-onboarding';
   }
+  if (location.pathname.startsWith('/invoice')) {
+    return 'invoice-cash-ops';
+  }
   
   return 'supplier-performance';
 };
@@ -18,5 +21,6 @@ export const useAgentContext = (): AgentContext => {
 export const getAgentLabel = (context: AgentContext): string => {
   if (context === 'dispatch-readiness') return 'Dispatch Readiness Agent';
   if (context === 'supplier-onboarding') return 'Supplier Onboarding Agent';
+  if (context === 'invoice-cash-ops') return 'Invoice & Cash Optimization Agent';
   return 'Supplier Performance Agent';
 };

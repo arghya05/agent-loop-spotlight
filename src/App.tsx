@@ -20,6 +20,11 @@ import { OnboardingLandingPage } from "@/pages/onboarding/OnboardingLandingPage"
 import { OnboardingBucketPage } from "@/pages/onboarding/OnboardingBucketPage";
 import { OnboardingSupplierPage } from "@/pages/onboarding/OnboardingSupplierPage";
 import { OnboardingCasePage } from "@/pages/onboarding/OnboardingCasePage";
+import { InvoiceLandingPage } from "@/pages/invoice/InvoiceLandingPage";
+import { InvoiceBucketPage } from "@/pages/invoice/InvoiceBucketPage";
+import { InvoiceDetailPage } from "@/pages/invoice/InvoiceDetailPage";
+import { DisputePage } from "@/pages/invoice/DisputePage";
+import { SupplierAPPage } from "@/pages/invoice/SupplierAPPage";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -71,6 +76,16 @@ const App = () => (
             <Route path="/onboarding/connectors" element={<ConnectorsPage />} />
             <Route path="/onboarding/settings" element={<SettingsPage />} />
             <Route path="/onboarding/admin/agents" element={<AdminAgentsPage />} />
+            {/* Invoice & Cash Optimization Agent Routes */}
+            <Route path="/invoice/landing" element={<InvoiceLandingPage />} />
+            <Route path="/invoice/bucket/:bucketId" element={<InvoiceBucketPage />} />
+            <Route path="/invoice/invoice/:invoiceId" element={<InvoiceDetailPage />} />
+            <Route path="/invoice/dispute/:disputeId" element={<DisputePage />} />
+            <Route path="/invoice/supplier/:supplierId" element={<SupplierAPPage />} />
+            <Route path="/invoice/analytics" element={<AnalyticsPage />} />
+            <Route path="/invoice/connectors" element={<ConnectorsPage />} />
+            <Route path="/invoice/settings" element={<SettingsPage />} />
+            <Route path="/invoice/admin/agents" element={<AdminAgentsPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
