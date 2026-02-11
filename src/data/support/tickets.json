@@ -1,0 +1,165 @@
+[
+  {
+    "id": "TKT-001",
+    "createdAt": "2025-02-10T08:30:00Z",
+    "updatedAt": "2025-02-10T09:15:00Z",
+    "status": "in_progress",
+    "priority": "high",
+    "channel": "chat",
+    "supplierOrg": "Global Textiles Ltd",
+    "supplierUser": { "id": "SU-001", "name": "Priya Sharma", "email": "priya@globaltextiles.com", "role": "Admin" },
+    "intentCategory": "login_access",
+    "summary": "Account locked after failed MFA attempts",
+    "conversation": [
+      { "role": "supplier", "content": "Hi, I can't login to the portal. It says my account is locked.", "time": "2025-02-10T08:30:00Z" },
+      { "role": "agent", "content": "I understand you're experiencing a locked account issue. Let me check your account status right away.", "time": "2025-02-10T08:30:05Z" },
+      { "role": "agent", "content": "I found your account (priya@globaltextiles.com). It was locked after 5 failed MFA attempts at 08:22 AM. I can unlock it for you. Would you like me to proceed?", "time": "2025-02-10T08:30:15Z" },
+      { "role": "supplier", "content": "Yes please, unlock it", "time": "2025-02-10T08:31:00Z" },
+      { "role": "agent", "content": "✅ Account unlocked successfully. I've also sent a password reset link to your registered email. Please set a new password and re-enable MFA.", "time": "2025-02-10T08:31:10Z" }
+    ],
+    "contextSignals": [
+      { "source": "IAM", "key": "lockReason", "value": "5 failed MFA attempts" },
+      { "source": "IAM", "key": "lastSuccessfulLogin", "value": "2025-02-09T17:45:00Z" },
+      { "source": "PortalLogs", "key": "recentError", "value": "AUTH_MFA_EXCEEDED at 08:22 AM" }
+    ],
+    "actionsExecuted": [
+      { "actionName": "Unlock Account", "status": "success", "time": "2025-02-10T08:31:10Z", "evidence": "Account priya@globaltextiles.com unlocked in IAM" },
+      { "actionName": "Send Password Reset", "status": "success", "time": "2025-02-10T08:31:12Z", "evidence": "Reset email sent to priya@globaltextiles.com" }
+    ],
+    "delegations": [],
+    "resolution": { "resolutionType": "auto_resolved", "notes": "Account unlocked and password reset sent", "confirmedBySupplier": false, "confirmedAt": null }
+  },
+  {
+    "id": "TKT-002",
+    "createdAt": "2025-02-10T09:00:00Z",
+    "updatedAt": "2025-02-10T10:30:00Z",
+    "status": "waiting_on_supplier",
+    "priority": "med",
+    "channel": "chat",
+    "supplierOrg": "PrecisionParts Co",
+    "supplierUser": { "id": "SU-002", "name": "Marcus Chen", "email": "marcus@precisionparts.com", "role": "Finance" },
+    "intentCategory": "p2p_invoice",
+    "summary": "Invoice INV-8842 rejected — requesting explanation",
+    "conversation": [
+      { "role": "supplier", "content": "My invoice INV-8842 was rejected. Can you tell me why?", "time": "2025-02-10T09:00:00Z" },
+      { "role": "agent", "content": "Let me pull up the details for invoice INV-8842.", "time": "2025-02-10T09:00:05Z" },
+      { "role": "agent", "content": "Invoice INV-8842 ($24,500) was rejected due to: **Price mismatch** — contract price for IC-2200 is $4.50/unit but invoice shows $4.85/unit. This is a $0.35/unit variance across 10,000 units ($3,500 over-charge). Would you like me to help you submit a corrected invoice?", "time": "2025-02-10T09:00:20Z" },
+      { "role": "supplier", "content": "I see. Can I resubmit with the correct price?", "time": "2025-02-10T09:05:00Z" },
+      { "role": "agent", "content": "Yes! Please upload a corrected invoice with the unit price of $4.50 for IC-2200. The new total should be $21,000. I'll watch for the resubmission and fast-track the review.", "time": "2025-02-10T09:05:10Z" }
+    ],
+    "contextSignals": [
+      { "source": "P2P", "key": "invoiceStatus", "value": "Rejected - Price Mismatch" },
+      { "source": "P2P", "key": "contractPrice", "value": "$4.50/unit" },
+      { "source": "P2P", "key": "invoicedPrice", "value": "$4.85/unit" }
+    ],
+    "actionsExecuted": [
+      { "actionName": "Fetch Invoice Details", "status": "success", "time": "2025-02-10T09:00:10Z", "evidence": "INV-8842 details retrieved from AP system" }
+    ],
+    "delegations": [],
+    "resolution": null
+  },
+  {
+    "id": "TKT-003",
+    "createdAt": "2025-02-09T14:00:00Z",
+    "updatedAt": "2025-02-10T08:00:00Z",
+    "status": "waiting_on_it",
+    "priority": "critical",
+    "channel": "email",
+    "supplierOrg": "FreshFoods Distribution",
+    "supplierUser": { "id": "SU-003", "name": "Anna Lopez", "email": "anna@freshfoods.com", "role": "Admin" },
+    "intentCategory": "portal_bug",
+    "summary": "Portal crashes on invoice upload — 500 error",
+    "conversation": [
+      { "role": "supplier", "content": "The portal crashes every time I try to upload an invoice. I get a 500 error.", "time": "2025-02-09T14:00:00Z" },
+      { "role": "agent", "content": "I'm sorry about the trouble. Let me investigate the error logs for your recent upload attempts.", "time": "2025-02-09T14:00:10Z" },
+      { "role": "agent", "content": "I found the issue. There's a server-side error related to file processing for PDF files larger than 10MB. Your file was 12.3MB. As a workaround, could you try compressing the PDF or splitting it? I'm also escalating this to IT for a permanent fix.", "time": "2025-02-09T14:01:00Z" }
+    ],
+    "contextSignals": [
+      { "source": "PortalLogs", "key": "errorCode", "value": "500 - FILE_PROCESSING_ERROR" },
+      { "source": "PortalLogs", "key": "fileSize", "value": "12.3MB" },
+      { "source": "PortalLogs", "key": "browser", "value": "Chrome 121.0" }
+    ],
+    "actionsExecuted": [
+      { "actionName": "Fetch Error Logs", "status": "success", "time": "2025-02-09T14:00:30Z", "evidence": "3 failed uploads in last 24h, all >10MB PDFs" }
+    ],
+    "delegations": [
+      { "system": "ITSM", "assignee": "IT-Infra Team", "ticketRef": "INC-4421", "status": "in_progress", "slaDue": "2025-02-11T14:00:00Z" }
+    ],
+    "resolution": null
+  },
+  {
+    "id": "TKT-004",
+    "createdAt": "2025-02-10T07:00:00Z",
+    "updatedAt": "2025-02-10T07:10:00Z",
+    "status": "resolved",
+    "priority": "low",
+    "channel": "chat",
+    "supplierOrg": "Acme Industrial Supply",
+    "supplierUser": { "id": "SU-004", "name": "John Smith", "email": "john@acmeindustrial.com", "role": "Viewer" },
+    "intentCategory": "reporting",
+    "summary": "Request for monthly PO summary report",
+    "conversation": [
+      { "role": "supplier", "content": "Can I get a report of all POs for January 2025?", "time": "2025-02-10T07:00:00Z" },
+      { "role": "agent", "content": "Of course! I'll generate a PO summary report for January 2025. What format would you prefer — PDF or Excel?", "time": "2025-02-10T07:00:05Z" },
+      { "role": "supplier", "content": "Excel please", "time": "2025-02-10T07:01:00Z" },
+      { "role": "agent", "content": "✅ Report generated! You can download your January 2025 PO Summary (Excel) from the Reports section. It includes 47 POs totaling $312,450.", "time": "2025-02-10T07:01:30Z" }
+    ],
+    "contextSignals": [
+      { "source": "Reporting", "key": "reportType", "value": "PO Summary" },
+      { "source": "Reporting", "key": "period", "value": "January 2025" }
+    ],
+    "actionsExecuted": [
+      { "actionName": "Generate Report", "status": "success", "time": "2025-02-10T07:01:25Z", "evidence": "PO_Summary_Jan2025.xlsx generated (47 POs, $312,450)" }
+    ],
+    "delegations": [],
+    "resolution": { "resolutionType": "auto_resolved", "notes": "Report generated and delivered", "confirmedBySupplier": true, "confirmedAt": "2025-02-10T07:05:00Z" }
+  },
+  {
+    "id": "TKT-005",
+    "createdAt": "2025-02-10T10:00:00Z",
+    "updatedAt": "2025-02-10T10:00:00Z",
+    "status": "new",
+    "priority": "med",
+    "channel": "chat",
+    "supplierOrg": "MegaLogistics Inc",
+    "supplierUser": { "id": "SU-005", "name": "David Park", "email": "david@megalogistics.com", "role": "Admin" },
+    "intentCategory": "user_mgmt",
+    "summary": "Request to create new portal user for logistics team",
+    "conversation": [
+      { "role": "supplier", "content": "I need to create a new user for my colleague Sarah Kim (sarah.kim@megalogistics.com) with Viewer access.", "time": "2025-02-10T10:00:00Z" }
+    ],
+    "contextSignals": [
+      { "source": "IAM", "key": "orgUserCount", "value": "8 active users" },
+      { "source": "IAM", "key": "orgUserLimit", "value": "15" }
+    ],
+    "actionsExecuted": [],
+    "delegations": [],
+    "resolution": null
+  },
+  {
+    "id": "TKT-006",
+    "createdAt": "2025-02-08T11:00:00Z",
+    "updatedAt": "2025-02-09T16:00:00Z",
+    "status": "closed",
+    "priority": "med",
+    "channel": "email",
+    "supplierOrg": "CleanChem Solutions",
+    "supplierUser": { "id": "SU-006", "name": "Lisa Weber", "email": "lisa@cleanchem.com", "role": "Finance" },
+    "intentCategory": "p2p_invoice",
+    "summary": "Payment status inquiry for INV-7721",
+    "conversation": [
+      { "role": "supplier", "content": "When will payment for INV-7721 be processed?", "time": "2025-02-08T11:00:00Z" },
+      { "role": "agent", "content": "Invoice INV-7721 ($18,200) is approved and scheduled for payment on Feb 15, 2025 via bank transfer. Payment reference: PAY-2025-0892.", "time": "2025-02-08T11:00:15Z" },
+      { "role": "supplier", "content": "Perfect, thanks!", "time": "2025-02-08T11:05:00Z" }
+    ],
+    "contextSignals": [
+      { "source": "P2P", "key": "paymentDate", "value": "2025-02-15" },
+      { "source": "P2P", "key": "paymentRef", "value": "PAY-2025-0892" }
+    ],
+    "actionsExecuted": [
+      { "actionName": "Fetch Payment Status", "status": "success", "time": "2025-02-08T11:00:10Z", "evidence": "Payment scheduled for Feb 15" }
+    ],
+    "delegations": [],
+    "resolution": { "resolutionType": "auto_resolved", "notes": "Payment info provided", "confirmedBySupplier": true, "confirmedAt": "2025-02-08T11:05:00Z" }
+  }
+]

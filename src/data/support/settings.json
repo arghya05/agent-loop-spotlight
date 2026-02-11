@@ -1,0 +1,28 @@
+{
+  "intentTaxonomy": ["login_access", "user_mgmt", "p2p_invoice", "portal_bug", "reporting", "admin_request"],
+  "humanInLoopGates": {
+    "unlockAccount": false,
+    "resetPassword": false,
+    "createUser": true,
+    "deactivateUser": true,
+    "reTriggerWorkflow": true,
+    "generateReport": false,
+    "createITSMTicket": false
+  },
+  "slaRules": {
+    "critical": { "responseMinutes": 15, "resolutionHours": 4 },
+    "high": { "responseMinutes": 30, "resolutionHours": 8 },
+    "med": { "responseMinutes": 60, "resolutionHours": 24 },
+    "low": { "responseMinutes": 120, "resolutionHours": 48 }
+  },
+  "autoFollowUp": {
+    "enabled": true,
+    "cadenceHours": 24,
+    "maxFollowUps": 3
+  },
+  "templates": {
+    "resolutionConfirmation": "Your issue has been resolved. Please confirm if everything is working as expected.",
+    "escalationNotice": "Your issue has been escalated to our technical team. Expected resolution within {sla}.",
+    "followUp": "We're following up on your recent support request. Is there anything else you need help with?"
+  }
+}

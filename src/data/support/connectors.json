@@ -1,0 +1,8 @@
+[
+  { "id": "iam", "name": "IAM / Identity Provider", "type": "api", "status": "connected", "endpoint": "https://iam.acme.com/api/v2/users", "lastSync": "2025-02-10T08:31:00Z", "description": "User create, reset, unlock, role management" },
+  { "id": "p2p-erp", "name": "P2P / ERP System", "type": "api", "status": "connected", "endpoint": "https://erp.acme.com/api/v2/invoices", "lastSync": "2025-02-10T09:00:00Z", "description": "Invoice, PO, payment status and workflow triggers" },
+  { "id": "reporting", "name": "Reporting Engine", "type": "api", "status": "connected", "endpoint": "https://reports.acme.com/api/v1/generate", "lastSync": "2025-02-10T07:01:00Z", "description": "On-demand report generation in PDF/Excel" },
+  { "id": "itsm", "name": "ITSM / ServiceNow", "type": "api", "status": "connected", "endpoint": "https://acme.service-now.com/api/now/table/incident", "lastSync": "2025-02-10T08:00:00Z", "description": "Create, assign, and track IT tickets" },
+  { "id": "email", "name": "Email Integration", "type": "smtp", "status": "connected", "endpoint": "smtp://mail.acme.com:587", "lastSync": "2025-02-10T09:15:00Z", "description": "Send notifications, follow-ups, and resolution confirmations" },
+  { "id": "portal-logs", "name": "Portal Event Logs", "type": "api", "status": "connected", "endpoint": "https://portal.acme.com/api/v1/events", "lastSync": "2025-02-10T10:00:00Z", "description": "User activity, errors, and session data" }
+]
