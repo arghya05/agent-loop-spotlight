@@ -601,7 +601,7 @@ const OnboardingConnectorsPage = () => {
                     {syncingId === c.id ? 'Syncing...' : 'Sync Now'}
                   </Button>
                 ) : (
-                  <Button size="sm" className="flex-1">Connect</Button>
+                  <Button size="sm" className="flex-1" onClick={() => { toast.success(`${c.name} connected`); }}>Connect</Button>
                 )}
               </div>
             </CardContent>
@@ -671,10 +671,10 @@ const InvoiceConnectorsPage = () => {
                       {syncingId === c.id ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RefreshCw className="w-4 h-4 mr-2" />}
                       {syncingId === c.id ? 'Syncing...' : 'Sync Now'}
                     </Button>
-                    <Button size="sm" variant="outline" className="flex-1"><Settings className="w-4 h-4 mr-2" />Configure</Button>
+                    <Button size="sm" variant="outline" className="flex-1" onClick={() => toast.success(`${c.name} configuration opened`)}><Settings className="w-4 h-4 mr-2" />Configure</Button>
                   </>
                 ) : (
-                  <Button size="sm" className="flex-1">Connect</Button>
+                  <Button size="sm" className="flex-1" onClick={() => toast.success(`${c.name} connected`)}>Connect</Button>
                 )}
               </div>
             </CardContent>
@@ -764,10 +764,10 @@ const ContractConnectorsPage = () => {
                       {syncingId === c.id ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RefreshCw className="w-4 h-4 mr-2" />}
                       {syncingId === c.id ? 'Syncing...' : 'Sync Now'}
                     </Button>
-                    <Button size="sm" variant="outline" className="flex-1"><Settings className="w-4 h-4 mr-2" />Configure</Button>
+                    <Button size="sm" variant="outline" className="flex-1" onClick={() => toast.success(`${c.name} configuration opened`)}><Settings className="w-4 h-4 mr-2" />Configure</Button>
                   </>
                 ) : (
-                  <Button size="sm" className="flex-1">Connect</Button>
+                  <Button size="sm" className="flex-1" onClick={() => toast.success(`${c.name} connected`)}>Connect</Button>
                 )}
               </div>
             </CardContent>

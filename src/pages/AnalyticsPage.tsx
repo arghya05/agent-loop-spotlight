@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -66,7 +67,7 @@ const DispatchAnalyticsPage = () => {
           </div>
           <p className="text-sm text-muted-foreground">Readiness reporting and performance insights</p>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={() => toast.success('Dispatch analytics report exported')}>
           <Download className="w-4 h-4 mr-2" />
           Export Report
         </Button>
@@ -346,7 +347,7 @@ const SupplierPerformanceAnalyticsPage = () => {
           </div>
           <p className="text-sm text-muted-foreground">Reporting and performance insights</p>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={() => toast.success('Performance analytics report exported')}>
           <Download className="w-4 h-4 mr-2" />
           Export Report
         </Button>
@@ -546,7 +547,7 @@ const OnboardingAnalyticsPage = () => {
           </div>
           <p className="text-sm text-muted-foreground">Funnel conversion, risk distribution, and blocked reasons</p>
         </div>
-        <Button variant="outline"><Download className="w-4 h-4 mr-2" />Export Report</Button>
+        <Button variant="outline" onClick={() => toast.success('Onboarding analytics report exported')}><Download className="w-4 h-4 mr-2" />Export Report</Button>
       </div>
 
       <div className="grid grid-cols-2 gap-6">
@@ -664,7 +665,7 @@ const InvoiceAnalyticsPage = () => {
           </div>
           <p className="text-sm text-muted-foreground">STP rates, leakage recovery, cycle times, and cash savings</p>
         </div>
-        <Button variant="outline"><Download className="w-4 h-4 mr-2" />Export Report</Button>
+        <Button variant="outline" onClick={() => toast.success('Invoice & Cash analytics report exported')}><Download className="w-4 h-4 mr-2" />Export Report</Button>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -819,7 +820,7 @@ const ContractAnalyticsPage = () => {
           </div>
           <p className="text-sm text-muted-foreground">Coverage trends, leakage recovery, and violation analysis</p>
         </div>
-        <Button variant="outline"><Download className="w-4 h-4 mr-2" />Export Report</Button>
+        <Button variant="outline" onClick={() => toast.success('Contract analytics report exported')}><Download className="w-4 h-4 mr-2" />Export Report</Button>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
