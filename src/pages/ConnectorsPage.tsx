@@ -539,12 +539,163 @@ const SupplierPerformanceConnectorsPage = () => {
   );
 };
 
+// Onboarding Connectors
+const OnboardingConnectorsPage = () => {
+  const onbConnectors = require('@/data/onboarding/connectors.json') as any[];
+  const [connectors, setConnectors] = useState(onbConnectors);
+  const [syncingId, setSyncingId] = useState<string | null>(null);
+
+  const handleSync = async (c: any) => {
+    setSyncingId(c.id);
+    await new Promise(r => setTimeout(r, 1500));
+    setConnectors(prev => prev.map(x => x.id === c.id ? { ...x, lastSync: new Date().toISOString() } : x));
+    setSyncingId(null);
+    toast.success(`${c.name} synced`);
+  };
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Factory className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Onboarding Connectors</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Integrations for supplier onboarding & compliance</p>
+        </div>
+        <Button><Plug className="w-4 h-4 mr-2" />Add Connector</Button>
+      </div>
+      <div className="grid grid-cols-2 gap-6">
+        {connectors.map((c) => (
+          <Card key={c.id} className="card-elevated">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center", c.status === 'connected' ? "bg-status-success/10" : "bg-muted")}>
+                    <Database className={cn("w-5 h-5", c.status === 'connected' ? "text-status-success" : "text-muted-foreground")} />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">{c.name}</CardTitle>
+                    <p className="text-xs text-muted-foreground">{c.description}</p>
+                  </div>
+                </div>
+                <Badge variant={c.status === 'connected' ? 'default' : 'destructive'} className="text-xs">
+                  {c.status === 'connected' ? <><CheckCircle2 className="w-3 h-3 mr-1" />Connected</> : <><XCircle className="w-3 h-3 mr-1" />Disconnected</>}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="p-3 rounded-lg bg-muted/50 text-sm">
+                <div className="flex justify-between"><span className="text-muted-foreground">Endpoint</span><span className="font-medium text-xs">{c.endpoint}</span></div>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Last Sync</span>
+                <span className="font-medium">{c.lastSync ? formatDate(c.lastSync) : 'Never'}</span>
+              </div>
+              <div className="flex gap-2 pt-2">
+                {c.status === 'connected' ? (
+                  <Button size="sm" variant="outline" className="flex-1" onClick={() => handleSync(c)} disabled={syncingId === c.id}>
+                    {syncingId === c.id ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RefreshCw className="w-4 h-4 mr-2" />}
+                    {syncingId === c.id ? 'Syncing...' : 'Sync Now'}
+                  </Button>
+                ) : (
+                  <Button size="sm" className="flex-1">Connect</Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Invoice Connectors
+const InvoiceConnectorsPage = () => {
+  const invConnectors = require('@/data/invoice/connectors.json') as any[];
+  const [connectors, setConnectors] = useState(invConnectors);
+  const [syncingId, setSyncingId] = useState<string | null>(null);
+
+  const handleSync = async (c: any) => {
+    setSyncingId(c.id);
+    await new Promise(r => setTimeout(r, 1500));
+    setConnectors(prev => prev.map(x => x.id === c.id ? { ...x, lastSync: new Date().toISOString() } : x));
+    setSyncingId(null);
+    toast.success(`${c.name} synced`);
+  };
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Plug className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Invoice & AP Connectors</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">ERP, PO, GRN, contract, and supplier portal integrations</p>
+        </div>
+        <Button><Plug className="w-4 h-4 mr-2" />Add Connector</Button>
+      </div>
+      <div className="grid grid-cols-2 gap-6">
+        {connectors.map((c) => (
+          <Card key={c.id} className="card-elevated">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center", c.status === 'connected' ? "bg-status-success/10" : "bg-muted")}>
+                    <Database className={cn("w-5 h-5", c.status === 'connected' ? "text-status-success" : "text-muted-foreground")} />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">{c.name}</CardTitle>
+                    <p className="text-xs text-muted-foreground">{c.description}</p>
+                  </div>
+                </div>
+                <Badge variant={c.status === 'connected' ? 'default' : 'destructive'} className="text-xs">
+                  {c.status === 'connected' ? <><CheckCircle2 className="w-3 h-3 mr-1" />Connected</> : <><XCircle className="w-3 h-3 mr-1" />Disconnected</>}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="p-3 rounded-lg bg-muted/50 text-sm">
+                <div className="flex justify-between"><span className="text-muted-foreground">Endpoint</span><span className="font-medium text-xs">{c.endpoint}</span></div>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Last Sync</span>
+                <span className="font-medium">{c.lastSync ? formatDate(c.lastSync) : 'Never'}</span>
+              </div>
+              <div className="flex gap-2 pt-2">
+                {c.status === 'connected' ? (
+                  <>
+                    <Button size="sm" variant="outline" className="flex-1" onClick={() => handleSync(c)} disabled={syncingId === c.id}>
+                      {syncingId === c.id ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RefreshCw className="w-4 h-4 mr-2" />}
+                      {syncingId === c.id ? 'Syncing...' : 'Sync Now'}
+                    </Button>
+                    <Button size="sm" variant="outline" className="flex-1"><Settings className="w-4 h-4 mr-2" />Configure</Button>
+                  </>
+                ) : (
+                  <Button size="sm" className="flex-1">Connect</Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 // Main Connectors Page that switches based on context
 export const ConnectorsPage = () => {
   const agentContext = useAgentContext();
   
   if (agentContext === 'dispatch-readiness') {
     return <DispatchConnectorsPage />;
+  }
+  if (agentContext === 'supplier-onboarding') {
+    return <OnboardingConnectorsPage />;
+  }
+  if (agentContext === 'invoice-cash-ops') {
+    return <InvoiceConnectorsPage />;
   }
   
   return <SupplierPerformanceConnectorsPage />;

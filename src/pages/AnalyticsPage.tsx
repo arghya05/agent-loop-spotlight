@@ -502,12 +502,278 @@ const SupplierPerformanceAnalyticsPage = () => {
   );
 };
 
+// Onboarding Analytics
+const OnboardingAnalyticsPage = () => {
+  const funnelData = [
+    { stage: 'Request', count: 42 },
+    { stage: 'Doc Collection', count: 38 },
+    { stage: 'Extraction', count: 35 },
+    { stage: 'Validation', count: 30 },
+    { stage: 'Screening', count: 28 },
+    { stage: 'Risk Scoring', count: 25 },
+    { stage: 'Approval', count: 20 },
+    { stage: 'Activated', count: 18 },
+  ];
+
+  const riskDistribution = [
+    { name: 'Fast Track', value: 18, color: '#16a34a' },
+    { name: 'Needs Review', value: 15, color: '#eab308' },
+    { name: 'Blocked', value: 9, color: '#dc2626' },
+  ];
+
+  const avgTimeByCountry = [
+    { country: 'India', days: 12 },
+    { country: 'China', days: 18 },
+    { country: 'Vietnam', days: 14 },
+    { country: 'Bangladesh', days: 16 },
+    { country: 'Turkey', days: 10 },
+  ];
+
+  const blockedReasons = [
+    { reason: 'Missing MSME Cert', count: 4 },
+    { reason: 'Sanctions Hit', count: 2 },
+    { reason: 'Adverse Media', count: 2 },
+    { reason: 'Invalid Factory License', count: 1 },
+  ];
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <BarChart3 className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Onboarding Analytics</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Funnel conversion, risk distribution, and blocked reasons</p>
+        </div>
+        <Button variant="outline"><Download className="w-4 h-4 mr-2" />Export Report</Button>
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm font-semibold">Onboarding Funnel</CardTitle></CardHeader>
+          <CardContent>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={funnelData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="stage" tick={{ fontSize: 10 }} angle={-30} textAnchor="end" height={60} />
+                  <YAxis tick={{ fontSize: 12 }} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm font-semibold">Risk Distribution</CardTitle></CardHeader>
+          <CardContent>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <RechartsPie>
+                  <Pie data={riskDistribution} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={2} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
+                    {riskDistribution.map((entry, index) => <Cell key={index} fill={entry.color} />)}
+                  </Pie>
+                  <Tooltip />
+                </RechartsPie>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm font-semibold">Avg Onboarding Time by Country (days)</CardTitle></CardHeader>
+          <CardContent>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={avgTimeByCountry}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="country" tick={{ fontSize: 12 }} />
+                  <YAxis tick={{ fontSize: 12 }} />
+                  <Tooltip formatter={(v: number) => `${v} days`} />
+                  <Bar dataKey="days" fill="#eab308" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm font-semibold">Blocked Suppliers by Reason</CardTitle></CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {blockedReasons.map((r) => (
+                <div key={r.reason} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                  <span className="text-sm">{r.reason}</span>
+                  <Badge variant="destructive" className="text-xs">{r.count}</Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+// Invoice Analytics
+const InvoiceAnalyticsPage = () => {
+  const stpTrend = [
+    { week: 'W1', rate: 72 },
+    { week: 'W2', rate: 75 },
+    { week: 'W3', rate: 78 },
+    { week: 'W4', rate: 74 },
+    { week: 'W5', rate: 80 },
+    { week: 'W6', rate: 82 },
+    { week: 'W7', rate: 79 },
+    { week: 'W8', rate: 85 },
+  ];
+
+  const bucketDistribution = [
+    { name: 'Matched', value: 4, color: '#16a34a' },
+    { name: 'Needs Review', value: 2, color: '#eab308' },
+    { name: 'Dispute', value: 2, color: '#dc2626' },
+    { name: 'Hold', value: 2, color: '#6b7280' },
+    { name: 'Cash Opp', value: 2, color: '#3b82f6' },
+  ];
+
+  const topDisputeReasons = [
+    { reason: 'Price Mismatch', count: 5, amount: 42000 },
+    { reason: 'Qty Overbilling', count: 3, amount: 28000 },
+    { reason: 'Missing GRN', count: 2, amount: 15000 },
+    { reason: 'Duplicate Invoice', count: 2, amount: 72000 },
+    { reason: 'Freight Variance', count: 1, amount: 800 },
+  ];
+
+  const cycleTimeData = [
+    { bucket: 'Matched', days: 0.5 },
+    { bucket: 'Needs Review', days: 3.2 },
+    { bucket: 'Dispute', days: 7.5 },
+    { bucket: 'Hold', days: 12 },
+  ];
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <BarChart3 className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Invoice & Cash Analytics</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">STP rates, leakage recovery, cycle times, and cash savings</p>
+        </div>
+        <Button variant="outline"><Download className="w-4 h-4 mr-2" />Export Report</Button>
+      </div>
+
+      <div className="grid grid-cols-4 gap-4">
+        {[
+          { label: 'STP Rate', value: '85%', icon: TrendingUp },
+          { label: '$ Leakage Prevented', value: '$18.7K', icon: DollarSign },
+          { label: 'Avg Days to Clear', value: '4.2d', icon: Clock },
+          { label: 'Cash Savings (YTD)', value: '$8.3K', icon: DollarSign },
+        ].map((kpi) => (
+          <Card key={kpi.label} className="card-elevated">
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <kpi.icon className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">{kpi.value}</p>
+                  <p className="text-xs text-muted-foreground">{kpi.label}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm font-semibold">Straight-Through Processing Rate</CardTitle></CardHeader>
+          <CardContent>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={stpTrend}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="week" tick={{ fontSize: 12 }} />
+                  <YAxis domain={[60, 100]} tick={{ fontSize: 12 }} tickFormatter={(v) => `${v}%`} />
+                  <Tooltip formatter={(v: number) => `${v}%`} />
+                  <Line type="monotone" dataKey="rate" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ fill: 'hsl(var(--primary))' }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm font-semibold">Invoice Distribution by Bucket</CardTitle></CardHeader>
+          <CardContent>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <RechartsPie>
+                  <Pie data={bucketDistribution} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={2} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
+                    {bucketDistribution.map((entry, index) => <Cell key={index} fill={entry.color} />)}
+                  </Pie>
+                  <Tooltip />
+                </RechartsPie>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm font-semibold">Cycle Time by Bucket (days)</CardTitle></CardHeader>
+          <CardContent>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={cycleTimeData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="bucket" tick={{ fontSize: 12 }} />
+                  <YAxis tick={{ fontSize: 12 }} />
+                  <Tooltip formatter={(v: number) => `${v} days`} />
+                  <Bar dataKey="days" fill="#f97316" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm font-semibold">Top Dispute Reasons</CardTitle></CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {topDisputeReasons.map((r) => (
+                <div key={r.reason} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                  <div>
+                    <span className="text-sm font-medium">{r.reason}</span>
+                    <p className="text-xs text-muted-foreground">{r.count} occurrences</p>
+                  </div>
+                  <span className="text-sm font-mono font-semibold text-status-danger">${r.amount.toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
 // Main Analytics Page that switches based on context
 export const AnalyticsPage = () => {
   const agentContext = useAgentContext();
   
   if (agentContext === 'dispatch-readiness') {
     return <DispatchAnalyticsPage />;
+  }
+  if (agentContext === 'supplier-onboarding') {
+    return <OnboardingAnalyticsPage />;
+  }
+  if (agentContext === 'invoice-cash-ops') {
+    return <InvoiceAnalyticsPage />;
   }
   
   return <SupplierPerformanceAnalyticsPage />;
