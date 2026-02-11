@@ -1,0 +1,29 @@
+{
+  "matchingRules": {
+    "priceTolerance": 5,
+    "qtyTolerance": 2,
+    "taxTolerance": 1,
+    "freightTolerance": 10,
+    "matchPolicy": "3-way"
+  },
+  "disputeRules": {
+    "autoOpenAboveVariance": 5000,
+    "escalationDays": 5,
+    "maxNegotiationRounds": 3
+  },
+  "approvalGates": {
+    "autoPayMaxAmount": 50000,
+    "settlementApprovalThreshold": 10000,
+    "writeOffApprovalThreshold": 5000
+  },
+  "cashOptimization": {
+    "minSavingsThreshold": 500,
+    "cashConstraintBand": "moderate",
+    "preferredSuppliers": ["SUP-A1", "SUP-E5"]
+  },
+  "fraudRules": {
+    "duplicateDetection": true,
+    "blacklistedSuppliers": ["SUP-I9"],
+    "autoHoldSanctioned": true
+  }
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "CASH-001",
+    "supplierId": "SUP-E5",
+    "supplierName": "Apex Chemical Supply",
+    "invoiceIds": ["INV005"],
+    "totalEligible": 232400,
+    "discountTerms": { "days": 10, "discountPct": 2.0, "netDays": 30 },
+    "decision": { "payEarlyYesNo": null, "payDate": "2025-02-09", "expectedSavings": 4648, "cashImpact": -232400 },
+    "approvals": [],
+    "status": "pending"
+  },
+  {
+    "id": "CASH-002",
+    "supplierId": "SUP-H8",
+    "supplierName": "Continental Papers SA",
+    "invoiceIds": ["INV009"],
+    "totalEligible": 102460,
+    "discountTerms": { "days": 15, "discountPct": 1.5, "netDays": 45 },
+    "decision": { "payEarlyYesNo": null, "payDate": "2025-02-15", "expectedSavings": 1537, "cashImpact": -102460 },
+    "approvals": [],
+    "status": "pending"
+  },
+  {
+    "id": "CASH-003",
+    "supplierId": "SUP-A1",
+    "supplierName": "Pacific Textiles Ltd",
+    "invoiceIds": ["INV001", "INV006"],
+    "totalEligible": 211744,
+    "discountTerms": { "days": 10, "discountPct": 1.0, "netDays": 30 },
+    "decision": { "payEarlyYesNo": true, "payDate": "2025-02-07", "expectedSavings": 2117, "cashImpact": -211744 },
+    "approvals": [
+      { "role": "Finance Manager", "approver": "David Kim", "decision": "approved", "time": "2025-02-01T11:00:00Z" }
+    ],
+    "status": "approved"
+  }
+]

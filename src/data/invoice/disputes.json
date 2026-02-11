@@ -1,0 +1,53 @@
+[
+  {
+    "id": "DSP-001",
+    "invoiceId": "INV003",
+    "supplierId": "SUP-C3",
+    "supplierName": "Global Packaging Inc",
+    "invoiceNumber": "INV-2024-8851",
+    "amount": 62544,
+    "varianceTotal": 12269,
+    "reasonCodes": ["price_mismatch", "qty_mismatch"],
+    "proposedResolution": {
+      "creditNoteAmount": 11360,
+      "revisedInvoiceAmount": 51184,
+      "paymentHoldDays": 0,
+      "settlementText": "We request a credit note of $11,360 covering the price variance of $8,520 (unit price discrepancy vs PO-4375) and quantity overbilling of $2,840 (500 units invoiced but not received per GRN-7685). The revised payable amount would be $51,184."
+    },
+    "status": "pending_supplier",
+    "commsTrail": [
+      { "time": "2025-01-23T10:00:00Z", "channel": "email", "sender": "Agent", "recipient": "ap@globalpackaging.com", "status": "delivered", "snippet": "Re: INV-2024-8851 — We have identified pricing and quantity discrepancies totaling $11,360. Please review and issue a credit note.", "followUpDue": "2025-01-28T10:00:00Z" },
+      { "time": "2025-01-24T14:00:00Z", "channel": "portal", "sender": "Agent", "recipient": "Global Packaging Inc", "status": "read", "snippet": "Dispute DSP-001 has been created in the supplier portal with attached evidence.", "followUpDue": null }
+    ],
+    "approvals": [],
+    "createdAt": "2025-01-23T10:00:00Z",
+    "updatedAt": "2025-01-24T14:00:00Z"
+  },
+  {
+    "id": "DSP-002",
+    "invoiceId": "INV008",
+    "supplierId": "SUP-G7",
+    "supplierName": "TechParts Asia Pte",
+    "invoiceNumber": "INV-2024-8890",
+    "amount": 51448,
+    "varianceTotal": 8187,
+    "reasonCodes": ["qty_mismatch", "freight_variance"],
+    "proposedResolution": {
+      "creditNoteAmount": 8187,
+      "revisedInvoiceAmount": 43261,
+      "paymentHoldDays": 5,
+      "settlementText": "Credit note requested for $8,187: $6,840 for 180 units invoiced but not received (GRN-7705 confirms 1,020 vs 1,200 invoiced), $547 tax adjustment, and $800 freight surcharge above contracted rate of $1,400."
+    },
+    "status": "negotiating",
+    "commsTrail": [
+      { "time": "2025-01-28T09:00:00Z", "channel": "email", "sender": "Agent", "recipient": "billing@techpartsasia.com", "status": "delivered", "snippet": "Re: INV-2024-8890 — Quantity and freight discrepancies identified. Total adjustment requested: $8,187.", "followUpDue": "2025-02-01T09:00:00Z" },
+      { "time": "2025-01-29T16:00:00Z", "channel": "email", "sender": "TechParts Asia", "recipient": "ap@algonomy.com", "status": "received", "snippet": "We acknowledge the qty difference. However, the freight charge reflects emergency shipping requested by your warehouse team on Jan 25.", "followUpDue": null },
+      { "time": "2025-01-30T10:00:00Z", "channel": "email", "sender": "Agent", "recipient": "billing@techpartsasia.com", "status": "delivered", "snippet": "We accept the freight explanation. Revised credit note request: $7,387 (qty + tax only).", "followUpDue": "2025-02-03T10:00:00Z" }
+    ],
+    "approvals": [
+      { "role": "AP Analyst", "approver": "Mike Johnson", "decision": "approved_draft", "notes": "Variance confirmed against GRN", "time": "2025-01-28T08:30:00Z" }
+    ],
+    "createdAt": "2025-01-28T09:00:00Z",
+    "updatedAt": "2025-01-30T10:00:00Z"
+  }
+]

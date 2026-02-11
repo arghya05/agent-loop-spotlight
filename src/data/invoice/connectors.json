@@ -1,0 +1,8 @@
+[
+  { "id": "erp-ap", "name": "ERP / AP System", "type": "api", "status": "connected", "endpoint": "https://erp.acme.com/api/v2/invoices", "lastSync": "2025-02-01T12:15:00Z", "description": "Invoice feed and payment status" },
+  { "id": "po-system", "name": "PO Management System", "type": "api", "status": "connected", "endpoint": "https://procurement.acme.com/api/v1/purchase-orders", "lastSync": "2025-02-01T12:16:00Z", "description": "Purchase order data for matching" },
+  { "id": "wms-grn", "name": "WMS / GRN Integration", "type": "api", "status": "connected", "endpoint": "https://wms.acme.com/api/v1/goods-receipts", "lastSync": "2025-02-01T11:00:00Z", "description": "Goods receipt notes for 3-way matching" },
+  { "id": "contract-repo", "name": "Contract Repository", "type": "api", "status": "connected", "endpoint": "https://contracts.acme.com/api/v1/terms", "lastSync": "2025-01-31T18:00:00Z", "description": "Contract terms, pricing, and penalty clauses" },
+  { "id": "email-ap", "name": "Email Integration (AP)", "type": "smtp", "status": "connected", "endpoint": "smtp://mail.acme.com:587", "lastSync": "2025-02-01T12:00:00Z", "description": "Send disputes, requests, and reminders to suppliers" },
+  { "id": "supplier-portal", "name": "Supplier Portal", "type": "webhook", "status": "connected", "endpoint": "https://portal.acme.com/api/v1/documents", "lastSync": "2025-02-01T10:00:00Z", "description": "Receive revised invoices and credit notes from suppliers" }
+]
