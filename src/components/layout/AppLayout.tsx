@@ -35,9 +35,9 @@ const agentTabs = [
     id: 'supplier-onboarding', 
     label: 'Supplier Onboarding',
     icon: Factory,
-    active: false,
-    badge: 'Soon',
-    basePath: null
+    active: true,
+    badge: null,
+    basePath: '/onboarding'
   },
   { 
     id: 'compliance-monitor', 
@@ -59,6 +59,8 @@ export const AppLayout = () => {
   useEffect(() => {
     if (location.pathname.startsWith('/dispatch')) {
       setActiveAgent('dispatch-readiness');
+    } else if (location.pathname.startsWith('/onboarding')) {
+      setActiveAgent('supplier-onboarding');
     } else {
       setActiveAgent('supplier-performance');
     }
@@ -70,6 +72,8 @@ export const AppLayout = () => {
       navigate('/landing');
     } else if (tabId === 'dispatch-readiness') {
       navigate('/dispatch/landing');
+    } else if (tabId === 'supplier-onboarding') {
+      navigate('/onboarding/landing');
     }
   };
 

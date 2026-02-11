@@ -1,0 +1,67 @@
+{
+  "agents": [
+    {
+      "agentName": "Document Extractor Agent",
+      "active": true,
+      "schedule": "On document upload",
+      "lastRun": "2024-01-20T10:00:00Z",
+      "nextRun": "On trigger",
+      "logs": [
+        { "time": "2024-01-20T10:00:00Z", "status": "success", "duration": 2400, "summary": "Extracted 6 documents for SUP007. All fields validated." },
+        { "time": "2024-01-19T14:30:00Z", "status": "success", "duration": 3100, "summary": "Processed W-8BEN-E for SUP004. TIN format validated." }
+      ]
+    },
+    {
+      "agentName": "Policy Validation Agent",
+      "active": true,
+      "schedule": "After extraction complete",
+      "lastRun": "2024-01-20T10:30:00Z",
+      "nextRun": "On trigger",
+      "logs": [
+        { "time": "2024-01-20T10:30:00Z", "status": "success", "duration": 1800, "summary": "Validated SUP007 against 12 policy rules. All passed." },
+        { "time": "2024-01-19T15:00:00Z", "status": "warning", "duration": 2200, "summary": "SUP002 failed 2/12 rules: missing ESG policy, low audit score." }
+      ]
+    },
+    {
+      "agentName": "External Screening Agent",
+      "active": true,
+      "schedule": "Daily at 06:00 UTC",
+      "lastRun": "2024-01-20T06:00:00Z",
+      "nextRun": "2024-01-21T06:00:00Z",
+      "logs": [
+        { "time": "2024-01-20T06:00:00Z", "status": "success", "duration": 45000, "summary": "Screened 8 suppliers. 2 sanctions hits, 3 adverse media flags." },
+        { "time": "2024-01-19T06:00:00Z", "status": "success", "duration": 42000, "summary": "Screened 8 suppliers. 1 new litigation flag on SUP003." }
+      ]
+    },
+    {
+      "agentName": "Risk Scoring Agent",
+      "active": true,
+      "schedule": "After screening complete",
+      "lastRun": "2024-01-20T07:00:00Z",
+      "nextRun": "On trigger",
+      "logs": [
+        { "time": "2024-01-20T07:00:00Z", "status": "success", "duration": 1200, "summary": "Recalculated scores for 5 suppliers. 2 bucket changes detected." }
+      ]
+    },
+    {
+      "agentName": "Approval Gate Orchestrator",
+      "active": true,
+      "schedule": "On score calculation",
+      "lastRun": "2024-01-20T07:05:00Z",
+      "nextRun": "On trigger",
+      "logs": [
+        { "time": "2024-01-20T07:05:00Z", "status": "success", "duration": 800, "summary": "Auto-approved 2 fast-track suppliers. 1 routed for human review." }
+      ]
+    },
+    {
+      "agentName": "Continuous Monitoring Agent",
+      "active": true,
+      "schedule": "Weekly on Monday 06:00 UTC",
+      "lastRun": "2024-01-15T06:00:00Z",
+      "nextRun": "2024-01-22T06:00:00Z",
+      "logs": [
+        { "time": "2024-01-15T06:00:00Z", "status": "success", "duration": 120000, "summary": "Monitored 24 active suppliers. 1 new alert: doc expiry for SUP-ACTIVE-12." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "riskScoring": {
+    "weights": {
+      "documentCompleteness": 0.15,
+      "auditScore": 0.20,
+      "sanctionsScreening": 0.25,
+      "esgRating": 0.15,
+      "adverseMedia": 0.15,
+      "financialHealth": 0.10
+    },
+    "thresholds": {
+      "fastTrack": 25,
+      "needsReview": 60,
+      "blocked": 60
+    }
+  },
+  "bucketRules": {
+    "fastTrack": {
+      "maxScore": 25,
+      "requireAllDocsPass": true,
+      "requireNoSanctionsHit": true,
+      "autoApprove": true
+    },
+    "needsReview": {
+      "minScore": 26,
+      "maxScore": 60,
+      "requireHumanApproval": true,
+      "approvalRoles": ["compliance_analyst", "procurement"]
+    },
+    "blocked": {
+      "minScore": 61,
+      "orSanctionsHit": true,
+      "orCriticalDocMissing": true,
+      "orSevereAdverseMedia": true,
+      "requireEscalation": true
+    }
+  },
+  "mandatoryDocs": [
+    { "type": "Business License", "critical": true },
+    { "type": "Factory Audit Report", "critical": true },
+    { "type": "ESG Policy", "critical": false },
+    { "type": "Insurance Certificate", "critical": true },
+    { "type": "Bank Details", "critical": true },
+    { "type": "W-8BEN-E", "critical": false }
+  ],
+  "policyControls": [
+    {
+      "id": "auto_approve_low_risk",
+      "name": "Auto-approve Low Risk",
+      "description": "Automatically approve suppliers with risk score ≤ 25 and all checks passed",
+      "enabled": true,
+      "triggeredCount": 3
+    },
+    {
+      "id": "block_sanctions_hit",
+      "name": "Block on Sanctions Hit",
+      "description": "Immediately block onboarding for any sanctions list match",
+      "enabled": true,
+      "triggeredCount": 2
+    },
+    {
+      "id": "procurement_signoff",
+      "name": "Procurement Sign-off Required",
+      "description": "Require procurement approval for suppliers with risk score > 40",
+      "enabled": true,
+      "threshold": 40,
+      "triggeredCount": 4
+    },
+    {
+      "id": "continuous_monitoring",
+      "name": "Continuous Monitoring",
+      "description": "Enable ongoing screening for all activated suppliers",
+      "enabled": true,
+      "triggeredCount": 24
+    }
+  ],
+  "externalScreeningSources": [
+    { "id": "ofac", "name": "OFAC SDN List", "enabled": true },
+    { "id": "eu_sanctions", "name": "EU Sanctions List", "enabled": true },
+    { "id": "adverse_media", "name": "Adverse Media Screening", "enabled": true },
+    { "id": "esg_monitor", "name": "ESG Rating Provider", "enabled": true },
+    { "id": "litigation", "name": "Litigation Database", "enabled": true },
+    { "id": "pep", "name": "PEP Database", "enabled": true }
+  ],
+  "reviewFrequency": {
+    "fastTrack": 30,
+    "needsReview": 7,
+    "blocked": 3
+  },
+  "approvalGates": [
+    { "condition": "score <= 25", "approvers": ["auto"], "label": "Auto-approve" },
+    { "condition": "score 26-60", "approvers": ["compliance_analyst"], "label": "Compliance Review" },
+    { "condition": "score > 60", "approvers": ["compliance_analyst", "procurement", "admin"], "label": "Multi-party Escalation" }
+  ],
+  "lastRefresh": "2024-01-20T10:15:00Z"
+}

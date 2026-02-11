@@ -1,0 +1,60 @@
+{
+  "connectors": [
+    {
+      "id": "email",
+      "name": "Email Integration",
+      "description": "Send automated communications to suppliers",
+      "status": "connected",
+      "lastSync": "2024-01-20T09:00:00Z",
+      "type": "communication"
+    },
+    {
+      "id": "supplier_portal",
+      "name": "Supplier Portal",
+      "description": "Self-service document upload and status tracking",
+      "status": "connected",
+      "lastSync": "2024-01-20T10:00:00Z",
+      "type": "integration"
+    },
+    {
+      "id": "erp_vendor_master",
+      "name": "ERP / Vendor Master",
+      "description": "Create and manage supplier records in ERP system",
+      "status": "connected",
+      "lastSync": "2024-01-19T18:00:00Z",
+      "type": "integration"
+    },
+    {
+      "id": "sanctions_provider",
+      "name": "Sanctions Screening Provider",
+      "description": "OFAC, EU, UN sanctions list screening",
+      "status": "connected",
+      "lastSync": "2024-01-20T06:00:00Z",
+      "type": "screening"
+    },
+    {
+      "id": "adverse_media",
+      "name": "Adverse Media Monitor",
+      "description": "Real-time news and media screening",
+      "status": "connected",
+      "lastSync": "2024-01-20T06:00:00Z",
+      "type": "screening"
+    },
+    {
+      "id": "esg_provider",
+      "name": "ESG Rating Provider",
+      "description": "Environmental, Social, and Governance scoring",
+      "status": "configured",
+      "lastSync": "2024-01-18T06:00:00Z",
+      "type": "screening"
+    },
+    {
+      "id": "document_ai",
+      "name": "Document AI Extractor",
+      "description": "Automated document parsing and field extraction",
+      "status": "connected",
+      "lastSync": "2024-01-20T10:00:00Z",
+      "type": "ai"
+    }
+  ]
+}

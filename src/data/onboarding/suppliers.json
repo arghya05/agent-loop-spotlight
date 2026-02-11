@@ -1,0 +1,293 @@
+{
+  "suppliers": [
+    {
+      "id": "SUP001",
+      "name": "Zenith Textiles Ltd",
+      "country": "Bangladesh",
+      "categories": ["Woven Shirts", "Casual Wear"],
+      "factoryLocations": ["Dhaka", "Gazipur"],
+      "owner": "Sarah Chen",
+      "riskScore": 18,
+      "bucketTag": "fast-track",
+      "status": "onboarding",
+      "lastReviewDate": "2024-01-18",
+      "nextReviewDue": "2024-02-18",
+      "requiredDocs": [
+        { "type": "Business License", "status": "verified", "extractedFields": { "licenseNo": "BL-2024-09812", "expiry": "2026-12-31" }, "uploadedAt": "2024-01-10" },
+        { "type": "Factory Audit Report", "status": "verified", "extractedFields": { "auditScore": 92, "auditor": "SGS" }, "uploadedAt": "2024-01-11" },
+        { "type": "ESG Policy", "status": "verified", "extractedFields": { "scope": "Full supply chain", "lastUpdate": "2023-11" }, "uploadedAt": "2024-01-12" },
+        { "type": "Insurance Certificate", "status": "verified", "extractedFields": { "coverage": "$5M", "expiry": "2025-06-30" }, "uploadedAt": "2024-01-12" },
+        { "type": "Bank Details", "status": "verified", "extractedFields": { "bank": "HSBC Bangladesh", "swift": "HSBCBDDH" }, "uploadedAt": "2024-01-13" },
+        { "type": "W-8BEN-E", "status": "verified", "extractedFields": { "ein": "98-XXXXXXX", "country": "BD" }, "uploadedAt": "2024-01-13" }
+      ],
+      "checks": [
+        { "name": "Sanctions Screening", "status": "pass", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-18" },
+        { "name": "PEP Check", "status": "pass", "severity": "high", "evidenceLink": "#", "lastRunAt": "2024-01-18" },
+        { "name": "Adverse Media", "status": "pass", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-18" },
+        { "name": "ESG Rating", "status": "pass", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-18" },
+        { "name": "Financial Health", "status": "pass", "severity": "low", "evidenceLink": "#", "lastRunAt": "2024-01-18" }
+      ],
+      "externalSignals": [],
+      "commsTrail": [
+        { "time": "2024-01-10T09:00:00Z", "channel": "portal", "sender": "Agent", "recipient": "Zenith Textiles", "status": "delivered", "snippet": "Welcome to Algonomy Supplier Portal. Please upload required documents.", "followUpDue": null },
+        { "time": "2024-01-13T14:30:00Z", "channel": "email", "sender": "Agent", "recipient": "Zenith Textiles", "status": "delivered", "snippet": "All documents received. Proceeding with automated validation.", "followUpDue": null }
+      ],
+      "onboardingCaseId": "CASE001"
+    },
+    {
+      "id": "SUP002",
+      "name": "Meridian Garments PLC",
+      "country": "Ethiopia",
+      "categories": ["Knit T-Shirts", "Activewear"],
+      "factoryLocations": ["Hawassa Industrial Park"],
+      "owner": "James Wright",
+      "riskScore": 52,
+      "bucketTag": "needs-review",
+      "status": "onboarding",
+      "lastReviewDate": "2024-01-17",
+      "nextReviewDue": "2024-01-24",
+      "requiredDocs": [
+        { "type": "Business License", "status": "verified", "extractedFields": { "licenseNo": "ETH-IND-4521", "expiry": "2025-09-30" }, "uploadedAt": "2024-01-08" },
+        { "type": "Factory Audit Report", "status": "flagged", "extractedFields": { "auditScore": 68, "auditor": "Bureau Veritas", "findings": "Minor fire safety gaps" }, "uploadedAt": "2024-01-09" },
+        { "type": "ESG Policy", "status": "missing", "extractedFields": {}, "uploadedAt": null },
+        { "type": "Insurance Certificate", "status": "verified", "extractedFields": { "coverage": "$2M", "expiry": "2024-12-31" }, "uploadedAt": "2024-01-10" },
+        { "type": "Bank Details", "status": "verified", "extractedFields": { "bank": "Commercial Bank of Ethiopia", "swift": "CBETETAA" }, "uploadedAt": "2024-01-10" },
+        { "type": "W-8BEN-E", "status": "pending", "extractedFields": {}, "uploadedAt": null }
+      ],
+      "checks": [
+        { "name": "Sanctions Screening", "status": "pass", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-17" },
+        { "name": "PEP Check", "status": "pass", "severity": "high", "evidenceLink": "#", "lastRunAt": "2024-01-17" },
+        { "name": "Adverse Media", "status": "flagged", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-17" },
+        { "name": "ESG Rating", "status": "fail", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-17" },
+        { "name": "Financial Health", "status": "pass", "severity": "low", "evidenceLink": "#", "lastRunAt": "2024-01-17" }
+      ],
+      "externalSignals": [
+        { "source": "Reuters", "type": "adverse_media", "severity": "medium", "snippet": "Reports of labor disputes at Hawassa Industrial Park affecting multiple factories", "urlMock": "#", "date": "2024-01-15" },
+        { "source": "ESG Monitor", "type": "esg", "severity": "high", "snippet": "Missing environmental impact assessment for water treatment facility", "urlMock": "#", "date": "2024-01-12" }
+      ],
+      "commsTrail": [
+        { "time": "2024-01-08T10:00:00Z", "channel": "portal", "sender": "Agent", "recipient": "Meridian Garments", "status": "delivered", "snippet": "Welcome to Algonomy Supplier Portal. Please upload required documents.", "followUpDue": null },
+        { "time": "2024-01-15T11:00:00Z", "channel": "email", "sender": "Agent", "recipient": "Meridian Garments", "status": "delivered", "snippet": "Reminder: ESG Policy document and W-8BEN-E form are still pending.", "followUpDue": "2024-01-22" },
+        { "time": "2024-01-17T09:00:00Z", "channel": "email", "sender": "Agent", "recipient": "Meridian Garments", "status": "delivered", "snippet": "Factory audit flagged minor fire safety issues. Please provide corrective action plan.", "followUpDue": "2024-01-24" }
+      ],
+      "onboardingCaseId": "CASE002"
+    },
+    {
+      "id": "SUP003",
+      "name": "Atlas Denim Co",
+      "country": "Turkey",
+      "categories": ["Denim", "Jeans", "Jackets"],
+      "factoryLocations": ["Istanbul", "Izmir"],
+      "owner": "Sarah Chen",
+      "riskScore": 85,
+      "bucketTag": "blocked",
+      "status": "onboarding",
+      "lastReviewDate": "2024-01-19",
+      "nextReviewDue": "2024-01-22",
+      "requiredDocs": [
+        { "type": "Business License", "status": "verified", "extractedFields": { "licenseNo": "TR-IST-7890", "expiry": "2025-03-31" }, "uploadedAt": "2024-01-05" },
+        { "type": "Factory Audit Report", "status": "flagged", "extractedFields": { "auditScore": 45, "auditor": "Intertek", "findings": "Critical: child labor risk indicators, structural safety deficiencies" }, "uploadedAt": "2024-01-06" },
+        { "type": "ESG Policy", "status": "flagged", "extractedFields": { "scope": "Limited", "lastUpdate": "2021-06" }, "uploadedAt": "2024-01-07" },
+        { "type": "Insurance Certificate", "status": "expired", "extractedFields": { "coverage": "$3M", "expiry": "2023-12-31" }, "uploadedAt": "2024-01-07" },
+        { "type": "Bank Details", "status": "verified", "extractedFields": { "bank": "Garanti BBVA", "swift": "TGBATRIS" }, "uploadedAt": "2024-01-08" },
+        { "type": "W-8BEN-E", "status": "verified", "extractedFields": { "ein": "98-XXXXXXX", "country": "TR" }, "uploadedAt": "2024-01-08" }
+      ],
+      "checks": [
+        { "name": "Sanctions Screening", "status": "flagged", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-19" },
+        { "name": "PEP Check", "status": "flagged", "severity": "high", "evidenceLink": "#", "lastRunAt": "2024-01-19" },
+        { "name": "Adverse Media", "status": "fail", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-19" },
+        { "name": "ESG Rating", "status": "fail", "severity": "high", "evidenceLink": "#", "lastRunAt": "2024-01-19" },
+        { "name": "Financial Health", "status": "flagged", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-19" }
+      ],
+      "externalSignals": [
+        { "source": "OFAC", "type": "sanctions", "severity": "critical", "snippet": "Partial match on beneficial owner name against SDN list - requires manual verification", "urlMock": "#", "date": "2024-01-19" },
+        { "source": "BBC News", "type": "adverse_media", "severity": "critical", "snippet": "Turkish textile factories under investigation for labor violations in Istanbul district", "urlMock": "#", "date": "2024-01-16" },
+        { "source": "Litigation Monitor", "type": "litigation", "severity": "high", "snippet": "Pending lawsuit: environmental contamination claim by local municipality", "urlMock": "#", "date": "2024-01-10" },
+        { "source": "ESG Monitor", "type": "esg", "severity": "high", "snippet": "Factory scored D- on environmental compliance index. Water treatment non-compliant.", "urlMock": "#", "date": "2024-01-14" }
+      ],
+      "commsTrail": [
+        { "time": "2024-01-05T08:00:00Z", "channel": "portal", "sender": "Agent", "recipient": "Atlas Denim", "status": "delivered", "snippet": "Welcome to Algonomy Supplier Portal.", "followUpDue": null },
+        { "time": "2024-01-19T16:00:00Z", "channel": "email", "sender": "Agent", "recipient": "Atlas Denim", "status": "delivered", "snippet": "URGENT: Onboarding blocked. Critical compliance flags detected. Immediate response required.", "followUpDue": "2024-01-21" }
+      ],
+      "onboardingCaseId": "CASE003"
+    },
+    {
+      "id": "SUP004",
+      "name": "Pacific Knitwear Inc",
+      "country": "Vietnam",
+      "categories": ["Knitwear", "Sweaters"],
+      "factoryLocations": ["Ho Chi Minh City"],
+      "owner": "James Wright",
+      "riskScore": 22,
+      "bucketTag": "fast-track",
+      "status": "onboarding",
+      "lastReviewDate": "2024-01-20",
+      "nextReviewDue": "2024-02-20",
+      "requiredDocs": [
+        { "type": "Business License", "status": "verified", "extractedFields": { "licenseNo": "VN-HCM-3344", "expiry": "2027-01-15" }, "uploadedAt": "2024-01-14" },
+        { "type": "Factory Audit Report", "status": "verified", "extractedFields": { "auditScore": 88, "auditor": "SGS" }, "uploadedAt": "2024-01-15" },
+        { "type": "ESG Policy", "status": "verified", "extractedFields": { "scope": "Operations + Tier 2", "lastUpdate": "2023-09" }, "uploadedAt": "2024-01-15" },
+        { "type": "Insurance Certificate", "status": "verified", "extractedFields": { "coverage": "$4M", "expiry": "2025-08-31" }, "uploadedAt": "2024-01-16" },
+        { "type": "Bank Details", "status": "verified", "extractedFields": { "bank": "Vietcombank", "swift": "BFTVVNVX" }, "uploadedAt": "2024-01-16" },
+        { "type": "W-8BEN-E", "status": "verified", "extractedFields": { "ein": "98-XXXXXXX", "country": "VN" }, "uploadedAt": "2024-01-17" }
+      ],
+      "checks": [
+        { "name": "Sanctions Screening", "status": "pass", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-20" },
+        { "name": "PEP Check", "status": "pass", "severity": "high", "evidenceLink": "#", "lastRunAt": "2024-01-20" },
+        { "name": "Adverse Media", "status": "pass", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-20" },
+        { "name": "ESG Rating", "status": "pass", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-20" },
+        { "name": "Financial Health", "status": "pass", "severity": "low", "evidenceLink": "#", "lastRunAt": "2024-01-20" }
+      ],
+      "externalSignals": [],
+      "commsTrail": [
+        { "time": "2024-01-14T10:00:00Z", "channel": "portal", "sender": "Agent", "recipient": "Pacific Knitwear", "status": "delivered", "snippet": "Welcome to Algonomy Supplier Portal.", "followUpDue": null },
+        { "time": "2024-01-17T13:00:00Z", "channel": "email", "sender": "Agent", "recipient": "Pacific Knitwear", "status": "delivered", "snippet": "All documents received and validated. Fast-track processing initiated.", "followUpDue": null }
+      ],
+      "onboardingCaseId": "CASE004"
+    },
+    {
+      "id": "SUP005",
+      "name": "Nile Cotton Mills",
+      "country": "Egypt",
+      "categories": ["Cotton Basics", "Underwear"],
+      "factoryLocations": ["Cairo", "Alexandria"],
+      "owner": "Priya Sharma",
+      "riskScore": 45,
+      "bucketTag": "needs-review",
+      "status": "onboarding",
+      "lastReviewDate": "2024-01-16",
+      "nextReviewDue": "2024-01-23",
+      "requiredDocs": [
+        { "type": "Business License", "status": "verified", "extractedFields": { "licenseNo": "EG-CAI-5567", "expiry": "2025-11-30" }, "uploadedAt": "2024-01-06" },
+        { "type": "Factory Audit Report", "status": "verified", "extractedFields": { "auditScore": 76, "auditor": "TÜV" }, "uploadedAt": "2024-01-07" },
+        { "type": "ESG Policy", "status": "verified", "extractedFields": { "scope": "Operations only", "lastUpdate": "2023-03" }, "uploadedAt": "2024-01-08" },
+        { "type": "Insurance Certificate", "status": "verified", "extractedFields": { "coverage": "$3M", "expiry": "2025-04-30" }, "uploadedAt": "2024-01-09" },
+        { "type": "Bank Details", "status": "pending", "extractedFields": {}, "uploadedAt": null },
+        { "type": "W-8BEN-E", "status": "verified", "extractedFields": { "ein": "98-XXXXXXX", "country": "EG" }, "uploadedAt": "2024-01-10" }
+      ],
+      "checks": [
+        { "name": "Sanctions Screening", "status": "pass", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-16" },
+        { "name": "PEP Check", "status": "flagged", "severity": "high", "evidenceLink": "#", "lastRunAt": "2024-01-16" },
+        { "name": "Adverse Media", "status": "pass", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-16" },
+        { "name": "ESG Rating", "status": "pass", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-16" },
+        { "name": "Financial Health", "status": "flagged", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-16" }
+      ],
+      "externalSignals": [
+        { "source": "PEP Database", "type": "sanctions", "severity": "medium", "snippet": "Beneficial owner has distant family connection to politically exposed person", "urlMock": "#", "date": "2024-01-16" }
+      ],
+      "commsTrail": [
+        { "time": "2024-01-06T09:00:00Z", "channel": "portal", "sender": "Agent", "recipient": "Nile Cotton Mills", "status": "delivered", "snippet": "Welcome to Algonomy Supplier Portal.", "followUpDue": null },
+        { "time": "2024-01-14T10:00:00Z", "channel": "email", "sender": "Agent", "recipient": "Nile Cotton Mills", "status": "delivered", "snippet": "Reminder: Bank details still pending. Please upload within 48 hours.", "followUpDue": "2024-01-23" }
+      ],
+      "onboardingCaseId": "CASE005"
+    },
+    {
+      "id": "SUP006",
+      "name": "Horizon Apparel Group",
+      "country": "India",
+      "categories": ["Formal Wear", "Suits"],
+      "factoryLocations": ["Bengaluru", "Chennai"],
+      "owner": "Priya Sharma",
+      "riskScore": 92,
+      "bucketTag": "blocked",
+      "status": "onboarding",
+      "lastReviewDate": "2024-01-20",
+      "nextReviewDue": "2024-01-22",
+      "requiredDocs": [
+        { "type": "Business License", "status": "verified", "extractedFields": { "licenseNo": "IN-KA-8812", "expiry": "2025-07-31" }, "uploadedAt": "2024-01-03" },
+        { "type": "Factory Audit Report", "status": "fail", "extractedFields": { "auditScore": 38, "auditor": "Intertek", "findings": "Critical: forced overtime, blocked fire exits" }, "uploadedAt": "2024-01-04" },
+        { "type": "ESG Policy", "status": "missing", "extractedFields": {}, "uploadedAt": null },
+        { "type": "Insurance Certificate", "status": "missing", "extractedFields": {}, "uploadedAt": null },
+        { "type": "Bank Details", "status": "verified", "extractedFields": { "bank": "ICICI Bank", "swift": "ICICINBB" }, "uploadedAt": "2024-01-05" },
+        { "type": "W-8BEN-E", "status": "missing", "extractedFields": {}, "uploadedAt": null }
+      ],
+      "checks": [
+        { "name": "Sanctions Screening", "status": "pass", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-20" },
+        { "name": "PEP Check", "status": "pass", "severity": "high", "evidenceLink": "#", "lastRunAt": "2024-01-20" },
+        { "name": "Adverse Media", "status": "fail", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-20" },
+        { "name": "ESG Rating", "status": "fail", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-20" },
+        { "name": "Financial Health", "status": "pass", "severity": "low", "evidenceLink": "#", "lastRunAt": "2024-01-20" }
+      ],
+      "externalSignals": [
+        { "source": "The Guardian", "type": "adverse_media", "severity": "critical", "snippet": "Investigation reveals systematic labor violations at Indian garment factories supplying major retailers", "urlMock": "#", "date": "2024-01-18" },
+        { "source": "ESG Monitor", "type": "esg", "severity": "critical", "snippet": "Factory rated F on worker safety index. Multiple OSHA-equivalent violations documented.", "urlMock": "#", "date": "2024-01-15" },
+        { "source": "Court Records", "type": "litigation", "severity": "high", "snippet": "Three pending labor tribunal cases filed by former employees alleging wage theft", "urlMock": "#", "date": "2024-01-12" }
+      ],
+      "commsTrail": [
+        { "time": "2024-01-03T08:00:00Z", "channel": "portal", "sender": "Agent", "recipient": "Horizon Apparel", "status": "delivered", "snippet": "Welcome to Algonomy Supplier Portal.", "followUpDue": null },
+        { "time": "2024-01-20T15:00:00Z", "channel": "email", "sender": "Agent", "recipient": "Horizon Apparel", "status": "delivered", "snippet": "CRITICAL: Onboarding suspended. Multiple critical compliance failures. Escalated to Compliance Lead.", "followUpDue": "2024-01-22" }
+      ],
+      "onboardingCaseId": "CASE006"
+    },
+    {
+      "id": "SUP007",
+      "name": "Nordic Wool Partners",
+      "country": "Sweden",
+      "categories": ["Wool Outerwear", "Coats"],
+      "factoryLocations": ["Borås"],
+      "owner": "Sarah Chen",
+      "riskScore": 12,
+      "bucketTag": "fast-track",
+      "status": "onboarding",
+      "lastReviewDate": "2024-01-19",
+      "nextReviewDue": "2024-02-19",
+      "requiredDocs": [
+        { "type": "Business License", "status": "verified", "extractedFields": { "licenseNo": "SE-VG-1122", "expiry": "2028-12-31" }, "uploadedAt": "2024-01-15" },
+        { "type": "Factory Audit Report", "status": "verified", "extractedFields": { "auditScore": 96, "auditor": "SGS" }, "uploadedAt": "2024-01-15" },
+        { "type": "ESG Policy", "status": "verified", "extractedFields": { "scope": "Full value chain", "lastUpdate": "2024-01" }, "uploadedAt": "2024-01-16" },
+        { "type": "Insurance Certificate", "status": "verified", "extractedFields": { "coverage": "$10M", "expiry": "2025-12-31" }, "uploadedAt": "2024-01-16" },
+        { "type": "Bank Details", "status": "verified", "extractedFields": { "bank": "SEB", "swift": "ESSESESS" }, "uploadedAt": "2024-01-16" },
+        { "type": "W-8BEN-E", "status": "verified", "extractedFields": { "ein": "98-XXXXXXX", "country": "SE" }, "uploadedAt": "2024-01-17" }
+      ],
+      "checks": [
+        { "name": "Sanctions Screening", "status": "pass", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-19" },
+        { "name": "PEP Check", "status": "pass", "severity": "high", "evidenceLink": "#", "lastRunAt": "2024-01-19" },
+        { "name": "Adverse Media", "status": "pass", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-19" },
+        { "name": "ESG Rating", "status": "pass", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-19" },
+        { "name": "Financial Health", "status": "pass", "severity": "low", "evidenceLink": "#", "lastRunAt": "2024-01-19" }
+      ],
+      "externalSignals": [],
+      "commsTrail": [
+        { "time": "2024-01-15T09:00:00Z", "channel": "portal", "sender": "Agent", "recipient": "Nordic Wool Partners", "status": "delivered", "snippet": "Welcome to Algonomy Supplier Portal.", "followUpDue": null }
+      ],
+      "onboardingCaseId": "CASE007"
+    },
+    {
+      "id": "SUP008",
+      "name": "Coastal Fabrics Myanmar",
+      "country": "Myanmar",
+      "categories": ["Basics", "Sportswear"],
+      "factoryLocations": ["Yangon"],
+      "owner": "James Wright",
+      "riskScore": 78,
+      "bucketTag": "blocked",
+      "status": "onboarding",
+      "lastReviewDate": "2024-01-18",
+      "nextReviewDue": "2024-01-21",
+      "requiredDocs": [
+        { "type": "Business License", "status": "verified", "extractedFields": { "licenseNo": "MM-YGN-2233", "expiry": "2025-06-30" }, "uploadedAt": "2024-01-02" },
+        { "type": "Factory Audit Report", "status": "pending", "extractedFields": {}, "uploadedAt": null },
+        { "type": "ESG Policy", "status": "missing", "extractedFields": {}, "uploadedAt": null },
+        { "type": "Insurance Certificate", "status": "pending", "extractedFields": {}, "uploadedAt": null },
+        { "type": "Bank Details", "status": "verified", "extractedFields": { "bank": "KBZ Bank", "swift": "KIKIUMMM" }, "uploadedAt": "2024-01-03" },
+        { "type": "W-8BEN-E", "status": "pending", "extractedFields": {}, "uploadedAt": null }
+      ],
+      "checks": [
+        { "name": "Sanctions Screening", "status": "fail", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-18" },
+        { "name": "PEP Check", "status": "flagged", "severity": "high", "evidenceLink": "#", "lastRunAt": "2024-01-18" },
+        { "name": "Adverse Media", "status": "fail", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-18" },
+        { "name": "ESG Rating", "status": "fail", "severity": "critical", "evidenceLink": "#", "lastRunAt": "2024-01-18" },
+        { "name": "Financial Health", "status": "flagged", "severity": "medium", "evidenceLink": "#", "lastRunAt": "2024-01-18" }
+      ],
+      "externalSignals": [
+        { "source": "OFAC", "type": "sanctions", "severity": "critical", "snippet": "Myanmar military-linked entity detected in corporate ownership chain", "urlMock": "#", "date": "2024-01-18" },
+        { "source": "Human Rights Watch", "type": "adverse_media", "severity": "critical", "snippet": "Report highlights forced labor risks in Myanmar garment sector post-coup", "urlMock": "#", "date": "2024-01-10" }
+      ],
+      "commsTrail": [
+        { "time": "2024-01-02T08:00:00Z", "channel": "portal", "sender": "Agent", "recipient": "Coastal Fabrics", "status": "delivered", "snippet": "Welcome to Algonomy Supplier Portal.", "followUpDue": null },
+        { "time": "2024-01-18T17:00:00Z", "channel": "email", "sender": "Agent", "recipient": "Coastal Fabrics", "status": "delivered", "snippet": "BLOCKED: Sanctions hit detected. Onboarding suspended pending investigation.", "followUpDue": null }
+      ],
+      "onboardingCaseId": "CASE008"
+    }
+  ]
+}
