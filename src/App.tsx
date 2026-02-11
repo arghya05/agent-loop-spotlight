@@ -16,6 +16,10 @@ import { AnalyticsPage } from "@/pages/AnalyticsPage";
 import { DispatchLandingPage } from "@/pages/dispatch/DispatchLandingPage";
 import { DispatchBucketPage } from "@/pages/dispatch/DispatchBucketPage";
 import { DispatchVendorPage } from "@/pages/dispatch/DispatchVendorPage";
+import { OnboardingLandingPage } from "@/pages/onboarding/OnboardingLandingPage";
+import { OnboardingBucketPage } from "@/pages/onboarding/OnboardingBucketPage";
+import { OnboardingSupplierPage } from "@/pages/onboarding/OnboardingSupplierPage";
+import { OnboardingCasePage } from "@/pages/onboarding/OnboardingCasePage";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -58,6 +62,15 @@ const App = () => (
             <Route path="/dispatch/connectors" element={<ConnectorsPage />} />
             <Route path="/dispatch/settings" element={<SettingsPage />} />
             <Route path="/dispatch/admin/agents" element={<AdminAgentsPage />} />
+            {/* Supplier Onboarding Agent Routes */}
+            <Route path="/onboarding/landing" element={<OnboardingLandingPage />} />
+            <Route path="/onboarding/bucket/:bucketId" element={<OnboardingBucketPage />} />
+            <Route path="/onboarding/supplier/:supplierId" element={<OnboardingSupplierPage />} />
+            <Route path="/onboarding/case/:caseId" element={<OnboardingCasePage />} />
+            <Route path="/onboarding/analytics" element={<AnalyticsPage />} />
+            <Route path="/onboarding/connectors" element={<ConnectorsPage />} />
+            <Route path="/onboarding/settings" element={<SettingsPage />} />
+            <Route path="/onboarding/admin/agents" element={<AdminAgentsPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,0 +1,119 @@
+{
+  "cases": [
+    {
+      "id": "CASE001",
+      "supplierId": "SUP001",
+      "supplierName": "Zenith Textiles Ltd",
+      "stage": "Approval Gate",
+      "timeline": [
+        { "stage": "Request Received", "status": "complete", "startedAt": "2024-01-08T09:00:00Z", "completedAt": "2024-01-08T09:05:00Z" },
+        { "stage": "Document Collection", "status": "complete", "startedAt": "2024-01-08T09:05:00Z", "completedAt": "2024-01-13T14:30:00Z" },
+        { "stage": "Document Extraction", "status": "complete", "startedAt": "2024-01-13T14:30:00Z", "completedAt": "2024-01-13T15:00:00Z" },
+        { "stage": "Policy Validation", "status": "complete", "startedAt": "2024-01-13T15:00:00Z", "completedAt": "2024-01-14T10:00:00Z" },
+        { "stage": "External Screening", "status": "complete", "startedAt": "2024-01-14T10:00:00Z", "completedAt": "2024-01-14T12:00:00Z" },
+        { "stage": "Risk Scoring", "status": "complete", "startedAt": "2024-01-14T12:00:00Z", "completedAt": "2024-01-14T12:30:00Z" },
+        { "stage": "Approval Gate", "status": "in_progress", "startedAt": "2024-01-14T12:30:00Z", "completedAt": null },
+        { "stage": "Supplier Activated", "status": "pending", "startedAt": null, "completedAt": null }
+      ],
+      "decisions": [],
+      "actionsExecuted": [],
+      "auditEvents": [
+        { "time": "2024-01-08T09:00:00Z", "actor": "System", "event": "Case created", "details": "New onboarding request for Zenith Textiles Ltd" },
+        { "time": "2024-01-13T15:00:00Z", "actor": "Agent", "event": "Documents extracted", "details": "6/6 documents processed, all fields extracted" },
+        { "time": "2024-01-14T12:30:00Z", "actor": "Agent", "event": "Risk score calculated", "details": "Score: 18 (Low Risk). Eligible for fast-track." }
+      ]
+    },
+    {
+      "id": "CASE002",
+      "supplierId": "SUP002",
+      "supplierName": "Meridian Garments PLC",
+      "stage": "External Screening",
+      "timeline": [
+        { "stage": "Request Received", "status": "complete", "startedAt": "2024-01-05T10:00:00Z", "completedAt": "2024-01-05T10:05:00Z" },
+        { "stage": "Document Collection", "status": "complete", "startedAt": "2024-01-05T10:05:00Z", "completedAt": "2024-01-10T16:00:00Z" },
+        { "stage": "Document Extraction", "status": "complete", "startedAt": "2024-01-10T16:00:00Z", "completedAt": "2024-01-10T16:30:00Z" },
+        { "stage": "Policy Validation", "status": "complete", "startedAt": "2024-01-10T16:30:00Z", "completedAt": "2024-01-11T11:00:00Z" },
+        { "stage": "External Screening", "status": "in_progress", "startedAt": "2024-01-11T11:00:00Z", "completedAt": null },
+        { "stage": "Risk Scoring", "status": "pending", "startedAt": null, "completedAt": null },
+        { "stage": "Approval Gate", "status": "pending", "startedAt": null, "completedAt": null },
+        { "stage": "Supplier Activated", "status": "pending", "startedAt": null, "completedAt": null }
+      ],
+      "decisions": [],
+      "actionsExecuted": [],
+      "auditEvents": [
+        { "time": "2024-01-05T10:00:00Z", "actor": "System", "event": "Case created", "details": "New onboarding request for Meridian Garments PLC" },
+        { "time": "2024-01-10T16:30:00Z", "actor": "Agent", "event": "Extraction partial", "details": "4/6 documents processed. ESG Policy and W-8BEN-E missing." },
+        { "time": "2024-01-15T11:00:00Z", "actor": "Agent", "event": "Follow-up sent", "details": "Reminder for missing documents" },
+        { "time": "2024-01-17T09:00:00Z", "actor": "Agent", "event": "Adverse media flagged", "details": "Labor disputes at Hawassa Industrial Park" }
+      ]
+    },
+    {
+      "id": "CASE003",
+      "supplierId": "SUP003",
+      "supplierName": "Atlas Denim Co",
+      "stage": "External Screening",
+      "timeline": [
+        { "stage": "Request Received", "status": "complete", "startedAt": "2024-01-03T08:00:00Z", "completedAt": "2024-01-03T08:05:00Z" },
+        { "stage": "Document Collection", "status": "complete", "startedAt": "2024-01-03T08:05:00Z", "completedAt": "2024-01-08T14:00:00Z" },
+        { "stage": "Document Extraction", "status": "complete", "startedAt": "2024-01-08T14:00:00Z", "completedAt": "2024-01-08T14:45:00Z" },
+        { "stage": "Policy Validation", "status": "complete", "startedAt": "2024-01-08T14:45:00Z", "completedAt": "2024-01-09T09:00:00Z" },
+        { "stage": "External Screening", "status": "blocked", "startedAt": "2024-01-09T09:00:00Z", "completedAt": null },
+        { "stage": "Risk Scoring", "status": "pending", "startedAt": null, "completedAt": null },
+        { "stage": "Approval Gate", "status": "pending", "startedAt": null, "completedAt": null },
+        { "stage": "Supplier Activated", "status": "pending", "startedAt": null, "completedAt": null }
+      ],
+      "decisions": [],
+      "actionsExecuted": [],
+      "auditEvents": [
+        { "time": "2024-01-03T08:00:00Z", "actor": "System", "event": "Case created", "details": "New onboarding request for Atlas Denim Co" },
+        { "time": "2024-01-08T14:45:00Z", "actor": "Agent", "event": "Critical findings", "details": "Factory audit score 45/100 - critical child labor indicators" },
+        { "time": "2024-01-19T10:00:00Z", "actor": "Agent", "event": "Sanctions partial match", "details": "OFAC SDN list partial match on beneficial owner" },
+        { "time": "2024-01-19T16:00:00Z", "actor": "Agent", "event": "Case blocked", "details": "Multiple critical compliance failures. Manual review required." }
+      ]
+    },
+    {
+      "id": "CASE004",
+      "supplierId": "SUP004",
+      "supplierName": "Pacific Knitwear Inc",
+      "stage": "Approval Gate",
+      "timeline": [
+        { "stage": "Request Received", "status": "complete", "startedAt": "2024-01-12T09:00:00Z", "completedAt": "2024-01-12T09:05:00Z" },
+        { "stage": "Document Collection", "status": "complete", "startedAt": "2024-01-12T09:05:00Z", "completedAt": "2024-01-17T13:00:00Z" },
+        { "stage": "Document Extraction", "status": "complete", "startedAt": "2024-01-17T13:00:00Z", "completedAt": "2024-01-17T13:30:00Z" },
+        { "stage": "Policy Validation", "status": "complete", "startedAt": "2024-01-17T13:30:00Z", "completedAt": "2024-01-18T09:00:00Z" },
+        { "stage": "External Screening", "status": "complete", "startedAt": "2024-01-18T09:00:00Z", "completedAt": "2024-01-18T11:00:00Z" },
+        { "stage": "Risk Scoring", "status": "complete", "startedAt": "2024-01-18T11:00:00Z", "completedAt": "2024-01-18T11:30:00Z" },
+        { "stage": "Approval Gate", "status": "in_progress", "startedAt": "2024-01-18T11:30:00Z", "completedAt": null },
+        { "stage": "Supplier Activated", "status": "pending", "startedAt": null, "completedAt": null }
+      ],
+      "decisions": [],
+      "actionsExecuted": [],
+      "auditEvents": [
+        { "time": "2024-01-12T09:00:00Z", "actor": "System", "event": "Case created", "details": "New onboarding request for Pacific Knitwear Inc" },
+        { "time": "2024-01-18T11:30:00Z", "actor": "Agent", "event": "Fast-track eligible", "details": "Score: 22. All checks passed. Ready for auto-approval." }
+      ]
+    },
+    {
+      "id": "CASE005",
+      "supplierId": "SUP005",
+      "supplierName": "Nile Cotton Mills",
+      "stage": "Document Collection",
+      "timeline": [
+        { "stage": "Request Received", "status": "complete", "startedAt": "2024-01-04T09:00:00Z", "completedAt": "2024-01-04T09:05:00Z" },
+        { "stage": "Document Collection", "status": "in_progress", "startedAt": "2024-01-04T09:05:00Z", "completedAt": null },
+        { "stage": "Document Extraction", "status": "pending", "startedAt": null, "completedAt": null },
+        { "stage": "Policy Validation", "status": "pending", "startedAt": null, "completedAt": null },
+        { "stage": "External Screening", "status": "pending", "startedAt": null, "completedAt": null },
+        { "stage": "Risk Scoring", "status": "pending", "startedAt": null, "completedAt": null },
+        { "stage": "Approval Gate", "status": "pending", "startedAt": null, "completedAt": null },
+        { "stage": "Supplier Activated", "status": "pending", "startedAt": null, "completedAt": null }
+      ],
+      "decisions": [],
+      "actionsExecuted": [],
+      "auditEvents": [
+        { "time": "2024-01-04T09:00:00Z", "actor": "System", "event": "Case created", "details": "New onboarding request for Nile Cotton Mills" },
+        { "time": "2024-01-14T10:00:00Z", "actor": "Agent", "event": "Follow-up sent", "details": "Reminder for Bank Details upload" }
+      ]
+    }
+  ]
+}
