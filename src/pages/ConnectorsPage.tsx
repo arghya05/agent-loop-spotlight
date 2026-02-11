@@ -24,6 +24,8 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import dispatchConnectors from '@/data/dispatch/connectors.json';
+import onboardingConnectorsData from '@/data/onboarding/connectors.json';
+import invoiceConnectorsData from '@/data/invoice/connectors.json';
 
 // Icon mapping for dispatch connectors
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -541,8 +543,7 @@ const SupplierPerformanceConnectorsPage = () => {
 
 // Onboarding Connectors
 const OnboardingConnectorsPage = () => {
-  const onbConnectors = require('@/data/onboarding/connectors.json') as any[];
-  const [connectors, setConnectors] = useState(onbConnectors);
+  const [connectors, setConnectors] = useState(onboardingConnectorsData.connectors);
   const [syncingId, setSyncingId] = useState<string | null>(null);
 
   const handleSync = async (c: any) => {
@@ -586,7 +587,7 @@ const OnboardingConnectorsPage = () => {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="p-3 rounded-lg bg-muted/50 text-sm">
-                <div className="flex justify-between"><span className="text-muted-foreground">Endpoint</span><span className="font-medium text-xs">{c.endpoint}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Type</span><span className="font-medium text-xs">{c.type}</span></div>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Last Sync</span>
@@ -612,8 +613,7 @@ const OnboardingConnectorsPage = () => {
 
 // Invoice Connectors
 const InvoiceConnectorsPage = () => {
-  const invConnectors = require('@/data/invoice/connectors.json') as any[];
-  const [connectors, setConnectors] = useState(invConnectors);
+  const [connectors, setConnectors] = useState(invoiceConnectorsData);
   const [syncingId, setSyncingId] = useState<string | null>(null);
 
   const handleSync = async (c: any) => {
