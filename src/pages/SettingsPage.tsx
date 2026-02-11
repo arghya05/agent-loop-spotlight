@@ -23,7 +23,8 @@ import {
   TrendingUp,
   CheckCircle2,
   Clock,
-  Package
+  Package,
+  Factory
 } from 'lucide-react';
 import dispatchSettings from '@/data/dispatch/settings.json';
 
@@ -641,12 +642,309 @@ const SupplierPerformanceSettings = () => {
   );
 };
 
+// Onboarding Settings
+const OnboardingSettings = () => {
+  const [hasChanges, setHasChanges] = useState(false);
+  const onbSettings = require('@/data/onboarding/settings.json');
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Factory className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Onboarding Settings</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Risk scoring, document requirements, and approval gate configuration</p>
+        </div>
+        {hasChanges && (
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => setHasChanges(false)}><RotateCcw className="w-4 h-4 mr-2" />Reset</Button>
+            <Button onClick={() => setHasChanges(false)}><Save className="w-4 h-4 mr-2" />Save Changes</Button>
+          </div>
+        )}
+      </div>
+
+      <Tabs defaultValue="risk" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="risk">Risk Scoring</TabsTrigger>
+          <TabsTrigger value="docs">Mandatory Documents</TabsTrigger>
+          <TabsTrigger value="screening">External Screening</TabsTrigger>
+          <TabsTrigger value="approvals">Approval Gates</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="risk" className="space-y-6">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm font-semibold flex items-center gap-2"><Target className="w-4 h-4" />Bucket Thresholds</CardTitle></CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-3 gap-6">
+                {[
+                  { label: 'Fast Track', desc: 'Auto-approvable, low risk', threshold: '≤ 25', color: 'text-status-success border-status-success/30' },
+                  { label: 'Needs Review', desc: 'Requires human approval', threshold: '26–69', color: 'text-status-warning border-status-warning/30' },
+                  { label: 'Blocked', desc: 'Critical failures', threshold: '≥ 70 or hard rule', color: 'text-status-danger border-status-danger/30' },
+                ].map((b) => (
+                  <div key={b.label} className={`p-4 rounded-lg border-2 ${b.color.split(' ')[1]}`}>
+                    <p className={`font-semibold mb-1 ${b.color.split(' ')[0]}`}>{b.label}</p>
+                    <p className="text-xs text-muted-foreground mb-3">{b.desc}</p>
+                    <Input value={b.threshold} className="text-center font-mono" onChange={() => setHasChanges(true)} />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm font-semibold flex items-center gap-2"><Scale className="w-4 h-4" />Scoring Weights</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {[
+                { label: 'Document Completeness', weight: 30 },
+                { label: 'External Screening (Sanctions/ESG)', weight: 25 },
+                { label: 'Financial Health', weight: 20 },
+                { label: 'Adverse Media', weight: 15 },
+                { label: 'Compliance History', weight: 10 },
+              ].map((w) => (
+                <div key={w.label} className="flex items-center justify-between">
+                  <span className="text-sm">{w.label}</span>
+                  <div className="flex items-center gap-2">
+                    <Slider value={[w.weight]} max={100} step={5} className="w-32" onValueChange={() => setHasChanges(true)} />
+                    <span className="text-sm font-mono w-10 text-right">{w.weight}%</span>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="docs" className="space-y-6">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm font-semibold">Required Documents by Category</CardTitle></CardHeader>
+            <CardContent className="space-y-3">
+              {['W-8/W-9 Tax Form', 'Factory License', 'ESG Policy Statement', 'Insurance Certificate', 'Bank Details / ACH Form', 'MSME Certificate', 'Quality Certifications (ISO 9001)'].map((doc) => (
+                <div key={doc} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                  <span className="text-sm">{doc}</span>
+                  <div className="flex items-center gap-3">
+                    <Badge variant="secondary" className="text-[10px]">Mandatory</Badge>
+                    <Switch defaultChecked onCheckedChange={() => setHasChanges(true)} />
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="screening" className="space-y-6">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm font-semibold">External Screening Sources</CardTitle></CardHeader>
+            <CardContent className="space-y-3">
+              {[
+                { name: 'Sanctions List Screening', enabled: true, desc: 'OFAC, EU, UN sanctions lists' },
+                { name: 'Adverse Media Monitoring', enabled: true, desc: 'News and media screening' },
+                { name: 'ESG Risk Assessment', enabled: true, desc: 'Environmental, social, governance' },
+                { name: 'Litigation History', enabled: false, desc: 'Court records and legal filings' },
+              ].map((s) => (
+                <div key={s.name} className="flex items-center justify-between p-3 rounded-lg border border-border">
+                  <div>
+                    <p className="text-sm font-medium">{s.name}</p>
+                    <p className="text-xs text-muted-foreground">{s.desc}</p>
+                  </div>
+                  <Switch defaultChecked={s.enabled} onCheckedChange={() => setHasChanges(true)} />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="approvals" className="space-y-6">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm font-semibold">Approval Gate Rules</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {[
+                { rule: 'Auto-approve Fast Track suppliers', enabled: true },
+                { rule: 'Block on sanctions hit (hard rule)', enabled: true },
+                { rule: 'Require Procurement sign-off above risk score 50', enabled: true },
+                { rule: 'Require Compliance Lead for Blocked suppliers', enabled: true },
+                { rule: 'Enable continuous monitoring post-activation', enabled: true },
+              ].map((r) => (
+                <div key={r.rule} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                  <span className="text-sm">{r.rule}</span>
+                  <Switch defaultChecked={r.enabled} onCheckedChange={() => setHasChanges(true)} />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+// Invoice & Cash Ops Settings
+const InvoiceSettings = () => {
+  const [hasChanges, setHasChanges] = useState(false);
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <SettingsIcon className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Invoice & Cash Ops Settings</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Matching tolerances, dispute rules, approval gates, and cash optimization</p>
+        </div>
+        {hasChanges && (
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => setHasChanges(false)}><RotateCcw className="w-4 h-4 mr-2" />Reset</Button>
+            <Button onClick={() => setHasChanges(false)}><Save className="w-4 h-4 mr-2" />Save Changes</Button>
+          </div>
+        )}
+      </div>
+
+      <Tabs defaultValue="matching" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="matching">Matching Rules</TabsTrigger>
+          <TabsTrigger value="disputes">Dispute Automation</TabsTrigger>
+          <TabsTrigger value="approvals">Approval Gates</TabsTrigger>
+          <TabsTrigger value="cash">Cash Optimization</TabsTrigger>
+          <TabsTrigger value="fraud">Fraud / Duplicates</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="matching" className="space-y-6">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm font-semibold flex items-center gap-2"><Target className="w-4 h-4" />Matching Tolerances</CardTitle></CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-6">
+                {[
+                  { label: 'Price Tolerance', value: '5%', desc: 'Max price variance before flagging' },
+                  { label: 'Quantity Tolerance', value: '2%', desc: 'Max qty variance before flagging' },
+                  { label: 'Tax Tolerance', value: '1%', desc: 'Max tax variance' },
+                  { label: 'Freight Tolerance', value: '10%', desc: 'Max freight variance' },
+                ].map((t) => (
+                  <div key={t.label} className="p-4 rounded-lg border border-border">
+                    <Label className="text-sm font-medium">{t.label}</Label>
+                    <p className="text-xs text-muted-foreground mb-2">{t.desc}</p>
+                    <Input value={t.value} className="text-center font-mono" onChange={() => setHasChanges(true)} />
+                  </div>
+                ))}
+              </div>
+              <Separator className="my-4" />
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                <div>
+                  <p className="text-sm font-medium">Match Policy</p>
+                  <p className="text-xs text-muted-foreground">Default matching strategy</p>
+                </div>
+                <select className="text-sm border border-border rounded px-3 py-1.5 bg-background" onChange={() => setHasChanges(true)}>
+                  <option>3-way match (PO + GRN + Contract)</option>
+                  <option>2-way match (PO + Invoice)</option>
+                </select>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="disputes" className="space-y-6">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm font-semibold">Dispute Automation Rules</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {[
+                { label: 'Auto-open dispute above variance', value: '$5,000' },
+                { label: 'Escalation after (days)', value: '5' },
+                { label: 'Max negotiation rounds', value: '3' },
+              ].map((r) => (
+                <div key={r.label} className="flex items-center justify-between p-3 rounded-lg border border-border">
+                  <span className="text-sm">{r.label}</span>
+                  <Input value={r.value} className="w-24 text-center font-mono" onChange={() => setHasChanges(true)} />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="approvals" className="space-y-6">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm font-semibold">Approval Thresholds</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {[
+                { label: 'Auto-pay max amount', value: '$50,000', role: 'System' },
+                { label: 'Settlement approval threshold', value: '$10,000', role: 'Finance Manager' },
+                { label: 'Write-off approval threshold', value: '$5,000', role: 'Controller' },
+              ].map((a) => (
+                <div key={a.label} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                  <div>
+                    <span className="text-sm font-medium">{a.label}</span>
+                    <p className="text-xs text-muted-foreground">Requires: {a.role}</p>
+                  </div>
+                  <Input value={a.value} className="w-28 text-center font-mono" onChange={() => setHasChanges(true)} />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="cash" className="space-y-6">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm font-semibold">Cash Optimization Rules</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {[
+                { label: 'Min savings threshold', value: '$500' },
+                { label: 'Cash constraint band', value: 'Moderate' },
+              ].map((c) => (
+                <div key={c.label} className="flex items-center justify-between p-3 rounded-lg border border-border">
+                  <span className="text-sm">{c.label}</span>
+                  <Input value={c.value} className="w-28 text-center font-mono" onChange={() => setHasChanges(true)} />
+                </div>
+              ))}
+              <div className="p-3 rounded-lg bg-muted/50">
+                <p className="text-sm font-medium mb-2">Preferred Suppliers (for early-pay)</p>
+                <div className="flex flex-wrap gap-2">
+                  {['Pacific Textiles Ltd', 'Apex Chemical Supply'].map((s) => (
+                    <Badge key={s} variant="secondary" className="text-xs">{s}</Badge>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="fraud" className="space-y-6">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm font-semibold">Fraud & Duplicate Detection</CardTitle></CardHeader>
+            <CardContent className="space-y-3">
+              {[
+                { rule: 'Duplicate invoice detection', enabled: true },
+                { rule: 'Auto-hold sanctioned suppliers', enabled: true },
+                { rule: 'Flag invoices without PO match', enabled: true },
+              ].map((f) => (
+                <div key={f.rule} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                  <span className="text-sm">{f.rule}</span>
+                  <Switch defaultChecked={f.enabled} onCheckedChange={() => setHasChanges(true)} />
+                </div>
+              ))}
+              <div className="p-3 rounded-lg border border-border">
+                <p className="text-sm font-medium mb-2">Blacklisted Suppliers</p>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="destructive" className="text-xs">Riverside Polymers LLC</Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
 // Main Settings Page that switches based on context
 export const SettingsPage = () => {
   const agentContext = useAgentContext();
   
   if (agentContext === 'dispatch-readiness') {
     return <DispatchSettings />;
+  }
+  if (agentContext === 'supplier-onboarding') {
+    return <OnboardingSettings />;
+  }
+  if (agentContext === 'invoice-cash-ops') {
+    return <InvoiceSettings />;
   }
   
   return <SupplierPerformanceSettings />;

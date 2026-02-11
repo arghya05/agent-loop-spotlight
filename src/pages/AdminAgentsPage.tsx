@@ -774,12 +774,210 @@ const SupplierPerformanceAdminAgentsPage = () => {
   );
 };
 
+// Onboarding Agent Admin
+const OnboardingAdminAgentsPage = () => {
+  const [agents, setAgents] = useState(
+    (require('@/data/onboarding/agentConfigs.json') as any[]).map((a: any, i: number) => ({
+      id: `onb-${i}`,
+      agentName: a.agentName,
+      description: `Manages ${a.agentName.toLowerCase()} tasks`,
+      active: a.active,
+      schedule: a.schedule,
+      lastRun: a.lastRun,
+      nextRun: a.nextRun,
+      lastOutcome: 'success' as const,
+      logs: a.logs.map((l: any) => ({ ...l, duration: parseInt(l.duration) || 10 }))
+    }))
+  );
+  const [selectedLogs, setSelectedLogs] = useState<string | null>(null);
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Bot className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Onboarding Agent Administration</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Configure and monitor supplier onboarding agents</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-6">
+        {agents.map((agent) => (
+          <Card key={agent.id} className="card-elevated">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center", agent.active ? "bg-primary/10" : "bg-muted")}>
+                    <Bot className={cn("w-5 h-5", agent.active ? "text-primary" : "text-muted-foreground")} />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">{agent.agentName}</CardTitle>
+                    <p className="text-xs text-muted-foreground">{agent.description}</p>
+                  </div>
+                </div>
+                <Switch checked={agent.active} onCheckedChange={() => {
+                  setAgents(prev => prev.map(a => a.id === agent.id ? { ...a, active: !a.active } : a));
+                  toast.success(`${agent.agentName} ${agent.active ? 'disabled' : 'enabled'}`);
+                }} />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-3 rounded-lg bg-muted/50">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><Clock className="w-3.5 h-3.5" />Schedule</div>
+                  <p className="text-sm font-medium">{agent.schedule}</p>
+                </div>
+                <div className="p-3 rounded-lg bg-muted/50">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><CheckCircle2 className="w-3.5 h-3.5 text-status-success" />Last Outcome</div>
+                  <Badge className="text-xs bg-status-success text-white">success</Badge>
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Last Run</span>
+                <span className="font-medium">{formatDate(agent.lastRun)}</span>
+              </div>
+              <div className="flex items-center gap-2 pt-2">
+                <Button size="sm" variant="outline" className="flex-1" onClick={() => setSelectedLogs(selectedLogs === agent.id ? null : agent.id)}>
+                  <History className="w-4 h-4 mr-2" />View Logs
+                </Button>
+                <Button size="sm" disabled={!agent.active} className="bg-primary hover:bg-primary/90">
+                  <Play className="w-4 h-4 mr-2" />Run Now
+                </Button>
+              </div>
+              {selectedLogs === agent.id && (
+                <div className="mt-4 p-3 rounded-lg bg-muted/30 border border-border">
+                  <p className="text-xs font-medium text-muted-foreground mb-2">Recent Logs</p>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {agent.logs.map((log: any, i: number) => (
+                      <div key={i} className="flex items-start gap-2 text-xs p-2 rounded bg-background/50">
+                        <span className="text-muted-foreground w-28 flex-shrink-0">{formatDate(log.time)}</span>
+                        <Badge className="text-[10px] px-1.5 bg-status-success text-white">{log.status}</Badge>
+                        <span className="flex-1 text-foreground">{log.summary}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Invoice Agent Admin
+const InvoiceAdminAgentsPage = () => {
+  const [agents, setAgents] = useState(
+    (require('@/data/invoice/agentConfigs.json') as any[]).map((a: any, i: number) => ({
+      id: `inv-${i}`,
+      agentName: a.agentName,
+      description: `Manages ${a.agentName.toLowerCase()} tasks`,
+      active: a.active,
+      schedule: a.schedule,
+      lastRun: a.lastRun,
+      nextRun: a.nextRun,
+      lastOutcome: 'success' as const,
+      logs: a.logs.map((l: any) => ({ ...l, duration: parseInt(l.duration) || 10 }))
+    }))
+  );
+  const [selectedLogs, setSelectedLogs] = useState<string | null>(null);
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Bot className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Invoice Agent Administration</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Configure and monitor invoice matching & cash optimization agents</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-6">
+        {agents.map((agent) => (
+          <Card key={agent.id} className="card-elevated">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center", agent.active ? "bg-primary/10" : "bg-muted")}>
+                    <Bot className={cn("w-5 h-5", agent.active ? "text-primary" : "text-muted-foreground")} />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">{agent.agentName}</CardTitle>
+                    <p className="text-xs text-muted-foreground">{agent.description}</p>
+                  </div>
+                </div>
+                <Switch checked={agent.active} onCheckedChange={() => {
+                  setAgents(prev => prev.map(a => a.id === agent.id ? { ...a, active: !a.active } : a));
+                  toast.success(`${agent.agentName} ${agent.active ? 'disabled' : 'enabled'}`);
+                }} />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-3 rounded-lg bg-muted/50">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><Clock className="w-3.5 h-3.5" />Schedule</div>
+                  <p className="text-sm font-medium">{agent.schedule}</p>
+                </div>
+                <div className="p-3 rounded-lg bg-muted/50">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><CheckCircle2 className="w-3.5 h-3.5 text-status-success" />Last Outcome</div>
+                  <Badge className="text-xs bg-status-success text-white">success</Badge>
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Last Run</span>
+                <span className="font-medium">{formatDate(agent.lastRun)}</span>
+              </div>
+              {agent.nextRun && (
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Next Run</span>
+                  <span className="font-medium">{formatDate(agent.nextRun)}</span>
+                </div>
+              )}
+              <div className="flex items-center gap-2 pt-2">
+                <Button size="sm" variant="outline" className="flex-1" onClick={() => setSelectedLogs(selectedLogs === agent.id ? null : agent.id)}>
+                  <History className="w-4 h-4 mr-2" />View Logs
+                </Button>
+                <Button size="sm" disabled={!agent.active} className="bg-primary hover:bg-primary/90">
+                  <Play className="w-4 h-4 mr-2" />Run Now
+                </Button>
+              </div>
+              {selectedLogs === agent.id && (
+                <div className="mt-4 p-3 rounded-lg bg-muted/30 border border-border">
+                  <p className="text-xs font-medium text-muted-foreground mb-2">Recent Logs</p>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {agent.logs.map((log: any, i: number) => (
+                      <div key={i} className="flex items-start gap-2 text-xs p-2 rounded bg-background/50">
+                        <span className="text-muted-foreground w-28 flex-shrink-0">{formatDate(log.time)}</span>
+                        <Badge className="text-[10px] px-1.5 bg-status-success text-white">{log.status}</Badge>
+                        <span className="flex-1 text-foreground">{log.summary}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 // Main Admin Page that switches based on context
 export const AdminAgentsPage = () => {
   const agentContext = useAgentContext();
   
   if (agentContext === 'dispatch-readiness') {
     return <DispatchAdminAgentsPage />;
+  }
+  if (agentContext === 'supplier-onboarding') {
+    return <OnboardingAdminAgentsPage />;
+  }
+  if (agentContext === 'invoice-cash-ops') {
+    return <InvoiceAdminAgentsPage />;
   }
   
   return <SupplierPerformanceAdminAgentsPage />;
