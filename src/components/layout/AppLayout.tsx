@@ -11,7 +11,8 @@ import {
   Truck, 
   Factory,
   ShieldCheck,
-  Zap
+  Zap,
+  FileText
 } from 'lucide-react';
 
 const agentTabs = [
@@ -46,6 +47,14 @@ const agentTabs = [
     active: true,
     badge: null,
     basePath: '/invoice'
+  },
+  { 
+    id: 'contract-lifecycle', 
+    label: 'Contract Lifecycle',
+    icon: FileText,
+    active: true,
+    badge: null,
+    basePath: '/contract'
   }
 ];
 
@@ -63,6 +72,8 @@ export const AppLayout = () => {
       setActiveAgent('supplier-onboarding');
     } else if (location.pathname.startsWith('/invoice')) {
       setActiveAgent('invoice-cash-ops');
+    } else if (location.pathname.startsWith('/contract')) {
+      setActiveAgent('contract-lifecycle');
     } else {
       setActiveAgent('supplier-performance');
     }
@@ -78,6 +89,8 @@ export const AppLayout = () => {
       navigate('/onboarding/landing');
     } else if (tabId === 'invoice-cash-ops') {
       navigate('/invoice/landing');
+    } else if (tabId === 'contract-lifecycle') {
+      navigate('/contract/landing');
     }
   };
 

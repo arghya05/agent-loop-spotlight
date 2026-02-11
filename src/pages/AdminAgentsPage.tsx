@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import onboardingAgentConfigs from '@/data/onboarding/agentConfigs.json';
 import invoiceAgentConfigs from '@/data/invoice/agentConfigs.json';
+import contractAgentConfigs from '@/data/contract/agentConfigs.json';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -981,6 +982,72 @@ export const AdminAgentsPage = () => {
   if (agentContext === 'invoice-cash-ops') {
     return <InvoiceAdminAgentsPage />;
   }
+  if (agentContext === 'contract-lifecycle') {
+    return <ContractAdminAgentsPage />;
+  }
   
   return <SupplierPerformanceAdminAgentsPage />;
+};
+
+// Contract Admin Agents
+const ContractAdminAgentsPage = () => {
+  const [agents, setAgents] = useState(
+    (contractAgentConfigs as any[]).map((a: any, i: number) => ({
+      id: `ctr-${i}`,
+      agentName: a.agentName,
+      description: `Manages ${a.agentName.toLowerCase()} tasks`,
+      active: a.active,
+      schedule: a.schedule,
+      lastRun: a.lastRun,
+      nextRun: a.nextRun,
+      lastOutcome: 'success' as const,
+      logs: a.logs.map((l: any) => ({ ...l, duration: parseInt(l.duration) || 10 }))
+    }))
+  );
+  const [selectedLogs, setSelectedLogs] = useState<string | null>(null);
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Bot className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Contract Lifecycle Agents</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Manage agents for contract parsing, violation detection, and enforcement</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        {agents.map((agent) => (
+          <Card key={agent.id} className="card-elevated">
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Bot className="w-5 h-5 text-primary" />
+                  <h3 className="font-semibold text-sm">{agent.agentName}</h3>
+                </div>
+                <Switch checked={agent.active} onCheckedChange={(checked) => {
+                  setAgents(prev => prev.map(a => a.id === agent.id ? { ...a, active: checked } : a));
+                }} />
+              </div>
+              <p className="text-xs text-muted-foreground mb-3">{agent.description}</p>
+              <div className="space-y-2 text-xs">
+                <div className="flex justify-between"><span className="text-muted-foreground">Schedule</span><span>{agent.schedule}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Last Run</span><span>{new Date(agent.lastRun).toLocaleString()}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Next Run</span><span>{agent.nextRun === 'On trigger' ? agent.nextRun : new Date(agent.nextRun).toLocaleString()}</span></div>
+              </div>
+              <div className="flex gap-2 mt-3">
+                <Button size="sm" variant="outline" className="flex-1 text-xs" onClick={() => setSelectedLogs(agent.id)}>
+                  <History className="w-3 h-3 mr-1" />Logs
+                </Button>
+                <Button size="sm" variant="outline" className="flex-1 text-xs">
+                  <Play className="w-3 h-3 mr-1" />Run Now
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
 };

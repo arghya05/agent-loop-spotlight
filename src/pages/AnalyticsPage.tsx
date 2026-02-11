@@ -775,6 +775,126 @@ export const AnalyticsPage = () => {
   if (agentContext === 'invoice-cash-ops') {
     return <InvoiceAnalyticsPage />;
   }
+  if (agentContext === 'contract-lifecycle') {
+    return <ContractAnalyticsPage />;
+  }
   
   return <SupplierPerformanceAnalyticsPage />;
+};
+
+// Contract Analytics
+const ContractAnalyticsPage = () => {
+  const coverageData = [
+    { month: 'Sep', score: 72 },
+    { month: 'Oct', score: 76 },
+    { month: 'Nov', score: 80 },
+    { month: 'Dec', score: 83 },
+    { month: 'Jan', score: 85 },
+    { month: 'Feb', score: 88 },
+  ];
+
+  const leakageData = [
+    { month: 'Sep', detected: 45000, recovered: 32000 },
+    { month: 'Oct', detected: 52000, recovered: 41000 },
+    { month: 'Nov', detected: 38000, recovered: 35000 },
+    { month: 'Dec', detected: 61000, recovered: 48000 },
+    { month: 'Jan', detected: 87600, recovered: 52000 },
+    { month: 'Feb', detected: 42000, recovered: 38000 },
+  ];
+
+  const violationsByType = [
+    { name: 'Price', value: 42, color: '#dc2626' },
+    { name: 'Rebate', value: 28, color: '#eab308' },
+    { name: 'SLA', value: 18, color: '#f97316' },
+    { name: 'Promo', value: 12, color: '#3b82f6' },
+  ];
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <BarChart3 className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Contract Lifecycle Analytics</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Coverage trends, leakage recovery, and violation analysis</p>
+        </div>
+        <Button variant="outline"><Download className="w-4 h-4 mr-2" />Export Report</Button>
+      </div>
+
+      <div className="grid grid-cols-4 gap-4">
+        {[
+          { label: 'Avg Coverage', value: '88%', icon: TrendingUp },
+          { label: '$ Leakage Detected', value: '$325.6K', icon: DollarSign },
+          { label: '$ Recovered', value: '$246K', icon: DollarSign },
+          { label: 'Violation Rate', value: '8.2%', icon: AlertTriangle },
+        ].map((kpi) => (
+          <Card key={kpi.label} className="card-elevated">
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <kpi.icon className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">{kpi.label}</p>
+                  <p className="text-xl font-bold">{kpi.value}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm">Coverage Score Trend</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={coverageData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} domain={[60, 100]} />
+                <Tooltip />
+                <Line type="monotone" dataKey="score" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm">Violations by Term Type</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={250}>
+              <RechartsPie>
+                <Pie data={violationsByType} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label>
+                  {violationsByType.map((entry, index) => (
+                    <Cell key={index} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </RechartsPie>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated col-span-2">
+          <CardHeader><CardTitle className="text-sm">Leakage Detected vs Recovered ($)</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={leakageData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="detected" fill="#dc2626" name="Detected" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="recovered" fill="#16a34a" name="Recovered" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 };
