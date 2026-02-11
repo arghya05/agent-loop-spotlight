@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ENF-001",
+    "contractId": "CTR-003",
+    "supplierId": "SUP-003",
+    "supplierName": "PrecisionParts Co",
+    "issueType": "Price violation + late delivery penalty",
+    "severity": "high",
+    "impactDollar": 70600,
+    "status": "in_progress",
+    "steps": [
+      { "stage": "Parse Contract", "status": "complete", "startedAt": "2025-01-25T08:00:00Z", "completedAt": "2025-01-25T08:05:00Z" },
+      { "stage": "Map Obligations", "status": "complete", "startedAt": "2025-01-25T08:05:00Z", "completedAt": "2025-01-25T08:15:00Z" },
+      { "stage": "Validate Execution", "status": "complete", "startedAt": "2025-01-25T08:15:00Z", "completedAt": "2025-01-25T08:30:00Z" },
+      { "stage": "Detect Violation", "status": "complete", "startedAt": "2025-01-25T08:30:00Z", "completedAt": "2025-01-25T08:35:00Z" },
+      { "stage": "Recommend Action", "status": "complete", "startedAt": "2025-01-25T08:35:00Z", "completedAt": "2025-01-25T08:40:00Z" },
+      { "stage": "Approval Gate", "status": "in_progress", "startedAt": "2025-01-25T08:40:00Z", "completedAt": null },
+      { "stage": "Execute & Notify", "status": "pending", "startedAt": null, "completedAt": null },
+      { "stage": "Close & Audit", "status": "pending", "startedAt": null, "completedAt": null }
+    ],
+    "commsTrail": [
+      { "time": "2025-01-25T09:00:00Z", "channel": "email", "sender": "Agent", "recipient": "PrecisionParts Co", "status": "sent", "snippet": "Notice of price variance on IC-2200: $0.35/unit above contract rate across 120K units", "followUpDue": "2025-02-01T09:00:00Z" }
+    ],
+    "approvals": [],
+    "actionsExecuted": []
+  },
+  {
+    "id": "ENF-002",
+    "contractId": "CTR-005",
+    "supplierId": "SUP-005",
+    "supplierName": "MegaLogistics Inc",
+    "issueType": "SLA underperformance + rate renegotiation",
+    "severity": "medium",
+    "impactDollar": 124000,
+    "status": "pending_review",
+    "steps": [
+      { "stage": "Parse Contract", "status": "complete", "startedAt": "2025-01-10T15:00:00Z", "completedAt": "2025-01-10T15:10:00Z" },
+      { "stage": "Map Obligations", "status": "complete", "startedAt": "2025-01-10T15:10:00Z", "completedAt": "2025-01-10T15:25:00Z" },
+      { "stage": "Validate Execution", "status": "complete", "startedAt": "2025-01-10T15:25:00Z", "completedAt": "2025-01-10T15:45:00Z" },
+      { "stage": "Detect Violation", "status": "complete", "startedAt": "2025-01-10T15:45:00Z", "completedAt": "2025-01-10T15:50:00Z" },
+      { "stage": "Recommend Action", "status": "in_progress", "startedAt": "2025-01-10T15:50:00Z", "completedAt": null },
+      { "stage": "Approval Gate", "status": "pending", "startedAt": null, "completedAt": null },
+      { "stage": "Execute & Notify", "status": "pending", "startedAt": null, "completedAt": null },
+      { "stage": "Close & Audit", "status": "pending", "startedAt": null, "completedAt": null }
+    ],
+    "commsTrail": [],
+    "approvals": [],
+    "actionsExecuted": []
+  }
+]

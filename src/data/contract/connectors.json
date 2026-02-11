@@ -1,0 +1,8 @@
+[
+  { "id": "contract-repo", "name": "Contract Repository", "type": "api", "status": "connected", "endpoint": "https://contracts.acme.com/api/v1/documents", "lastSync": "2025-02-01T10:00:00Z", "description": "Upload, scan, and parse contract documents" },
+  { "id": "erp-po", "name": "ERP / PO System", "type": "api", "status": "connected", "endpoint": "https://erp.acme.com/api/v2/purchase-orders", "lastSync": "2025-02-01T12:00:00Z", "description": "Purchase order data for obligation mapping" },
+  { "id": "ap-invoice", "name": "AP / Invoice System", "type": "api", "status": "connected", "endpoint": "https://ap.acme.com/api/v1/invoices", "lastSync": "2025-02-01T12:00:00Z", "description": "Invoice and payment data for enforcement checks" },
+  { "id": "promo-rebate", "name": "Promo & Rebates System", "type": "api", "status": "connected", "endpoint": "https://promo.acme.com/api/v1/programs", "lastSync": "2025-02-01T08:00:00Z", "description": "Promotional funding and rebate program tracking" },
+  { "id": "email-integration", "name": "Email Integration", "type": "smtp", "status": "connected", "endpoint": "smtp://mail.acme.com:587", "lastSync": "2025-02-01T14:00:00Z", "description": "Send claims, penalties, and renegotiation notices" },
+  { "id": "supplier-portal", "name": "Supplier Portal", "type": "api", "status": "configured", "endpoint": "https://suppliers.acme.com/api/v1", "lastSync": "2025-01-30T18:00:00Z", "description": "Supplier self-service for dispute responses and document uploads" }
+]

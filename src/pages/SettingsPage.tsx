@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import onboardingSettingsData from '@/data/onboarding/settings.json';
+import contractSettingsData from '@/data/contract/settings.json';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -947,6 +948,103 @@ export const SettingsPage = () => {
   if (agentContext === 'invoice-cash-ops') {
     return <InvoiceSettings />;
   }
+  if (agentContext === 'contract-lifecycle') {
+    return <ContractSettings />;
+  }
   
   return <SupplierPerformanceSettings />;
+};
+
+// Contract Lifecycle Settings
+const ContractSettings = () => {
+  const [hasChanges, setHasChanges] = useState(false);
+  const settings = contractSettingsData as any;
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <SettingsIcon className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Contract Enforcement Settings</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Tolerances, approval gates, auto-actions, and renewal alerts</p>
+        </div>
+        <Button disabled={!hasChanges} onClick={() => setHasChanges(false)}>
+          <Save className="w-4 h-4 mr-2" />Save Changes
+        </Button>
+      </div>
+
+      <Tabs defaultValue="tolerances">
+        <TabsList>
+          <TabsTrigger value="tolerances">Tolerances</TabsTrigger>
+          <TabsTrigger value="approvals">Approval Gates</TabsTrigger>
+          <TabsTrigger value="auto">Auto-Actions</TabsTrigger>
+          <TabsTrigger value="renewals">Renewals</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="tolerances" className="space-y-4 mt-4">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm">Matching Tolerances</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {Object.entries(settings.tolerances).map(([key, val]) => (
+                <div key={key} className="flex items-center justify-between">
+                  <Label className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</Label>
+                  <Input className="w-24 text-right" defaultValue={String(val)} onChange={() => setHasChanges(true)} />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="approvals" className="space-y-4 mt-4">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm">Approval Thresholds</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {Object.entries(settings.approvalGates).map(([key, val]) => (
+                <div key={key} className="flex items-center justify-between">
+                  <Label className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</Label>
+                  <Input className="w-32 text-right" defaultValue={`$${val}`} onChange={() => setHasChanges(true)} />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="auto" className="space-y-4 mt-4">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm">Automation Toggles</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {Object.entries(settings.autoActions).map(([key, val]) => (
+                <div key={key} className="flex items-center justify-between">
+                  <Label className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</Label>
+                  {typeof val === 'boolean' ? (
+                    <Switch defaultChecked={val as boolean} onCheckedChange={() => setHasChanges(true)} />
+                  ) : (
+                    <Input className="w-32 text-right" defaultValue={`$${val}`} onChange={() => setHasChanges(true)} />
+                  )}
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="renewals" className="space-y-4 mt-4">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm">Renewal Alert Configuration</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label>Alert days before expiry</Label>
+                <span className="text-sm font-medium">{settings.renewalAlerts.alertDays.join(', ')} days</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <Label>Auto-generate renegotiation pack</Label>
+                <Switch defaultChecked={settings.renewalAlerts.autoGenerateRenegotiationPack} onCheckedChange={() => setHasChanges(true)} />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
 };

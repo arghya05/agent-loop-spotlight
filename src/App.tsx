@@ -25,6 +25,12 @@ import { InvoiceBucketPage } from "@/pages/invoice/InvoiceBucketPage";
 import { InvoiceDetailPage } from "@/pages/invoice/InvoiceDetailPage";
 import { DisputePage } from "@/pages/invoice/DisputePage";
 import { SupplierAPPage } from "@/pages/invoice/SupplierAPPage";
+import { ContractLandingPage } from "@/pages/contract/ContractLandingPage";
+import { ContractBucketPage } from "@/pages/contract/ContractBucketPage";
+import { ContractDetailPage } from "@/pages/contract/ContractDetailPage";
+import { ContractSupplierPage } from "@/pages/contract/ContractSupplierPage";
+import { ObligationDetailPage } from "@/pages/contract/ObligationDetailPage";
+import { ContractCasePage } from "@/pages/contract/ContractCasePage";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -86,6 +92,17 @@ const App = () => (
             <Route path="/invoice/connectors" element={<ConnectorsPage />} />
             <Route path="/invoice/settings" element={<SettingsPage />} />
             <Route path="/invoice/admin/agents" element={<AdminAgentsPage />} />
+            {/* Contract Lifecycle Agent Routes */}
+            <Route path="/contract/landing" element={<ContractLandingPage />} />
+            <Route path="/contract/bucket/:bucketId" element={<ContractBucketPage />} />
+            <Route path="/contract/contract/:contractId" element={<ContractDetailPage />} />
+            <Route path="/contract/supplier/:supplierId" element={<ContractSupplierPage />} />
+            <Route path="/contract/obligation/:obligationId" element={<ObligationDetailPage />} />
+            <Route path="/contract/case/:caseId" element={<ContractCasePage />} />
+            <Route path="/contract/analytics" element={<AnalyticsPage />} />
+            <Route path="/contract/connectors" element={<ConnectorsPage />} />
+            <Route path="/contract/settings" element={<SettingsPage />} />
+            <Route path="/contract/admin/agents" element={<AdminAgentsPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

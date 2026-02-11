@@ -23,7 +23,9 @@ import {
   FileText,
   XCircle,
   Ban,
-  DollarSign
+  DollarSign,
+  Calendar,
+  Gavel
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -115,6 +117,20 @@ const invoiceNavItems = [
   { label: 'Admin', path: '/invoice/admin/agents', icon: Shield, description: 'Agent management' }
 ];
 
+// Contract Lifecycle nav items
+const contractNavItems = [
+  { label: 'Enforcement Home', path: '/contract/landing', icon: LayoutDashboard, description: 'Contract enforcement overview' },
+  { label: 'Compliant', path: '/contract/bucket/compliant', icon: CheckCircle2, description: 'Obligations met' },
+  { label: 'At Risk', path: '/contract/bucket/at_risk', icon: AlertTriangle, description: 'Benefits at risk' },
+  { label: 'Violations', path: '/contract/bucket/violations', icon: Shield, description: 'Confirmed violations' },
+  { label: 'Expiring Soon', path: '/contract/bucket/expiring_soon', icon: Calendar, description: 'Renewals needed' },
+  { label: 'Renegotiation', path: '/contract/bucket/renegotiation', icon: TrendingUp, description: 'Terms not competitive' },
+  { label: 'Analytics', path: '/contract/analytics', icon: BarChart3, description: 'Reports & exports' },
+  { label: 'Connectors', path: '/contract/connectors', icon: Plug, description: 'Integrations' },
+  { label: 'Settings', path: '/contract/settings', icon: Settings, description: 'Configuration' },
+  { label: 'Admin', path: '/contract/admin/agents', icon: Shield, description: 'Agent management' }
+];
+
 export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
   const location = useLocation();
   const agentContext = useAgentContext();
@@ -122,17 +138,19 @@ export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
   const attentionCount = getAttentionQueue().length;
   
   // Select nav items based on agent context
-  const navItems = agentContext === 'dispatch-readiness' ? dispatchNavItems : agentContext === 'supplier-onboarding' ? onboardingNavItems : agentContext === 'invoice-cash-ops' ? invoiceNavItems : supplierNavItems;
+  const navItems = agentContext === 'dispatch-readiness' ? dispatchNavItems : agentContext === 'supplier-onboarding' ? onboardingNavItems : agentContext === 'invoice-cash-ops' ? invoiceNavItems : agentContext === 'contract-lifecycle' ? contractNavItems : supplierNavItems;
   
   const isActive = (path: string) => {
     if (path === '/landing') return location.pathname === '/landing' || location.pathname === '/';
     if (path === '/dispatch/landing') return location.pathname === '/dispatch/landing' || location.pathname === '/dispatch';
     if (path === '/onboarding/landing') return location.pathname === '/onboarding/landing' || location.pathname === '/onboarding';
     if (path === '/invoice/landing') return location.pathname === '/invoice/landing' || location.pathname === '/invoice';
+    if (path === '/contract/landing') return location.pathname === '/contract/landing' || location.pathname === '/contract';
     if (path === '/bucket') return location.pathname.startsWith('/bucket') && !location.pathname.startsWith('/dispatch');
     if (path.startsWith('/dispatch/bucket/')) return location.pathname === path;
     if (path.startsWith('/onboarding/bucket/')) return location.pathname === path;
     if (path.startsWith('/invoice/bucket/')) return location.pathname === path;
+    if (path.startsWith('/contract/bucket/')) return location.pathname === path;
     if (path === '/admin/agents') return location.pathname.startsWith('/admin');
     return location.pathname.startsWith(path);
   };

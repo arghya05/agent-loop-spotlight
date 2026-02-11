@@ -1,0 +1,30 @@
+{
+  "obligationTaxonomy": ["price", "rebate", "promo", "SLA", "penalty", "payment_terms", "returns", "co-op_marketing"],
+  "tolerances": {
+    "priceVariancePct": 2.0,
+    "qtyVariancePct": 5.0,
+    "slaThresholdPct": 95,
+    "timingWindowDays": 7
+  },
+  "approvalGates": {
+    "commercialClaimThreshold": 25000,
+    "paymentHoldThreshold": 50000,
+    "writeOffThreshold": 10000
+  },
+  "autoActions": {
+    "autoClaimBelowAmount": 5000,
+    "autoNotifySupplier": true,
+    "autoCreateCase": true
+  },
+  "renewalAlerts": {
+    "alertDays": [30, 60, 90],
+    "autoGenerateRenegotiationPack": true
+  },
+  "mappingRules": {
+    "linkPO": true,
+    "linkGRN": true,
+    "linkInvoice": true,
+    "linkPromo": true,
+    "linkPayment": true
+  }
+}

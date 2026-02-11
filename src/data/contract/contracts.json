@@ -1,0 +1,157 @@
+[
+  {
+    "id": "CTR-001",
+    "supplierId": "SUP-001",
+    "supplierName": "Acme Industrial Supply",
+    "contractName": "Master Supply Agreement 2024",
+    "categoryTags": ["Raw Materials", "Packaging"],
+    "region": "North America",
+    "startDate": "2024-01-01",
+    "endDate": "2025-12-31",
+    "status": "active",
+    "coverageScore": 92,
+    "riskScore": 18,
+    "bucketTag": "compliant",
+    "leakageEstimateDollar": 0,
+    "lastReviewedDate": "2025-01-15",
+    "nextReviewDue": "2025-04-15",
+    "obligations": [
+      { "id": "OBL-001", "type": "price", "description": "Unit price for SKU-100 must not exceed $12.50/unit", "enforcementStatus": "met", "impactDollar": 0 },
+      { "id": "OBL-002", "type": "rebate", "description": "3% volume rebate on quarterly spend above $500K", "enforcementStatus": "met", "impactDollar": 15200 },
+      { "id": "OBL-003", "type": "SLA", "description": "95% on-time delivery within 5 business days", "enforcementStatus": "met", "impactDollar": 0 }
+    ],
+    "timeline": [
+      { "time": "2024-01-01T00:00:00Z", "event": "Contract activated", "actor": "System", "details": "Master agreement effective" },
+      { "time": "2025-01-15T10:00:00Z", "event": "Quarterly review completed", "actor": "Agent", "details": "All obligations met; rebate claimed" }
+    ]
+  },
+  {
+    "id": "CTR-002",
+    "supplierId": "SUP-002",
+    "supplierName": "Global Textiles Ltd",
+    "contractName": "Fabric Supply Contract FY24",
+    "categoryTags": ["Textiles", "Apparel"],
+    "region": "APAC",
+    "startDate": "2024-03-01",
+    "endDate": "2025-06-30",
+    "status": "active",
+    "coverageScore": 78,
+    "riskScore": 52,
+    "bucketTag": "at_risk",
+    "leakageEstimateDollar": 34500,
+    "lastReviewedDate": "2025-01-20",
+    "nextReviewDue": "2025-02-20",
+    "obligations": [
+      { "id": "OBL-004", "type": "price", "description": "Fixed price of $8.20/meter for cotton blend", "enforcementStatus": "at_risk", "impactDollar": 12300 },
+      { "id": "OBL-005", "type": "rebate", "description": "2% rebate on annual spend above $1M not yet claimed", "enforcementStatus": "at_risk", "impactDollar": 22200 },
+      { "id": "OBL-006", "type": "SLA", "description": "98% quality acceptance rate", "enforcementStatus": "met", "impactDollar": 0 }
+    ],
+    "timeline": [
+      { "time": "2024-03-01T00:00:00Z", "event": "Contract activated", "actor": "System", "details": "Fabric supply agreement effective" },
+      { "time": "2025-01-20T14:00:00Z", "event": "Rebate at risk flagged", "actor": "Agent", "details": "Q4 rebate claim window closing; $22.2K unclaimed" }
+    ]
+  },
+  {
+    "id": "CTR-003",
+    "supplierId": "SUP-003",
+    "supplierName": "PrecisionParts Co",
+    "contractName": "Components Framework Agreement",
+    "categoryTags": ["Electronics", "Components"],
+    "region": "Europe",
+    "startDate": "2023-07-01",
+    "endDate": "2025-06-30",
+    "status": "active",
+    "coverageScore": 65,
+    "riskScore": 78,
+    "bucketTag": "violations",
+    "leakageEstimateDollar": 87600,
+    "lastReviewedDate": "2025-01-25",
+    "nextReviewDue": "2025-02-10",
+    "obligations": [
+      { "id": "OBL-007", "type": "price", "description": "Agreed price $4.50/unit for IC-2200; invoiced at $4.85", "enforcementStatus": "violated", "impactDollar": 42000 },
+      { "id": "OBL-008", "type": "penalty", "description": "2% penalty per day for late deliveries beyond 7 days", "enforcementStatus": "violated", "impactDollar": 28600 },
+      { "id": "OBL-009", "type": "promo", "description": "Co-op marketing fund of $17K/quarter not applied", "enforcementStatus": "violated", "impactDollar": 17000 }
+    ],
+    "timeline": [
+      { "time": "2023-07-01T00:00:00Z", "event": "Contract activated", "actor": "System", "details": "Framework agreement effective" },
+      { "time": "2025-01-25T09:00:00Z", "event": "Price violation detected", "actor": "Agent", "details": "IC-2200 invoiced $0.35 above contract price across 120K units" },
+      { "time": "2025-01-25T09:05:00Z", "event": "Penalty calculation", "actor": "Agent", "details": "Late delivery penalty of $28.6K computed" }
+    ]
+  },
+  {
+    "id": "CTR-004",
+    "supplierId": "SUP-004",
+    "supplierName": "FreshFoods Distribution",
+    "contractName": "Perishables Supply Agreement",
+    "categoryTags": ["Food & Beverage", "Perishables"],
+    "region": "North America",
+    "startDate": "2023-06-01",
+    "endDate": "2025-03-31",
+    "status": "active",
+    "coverageScore": 88,
+    "riskScore": 45,
+    "bucketTag": "expiring_soon",
+    "leakageEstimateDollar": 5200,
+    "lastReviewedDate": "2025-01-28",
+    "nextReviewDue": "2025-02-15",
+    "obligations": [
+      { "id": "OBL-010", "type": "payment_terms", "description": "Net-30 payment terms with 2% early-pay discount", "enforcementStatus": "met", "impactDollar": 0 },
+      { "id": "OBL-011", "type": "returns", "description": "Full credit for expired goods within shelf-life guarantee", "enforcementStatus": "at_risk", "impactDollar": 5200 },
+      { "id": "OBL-012", "type": "SLA", "description": "Same-day dispatch for orders placed before 10 AM", "enforcementStatus": "met", "impactDollar": 0 }
+    ],
+    "timeline": [
+      { "time": "2023-06-01T00:00:00Z", "event": "Contract activated", "actor": "System", "details": "Perishables supply agreement effective" },
+      { "time": "2025-01-28T11:00:00Z", "event": "Expiry alert", "actor": "Agent", "details": "Contract expires in 62 days; renewal recommended" }
+    ]
+  },
+  {
+    "id": "CTR-005",
+    "supplierId": "SUP-005",
+    "supplierName": "MegaLogistics Inc",
+    "contractName": "3PL & Freight Master Agreement",
+    "categoryTags": ["Logistics", "Transportation"],
+    "region": "Global",
+    "startDate": "2023-01-01",
+    "endDate": "2025-12-31",
+    "status": "active",
+    "coverageScore": 55,
+    "riskScore": 62,
+    "bucketTag": "renegotiation",
+    "leakageEstimateDollar": 124000,
+    "lastReviewedDate": "2025-01-10",
+    "nextReviewDue": "2025-02-10",
+    "obligations": [
+      { "id": "OBL-013", "type": "price", "description": "Freight rate $2.10/kg for standard shipments; market now $1.85/kg", "enforcementStatus": "met", "impactDollar": 0 },
+      { "id": "OBL-014", "type": "rebate", "description": "Volume-based rebate tiers not competitive vs market", "enforcementStatus": "at_risk", "impactDollar": 78000 },
+      { "id": "OBL-015", "type": "SLA", "description": "99% on-time delivery; actual 94% with no penalties enforced", "enforcementStatus": "violated", "impactDollar": 46000 }
+    ],
+    "timeline": [
+      { "time": "2023-01-01T00:00:00Z", "event": "Contract activated", "actor": "System", "details": "3PL master agreement effective" },
+      { "time": "2025-01-10T16:00:00Z", "event": "Renegotiation flagged", "actor": "Agent", "details": "Freight rates 13.5% above market; $124K annual savings opportunity" }
+    ]
+  },
+  {
+    "id": "CTR-006",
+    "supplierId": "SUP-006",
+    "supplierName": "CleanChem Solutions",
+    "contractName": "Chemical Supply Agreement",
+    "categoryTags": ["Chemicals", "Industrial"],
+    "region": "Europe",
+    "startDate": "2024-06-01",
+    "endDate": "2026-05-31",
+    "status": "active",
+    "coverageScore": 95,
+    "riskScore": 12,
+    "bucketTag": "compliant",
+    "leakageEstimateDollar": 0,
+    "lastReviewedDate": "2025-02-01",
+    "nextReviewDue": "2025-05-01",
+    "obligations": [
+      { "id": "OBL-016", "type": "price", "description": "Fixed price with CPI adjustment clause", "enforcementStatus": "met", "impactDollar": 0 },
+      { "id": "OBL-017", "type": "SLA", "description": "MSDS documentation within 24h of shipment", "enforcementStatus": "met", "impactDollar": 0 }
+    ],
+    "timeline": [
+      { "time": "2024-06-01T00:00:00Z", "event": "Contract activated", "actor": "System", "details": "Chemical supply agreement effective" }
+    ]
+  }
+]
