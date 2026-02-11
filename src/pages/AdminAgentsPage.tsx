@@ -1,4 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import onboardingAgentConfigs from '@/data/onboarding/agentConfigs.json';
+import invoiceAgentConfigs from '@/data/invoice/agentConfigs.json';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -777,7 +779,7 @@ const SupplierPerformanceAdminAgentsPage = () => {
 // Onboarding Agent Admin
 const OnboardingAdminAgentsPage = () => {
   const [agents, setAgents] = useState(
-    (require('@/data/onboarding/agentConfigs.json') as any[]).map((a: any, i: number) => ({
+    ((onboardingAgentConfigs as any).agents ?? (onboardingAgentConfigs as unknown as any[])).map((a: any, i: number) => ({
       id: `onb-${i}`,
       agentName: a.agentName,
       description: `Manages ${a.agentName.toLowerCase()} tasks`,
@@ -870,7 +872,7 @@ const OnboardingAdminAgentsPage = () => {
 // Invoice Agent Admin
 const InvoiceAdminAgentsPage = () => {
   const [agents, setAgents] = useState(
-    (require('@/data/invoice/agentConfigs.json') as any[]).map((a: any, i: number) => ({
+    (invoiceAgentConfigs as any[]).map((a: any, i: number) => ({
       id: `inv-${i}`,
       agentName: a.agentName,
       description: `Manages ${a.agentName.toLowerCase()} tasks`,

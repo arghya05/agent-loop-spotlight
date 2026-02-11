@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import onboardingSettingsData from '@/data/onboarding/settings.json';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -645,7 +646,7 @@ const SupplierPerformanceSettings = () => {
 // Onboarding Settings
 const OnboardingSettings = () => {
   const [hasChanges, setHasChanges] = useState(false);
-  const onbSettings = require('@/data/onboarding/settings.json');
+  const onbSettings = onboardingSettingsData;
 
   return (
     <div className="p-6 space-y-6">
