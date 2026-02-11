@@ -192,7 +192,7 @@ export const ContractDetailPage = () => {
                       <Button size="sm" className="h-7 text-xs" onClick={() => handleApprove(`${obl.type} action for ${obl.id}`)}>
                         Approve & Execute
                       </Button>
-                      <Button size="sm" variant="outline" className="h-7 text-xs">Edit</Button>
+                      <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => toast.info('Edit mode opened for this action')}>Edit</Button>
                     </div>
                   </div>
                 ))

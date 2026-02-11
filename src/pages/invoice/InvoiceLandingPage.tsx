@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -220,7 +221,7 @@ export const InvoiceLandingPage = () => {
                   </TableCell>
                   <TableCell>
                     {c.status === 'pending' && (
-                      <Button size="sm" className="h-6 px-2 text-xs">Approve</Button>
+                      <Button size="sm" className="h-6 px-2 text-xs" onClick={() => toast.success(`Cash opportunity ${c.id} approved`)}>Approve</Button>
                     )}
                   </TableCell>
                 </TableRow>
