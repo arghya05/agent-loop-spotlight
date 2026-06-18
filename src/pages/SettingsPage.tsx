@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 import onboardingSettingsData from '@/data/onboarding/settings.json';
 import contractSettingsData from '@/data/contract/settings.json';
 import pricingSettingsData from '@/data/pricing/settings.json';
