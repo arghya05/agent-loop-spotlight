@@ -782,6 +782,9 @@ export const AnalyticsPage = () => {
   if (agentContext === 'pricing-intelligence') {
     return <PricingAnalyticsPage />;
   }
+  if (agentContext === 'autonomous-inventory') {
+    return <InventoryAnalyticsPage />;
+  }
   
   return <SupplierPerformanceAnalyticsPage />;
 };
