@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -64,7 +65,14 @@ export const ContractBucketPage = () => {
               </tr>
             </thead>
             <tbody>
-              {contracts.map((c) => (
+              {contracts.map((c) => {
+                const showWhy = bucketId === 'at_risk' || bucketId === 'violations';
+                const flagged = (c.obligations || []).filter((o: any) =>
+                  bucketId === 'violations' ? o.enforcementStatus === 'violated' : o.enforcementStatus === 'at_risk' || o.enforcementStatus === 'violated'
+                );
+                const daysLeft = Math.ceil((new Date(c.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+                return (
+                <Fragment key={c.id}>
                 <tr key={c.id} className="border-b border-border/50 hover:bg-muted/30">
                   <td className="py-2.5 px-3 font-medium">{c.contractName}</td>
                   <td className="py-2.5 px-3">{c.supplierName}</td>
@@ -89,7 +97,43 @@ export const ContractBucketPage = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
+                {showWhy && (flagged.length > 0 || c.leakageEstimateDollar > 0) && (
+                  <tr key={`${c.id}-why`} className="bg-muted/20">
+                    <td colSpan={9} className="px-3 py-2">
+                      <div className="flex items-start gap-2 flex-wrap">
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground pt-0.5">
+                          Why {bucketId === 'violations' ? 'violated' : 'at risk'}:
+                        </span>
+                        {flagged.map((o: any) => (
+                          <Badge
+                            key={o.id}
+                            variant="outline"
+                            className={cn(
+                              'text-[11px] font-normal',
+                              o.enforcementStatus === 'violated'
+                                ? 'border-status-danger/40 bg-status-danger-bg text-status-danger'
+                                : 'border-status-warning/40 bg-status-warning-bg text-status-warning'
+                            )}
+                          >
+                            {o.type.toUpperCase()}: {o.description}{o.impactDollar > 0 ? ` (−$${(o.impactDollar / 1000).toFixed(1)}K)` : ''}
+                          </Badge>
+                        ))}
+                        {c.riskScore > 60 && (
+                          <Badge variant="outline" className="text-[11px] font-normal border-status-danger/40 bg-status-danger-bg text-status-danger">
+                            Risk score {c.riskScore} (high)
+                          </Badge>
+                        )}
+                        {daysLeft > 0 && daysLeft < 60 && (
+                          <Badge variant="outline" className="text-[11px] font-normal border-status-warning/40 bg-status-warning-bg text-status-warning">
+                            Expires in {daysLeft} days
+                          </Badge>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                </Fragment>
+              );})}
               {contracts.length === 0 && (
                 <tr><td colSpan={9} className="py-8 text-center text-muted-foreground">No contracts in this bucket</td></tr>
               )}

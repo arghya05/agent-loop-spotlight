@@ -20,7 +20,7 @@ import {
   Wrench
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useState, Fragment as FragmentRow } from 'react';
 
 const bucketConfig: Record<BucketTag, { label: string; planType: string; color: string; bgColor: string; icon: React.ReactNode; description: string }> = {
   good: { 
@@ -98,6 +98,55 @@ export const BucketPage = () => {
   });
 
   const uniqueDCs = [...new Set(vendors.map(v => v.dc))];
+
+  const showReasons = bucket === 'needs_review' || bucket === 'critical';
+
+  const computeReasons = (v: any): { label: string; tone: 'danger' | 'warning' }[] => {
+    const reasons: { label: string; tone: 'danger' | 'warning' }[] = [];
+    const m = v.metrics;
+    if (m.otif.current < m.otif.target) {
+      const gap = m.otif.target - m.otif.current;
+      reasons.push({
+        label: `OTIF ${m.otif.current}% vs target ${m.otif.target}% (−${gap}pp, prev ${m.otif.previous}%)`,
+        tone: m.otif.current < 80 ? 'danger' : 'warning',
+      });
+    }
+    if (m.fillRate.current < m.fillRate.target) {
+      reasons.push({
+        label: `Fill rate ${m.fillRate.current}% below ${m.fillRate.target}% target`,
+        tone: m.fillRate.current < 90 ? 'danger' : 'warning',
+      });
+    }
+    if (m.quality.current < m.quality.target) {
+      reasons.push({
+        label: `Quality ${m.quality.current}% below ${m.quality.target}% target`,
+        tone: m.quality.current < 95 ? 'danger' : 'warning',
+      });
+    }
+    if (m.compliance.current > m.compliance.target) {
+      reasons.push({
+        label: `Compliance breach rate ${m.compliance.current}% above ${m.compliance.target}% threshold`,
+        tone: m.compliance.current > 2 ? 'danger' : 'warning',
+      });
+    }
+    (v.complianceIssues || [])
+      .filter((i: any) => i.status === 'open')
+      .forEach((i: any) =>
+        reasons.push({
+          label: `${i.type}: ${i.evidence}`,
+          tone: i.severity === 'critical' ? 'danger' : 'warning',
+        })
+      );
+    (v.riskDrivers || []).forEach((d: string) => {
+      if (!reasons.some(r => r.label.toLowerCase().includes(d.toLowerCase().split(' ')[0]))) {
+        reasons.push({ label: d, tone: 'warning' });
+      }
+    });
+    if (new Date(v.nextReviewDue) < new Date()) {
+      reasons.push({ label: `Review overdue (was due ${formatDate(v.nextReviewDue)})`, tone: 'warning' });
+    }
+    return reasons;
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -189,7 +238,10 @@ export const BucketPage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredVendors.map((vendor) => (
+              {filteredVendors.map((vendor) => {
+                const reasons = showReasons ? computeReasons(vendor) : [];
+                return (
+                <FragmentRow key={vendor.id}>
                 <TableRow key={vendor.id} className="hover:bg-muted/50">
                   <TableCell>
                     <div>
@@ -283,7 +335,33 @@ export const BucketPage = () => {
                     </div>
                   </TableCell>
                 </TableRow>
-              ))}
+                {showReasons && reasons.length > 0 && (
+                  <TableRow key={`${vendor.id}-why`} className="bg-muted/20 hover:bg-muted/30">
+                    <TableCell colSpan={13} className="py-2">
+                      <div className="flex items-start gap-2 flex-wrap">
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground pt-0.5">
+                          Why {bucket === 'critical' ? 'breached' : 'at risk'}:
+                        </span>
+                        {reasons.map((r, i) => (
+                          <Badge
+                            key={i}
+                            variant="outline"
+                            className={cn(
+                              'text-[11px] font-normal',
+                              r.tone === 'danger'
+                                ? 'border-status-danger/40 bg-status-danger-bg text-status-danger'
+                                : 'border-status-warning/40 bg-status-warning-bg text-status-warning'
+                            )}
+                          >
+                            {r.label}
+                          </Badge>
+                        ))}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+                </FragmentRow>
+              );})}
             </TableBody>
           </Table>
         </CardContent>

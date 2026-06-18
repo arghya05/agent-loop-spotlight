@@ -18,7 +18,7 @@ import {
   Send
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import dispatchVendorsData from '@/data/dispatch/vendors.json';
 import dispatchSettingsData from '@/data/dispatch/settings.json';
 
@@ -220,8 +220,12 @@ export const DispatchBucketPage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredVendors.map((vendor) => (
-                <TableRow key={vendor.id} className="hover:bg-muted/50">
+              {filteredVendors.map((vendor) => {
+                const showWhy = bucket === 'aw' || bucket === 'ss';
+                const overdueReview = new Date(vendor.nextReviewDue) < new Date();
+                return (
+                <Fragment key={vendor.id}>
+                <TableRow className="hover:bg-muted/50">
                   <TableCell>
                     <div>
                       <p className="font-medium">{vendor.name}</p>
@@ -259,7 +263,7 @@ export const DispatchBucketPage = () => {
                   </TableCell>
                   <TableCell className="text-xs">
                     <span className={cn(
-                      new Date(vendor.nextReviewDue) < new Date() ? "text-status-danger font-medium" : "text-muted-foreground"
+                      overdueReview ? "text-status-danger font-medium" : "text-muted-foreground"
                     )}>
                       {formatDate(vendor.nextReviewDue)}
                     </span>
@@ -295,7 +299,54 @@ export const DispatchBucketPage = () => {
                     </div>
                   </TableCell>
                 </TableRow>
-              ))}
+                {showWhy && (vendor.riskDrivers.length > 0 || vendor.atRiskDollar > 0) && (
+                  <TableRow className="bg-muted/20 hover:bg-muted/30">
+                    <TableCell colSpan={9} className="py-2">
+                      <div className="flex items-start gap-2 flex-wrap">
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground pt-0.5">
+                          Why {bucket === 'ss' ? 'slipping' : 'on watchlist'}:
+                        </span>
+                        {vendor.riskDrivers.map((d, i) => (
+                          <Badge
+                            key={i}
+                            variant="outline"
+                            className={cn(
+                              'text-[11px] font-normal',
+                              bucket === 'ss'
+                                ? 'border-status-danger/40 bg-status-danger-bg text-status-danger'
+                                : 'border-status-warning/40 bg-status-warning-bg text-status-warning'
+                            )}
+                          >
+                            {d}
+                          </Badge>
+                        ))}
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            'text-[11px] font-normal',
+                            vendor.riskScore >= 70
+                              ? 'border-status-danger/40 bg-status-danger-bg text-status-danger'
+                              : 'border-status-warning/40 bg-status-warning-bg text-status-warning'
+                          )}
+                        >
+                          Risk score {vendor.riskScore} (threshold {bucket === 'ss' ? '> 60' : '26–60'})
+                        </Badge>
+                        {vendor.atRiskDollar > 0 && (
+                          <Badge variant="outline" className="text-[11px] font-normal border-status-danger/40 bg-status-danger-bg text-status-danger">
+                            {formatCurrency(vendor.atRiskDollar)} at risk across {vendor.openPOCount} POs
+                          </Badge>
+                        )}
+                        {overdueReview && (
+                          <Badge variant="outline" className="text-[11px] font-normal border-status-warning/40 bg-status-warning-bg text-status-warning">
+                            Review overdue ({formatDate(vendor.nextReviewDue)})
+                          </Badge>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+                </Fragment>
+              );})}
             </TableBody>
           </Table>
         </CardContent>
