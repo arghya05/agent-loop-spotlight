@@ -20,7 +20,7 @@ import {
   Wrench
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useState, Fragment as FragmentRow } from 'react';
 
 const bucketConfig: Record<BucketTag, { label: string; planType: string; color: string; bgColor: string; icon: React.ReactNode; description: string }> = {
   good: { 
