@@ -72,7 +72,7 @@ export const ContractBucketPage = () => {
                 );
                 const daysLeft = Math.ceil((new Date(c.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
                 return (
-                <>
+                <Fragment key={c.id}>
                 <tr key={c.id} className="border-b border-border/50 hover:bg-muted/30">
                   <td className="py-2.5 px-3 font-medium">{c.contractName}</td>
                   <td className="py-2.5 px-3">{c.supplierName}</td>
@@ -132,7 +132,7 @@ export const ContractBucketPage = () => {
                     </td>
                   </tr>
                 )}
-                </>
+                </Fragment>
               );})}
               {contracts.length === 0 && (
                 <tr><td colSpan={9} className="py-8 text-center text-muted-foreground">No contracts in this bucket</td></tr>
