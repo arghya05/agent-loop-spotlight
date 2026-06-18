@@ -1,0 +1,10 @@
+[
+  { "id": "pim-master", "name": "Akeneo PIM (Product Master)", "type": "api", "status": "connected", "endpoint": "https://akeneo.acme.com/api/rest/v1/products", "lastSync": "2026-06-18T08:50:00Z", "description": "Master product record, attributes, families, and variants" },
+  { "id": "supplier-sftp", "name": "Supplier Catalog SFTP", "type": "sftp", "status": "connected", "endpoint": "sftp://catalog.acme.com:22/inbound", "lastSync": "2026-06-18T08:30:00Z", "description": "New-item submission packets from 240 brand suppliers" },
+  { "id": "dam-cdn", "name": "Cloudinary DAM / Image CDN", "type": "api", "status": "connected", "endpoint": "https://api.cloudinary.com/v1_1/acme/image", "lastSync": "2026-06-18T08:45:00Z", "description": "Image upload, transformation, and resolution validation" },
+  { "id": "taxonomy", "name": "GS1 Taxonomy Service", "type": "api", "status": "connected", "endpoint": "https://taxonomy.acme.com/api/v1/categories", "lastSync": "2026-06-18T07:00:00Z", "description": "Standardized category, attribute, and HS-code mapping" },
+  { "id": "copy-ai", "name": "Catalog Copy AI", "type": "api", "status": "connected", "endpoint": "https://copy.acme.com/api/v1/generate", "lastSync": "2026-06-18T08:20:00Z", "description": "LLM-based bullet copy + long description generation" },
+  { "id": "compliance-vault", "name": "Regulatory Compliance Vault", "type": "api", "status": "connected", "endpoint": "https://compliance.acme.com/api/v1/certificates", "lastSync": "2026-06-18T07:30:00Z", "description": "OEKO-TEX, CE, FDA, energy ratings, and safety certificates" },
+  { "id": "channel-publisher", "name": "Channel Publisher Hub", "type": "webhook", "status": "connected", "endpoint": "https://publish.acme.com/api/v1/sync", "lastSync": "2026-06-18T08:55:00Z", "description": "Pushes activated SKUs to web, app, POS, and marketplaces" },
+  { "id": "downstream-bridge", "name": "Downstream Pricing & Inventory Bridge", "type": "webhook", "status": "configured", "endpoint": "https://bridge.acme.com/api/v1/new-sku", "lastSync": null, "description": "Notifies Pricing + Inventory agents when a new SKU goes live" }
+]
