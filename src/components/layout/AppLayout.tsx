@@ -13,7 +13,8 @@ import {
   ShieldCheck,
   Zap,
   FileText,
-  Tag
+  Tag,
+  Package
 } from 'lucide-react';
 
 const agentTabs = [
@@ -64,6 +65,14 @@ const agentTabs = [
     active: true,
     badge: null,
     basePath: '/pricing'
+  },
+  { 
+    id: 'autonomous-inventory', 
+    label: 'Autonomous Inventory',
+    icon: Package,
+    active: true,
+    badge: null,
+    basePath: '/inventory'
   }
 ];
 
@@ -85,6 +94,8 @@ export const AppLayout = () => {
       setActiveAgent('contract-lifecycle');
     } else if (location.pathname.startsWith('/pricing')) {
       setActiveAgent('pricing-intelligence');
+    } else if (location.pathname.startsWith('/inventory')) {
+      setActiveAgent('autonomous-inventory');
     } else {
       setActiveAgent('supplier-performance');
     }
@@ -104,6 +115,8 @@ export const AppLayout = () => {
       navigate('/contract/landing');
     } else if (tabId === 'pricing-intelligence') {
       navigate('/pricing/landing');
+    } else if (tabId === 'autonomous-inventory') {
+      navigate('/inventory/landing');
     }
   };
 

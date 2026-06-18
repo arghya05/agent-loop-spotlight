@@ -28,7 +28,11 @@ import {
   Gavel,
   Tag,
   Megaphone,
-  Scissors
+  Scissors,
+  Package as PackageIcon,
+  PackagePlus,
+  ArrowLeftRight,
+  Eye
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -146,13 +150,25 @@ const pricingNavItems = [
   { label: 'Admin', path: '/pricing/admin/agents', icon: Shield, description: 'Agent management' }
 ];
 
+// Autonomous Inventory nav items
+const inventoryNavItems = [
+  { label: 'Inventory Home', path: '/inventory/landing', icon: PackageIcon, description: 'Multi-agent inventory overview' },
+  { label: 'Replenish', path: '/inventory/bucket/replenish', icon: PackagePlus, description: 'Reorder via SupplierSystem' },
+  { label: 'Transfer', path: '/inventory/bucket/transfer', icon: ArrowLeftRight, description: 'Network stock rebalance' },
+  { label: 'Monitor', path: '/inventory/bucket/monitor', icon: Eye, description: 'Stock sufficient — monitor' },
+  { label: 'Analytics', path: '/inventory/analytics', icon: BarChart3, description: 'Reports & exports' },
+  { label: 'Connectors', path: '/inventory/connectors', icon: Plug, description: 'POS · WMS · SupplierEDI' },
+  { label: 'Settings', path: '/inventory/settings', icon: Settings, description: 'Configuration' },
+  { label: 'Admin', path: '/inventory/admin/agents', icon: Shield, description: 'Agent management' }
+];
+
 export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
   const location = useLocation();
   const agentContext = useAgentContext();
   const { getAttentionQueue } = useGovernanceStore();
   const attentionCount = getAttentionQueue().length;
   
-  const navItems = agentContext === 'dispatch-readiness' ? dispatchNavItems : agentContext === 'supplier-onboarding' ? onboardingNavItems : agentContext === 'invoice-cash-ops' ? invoiceNavItems : agentContext === 'contract-lifecycle' ? contractNavItems : agentContext === 'pricing-intelligence' ? pricingNavItems : supplierNavItems;
+  const navItems = agentContext === 'dispatch-readiness' ? dispatchNavItems : agentContext === 'supplier-onboarding' ? onboardingNavItems : agentContext === 'invoice-cash-ops' ? invoiceNavItems : agentContext === 'contract-lifecycle' ? contractNavItems : agentContext === 'pricing-intelligence' ? pricingNavItems : agentContext === 'autonomous-inventory' ? inventoryNavItems : supplierNavItems;
   
   const isActive = (path: string) => {
     if (path === '/landing') return location.pathname === '/landing' || location.pathname === '/';

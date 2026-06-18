@@ -34,6 +34,9 @@ import { ContractCasePage } from "@/pages/contract/ContractCasePage";
 import { PricingLandingPage } from "@/pages/pricing/PricingLandingPage";
 import { PricingBucketPage } from "@/pages/pricing/PricingBucketPage";
 import { PricingSignalDetailPage } from "@/pages/pricing/PricingSignalDetailPage";
+import { InventoryLandingPage } from "@/pages/inventory/InventoryLandingPage";
+import { InventoryBucketPage } from "@/pages/inventory/InventoryBucketPage";
+import { InventorySignalDetailPage } from "@/pages/inventory/InventorySignalDetailPage";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -114,6 +117,14 @@ const App = () => (
             <Route path="/pricing/connectors" element={<ConnectorsPage />} />
             <Route path="/pricing/settings" element={<SettingsPage />} />
             <Route path="/pricing/admin/agents" element={<AdminAgentsPage />} />
+            {/* Autonomous Inventory Agent Routes */}
+            <Route path="/inventory/landing" element={<InventoryLandingPage />} />
+            <Route path="/inventory/bucket/:bucketId" element={<InventoryBucketPage />} />
+            <Route path="/inventory/signal/:signalId" element={<InventorySignalDetailPage />} />
+            <Route path="/inventory/analytics" element={<AnalyticsPage />} />
+            <Route path="/inventory/connectors" element={<ConnectorsPage />} />
+            <Route path="/inventory/settings" element={<SettingsPage />} />
+            <Route path="/inventory/admin/agents" element={<AdminAgentsPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
