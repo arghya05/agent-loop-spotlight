@@ -12,6 +12,7 @@ import {
 import invoicesData from '@/data/invoice/invoices.json';
 import cashData from '@/data/invoice/cashOpportunities.json';
 import { useInvoiceStore } from '@/store/invoiceStore';
+import { AutopilotPanel, AutopilotStep } from '@/components/AutopilotPanel';
 
 const buckets = [
   { id: 'matched', label: 'Matched / AutoPay', icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
