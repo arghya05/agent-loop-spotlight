@@ -88,6 +88,16 @@ export const InvoiceLandingPage = () => {
         </div>
       </div>
 
+      <AutopilotPanel
+        steps={autopilotSteps}
+        queueCount={exceptionInvoices.length}
+        itemLabel="invoices"
+        title="AP Autopilot"
+        onComplete={(n) => toast.success(`Autopilot complete · ${n} invoices reviewed`)}
+      />
+
+
+
       {/* KPI Cards */}
       <div className="grid grid-cols-6 gap-3">
         {[
