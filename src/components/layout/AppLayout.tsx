@@ -14,7 +14,8 @@ import {
   Zap,
   FileText,
   Tag,
-  Package
+  Package,
+  PackageOpen
 } from 'lucide-react';
 
 const agentTabs = [
@@ -73,6 +74,14 @@ const agentTabs = [
     active: true,
     badge: null,
     basePath: '/inventory'
+  },
+  { 
+    id: 'product-onboarding', 
+    label: 'Product Onboarding',
+    icon: PackageOpen,
+    active: true,
+    badge: null,
+    basePath: '/product'
   }
 ];
 
@@ -96,6 +105,8 @@ export const AppLayout = () => {
       setActiveAgent('pricing-intelligence');
     } else if (location.pathname.startsWith('/inventory')) {
       setActiveAgent('autonomous-inventory');
+    } else if (location.pathname.startsWith('/product')) {
+      setActiveAgent('product-onboarding');
     } else {
       setActiveAgent('supplier-performance');
     }
@@ -117,6 +128,8 @@ export const AppLayout = () => {
       navigate('/pricing/landing');
     } else if (tabId === 'autonomous-inventory') {
       navigate('/inventory/landing');
+    } else if (tabId === 'product-onboarding') {
+      navigate('/product/landing');
     }
   };
 

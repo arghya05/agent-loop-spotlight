@@ -37,6 +37,9 @@ import { PricingSignalDetailPage } from "@/pages/pricing/PricingSignalDetailPage
 import { InventoryLandingPage } from "@/pages/inventory/InventoryLandingPage";
 import { InventoryBucketPage } from "@/pages/inventory/InventoryBucketPage";
 import { InventorySignalDetailPage } from "@/pages/inventory/InventorySignalDetailPage";
+import { ProductLandingPage } from "@/pages/product/ProductLandingPage";
+import { ProductBucketPage } from "@/pages/product/ProductBucketPage";
+import { ProductItemDetailPage } from "@/pages/product/ProductItemDetailPage";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -125,6 +128,14 @@ const App = () => (
             <Route path="/inventory/connectors" element={<ConnectorsPage />} />
             <Route path="/inventory/settings" element={<SettingsPage />} />
             <Route path="/inventory/admin/agents" element={<AdminAgentsPage />} />
+            {/* Product Onboarding Agent Routes */}
+            <Route path="/product/landing" element={<ProductLandingPage />} />
+            <Route path="/product/bucket/:bucketId" element={<ProductBucketPage />} />
+            <Route path="/product/item/:itemId" element={<ProductItemDetailPage />} />
+            <Route path="/product/analytics" element={<AnalyticsPage />} />
+            <Route path="/product/connectors" element={<ConnectorsPage />} />
+            <Route path="/product/settings" element={<SettingsPage />} />
+            <Route path="/product/admin/agents" element={<AdminAgentsPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
