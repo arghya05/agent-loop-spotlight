@@ -779,8 +779,130 @@ export const AnalyticsPage = () => {
   if (agentContext === 'contract-lifecycle') {
     return <ContractAnalyticsPage />;
   }
+  if (agentContext === 'pricing-intelligence') {
+    return <PricingAnalyticsPage />;
+  }
   
   return <SupplierPerformanceAnalyticsPage />;
+};
+
+// Pricing Analytics
+const PricingAnalyticsPage = () => {
+  const revenueData = [
+    { month: 'Jan', baseline: 1200000, lift: 124000 },
+    { month: 'Feb', baseline: 1280000, lift: 158000 },
+    { month: 'Mar', baseline: 1310000, lift: 174000 },
+    { month: 'Apr', baseline: 1340000, lift: 196000 },
+    { month: 'May', baseline: 1390000, lift: 214000 },
+    { month: 'Jun', baseline: 1420000, lift: 238000 },
+  ];
+
+  const modeMix = [
+    { name: 'Reprice', value: 64, color: '#3b82f6' },
+    { name: 'Promote', value: 41, color: '#a855f7' },
+    { name: 'Markdown', value: 37, color: '#f59e0b' },
+  ];
+
+  const elasticityData = [
+    { month: 'Jan', units: 8200, margin: 38.2 },
+    { month: 'Feb', units: 8650, margin: 37.8 },
+    { month: 'Mar', units: 9100, margin: 38.5 },
+    { month: 'Apr', units: 9420, margin: 39.1 },
+    { month: 'May', units: 9810, margin: 39.4 },
+    { month: 'Jun', units: 10240, margin: 39.8 },
+  ];
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <BarChart3 className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Pricing Intelligence Analytics</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Revenue lift, mode mix, and price elasticity outcomes</p>
+        </div>
+        <Button variant="outline" onClick={() => toast.success('Pricing analytics report exported')}><Download className="w-4 h-4 mr-2" />Export Report</Button>
+      </div>
+
+      <div className="grid grid-cols-4 gap-4">
+        {[
+          { label: 'Revenue Lift (YTD)', value: '$1.10M', icon: DollarSign },
+          { label: 'Avg Reprice Cycle', value: '8 min', icon: Clock },
+          { label: 'Promo ROAS', value: '4.6x', icon: TrendingUp },
+          { label: 'Markdown Recovery', value: '82%', icon: Package },
+        ].map((kpi) => (
+          <Card key={kpi.label} className="card-elevated">
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <kpi.icon className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">{kpi.label}</p>
+                  <p className="text-xl font-bold">{kpi.value}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        <Card className="card-elevated col-span-2">
+          <CardHeader><CardTitle className="text-sm">Baseline Revenue vs Pricing Lift</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={revenueData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="baseline" fill="#94a3b8" name="Baseline" radius={[4, 4, 0, 0]} stackId="a" />
+                <Bar dataKey="lift" fill="#16a34a" name="Pricing Lift" radius={[4, 4, 0, 0]} stackId="a" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm">Action Mix (Last 24h)</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={250}>
+              <RechartsPie>
+                <Pie data={modeMix} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label>
+                  {modeMix.map((entry, index) => (
+                    <Cell key={index} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </RechartsPie>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm">Units vs Margin (Elasticity)</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={elasticityData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis yAxisId="left" tick={{ fontSize: 12 }} />
+                <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Legend />
+                <Line yAxisId="left" type="monotone" dataKey="units" stroke="#3b82f6" strokeWidth={2} dot={{ r: 4 }} name="Units" />
+                <Line yAxisId="right" type="monotone" dataKey="margin" stroke="#16a34a" strokeWidth={2} dot={{ r: 4 }} name="Margin %" />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 };
 
 // Contract Analytics
