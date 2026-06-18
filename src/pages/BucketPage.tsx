@@ -360,7 +360,7 @@ export const BucketPage = () => {
                     </TableCell>
                   </TableRow>
                 )}
-                </>
+                </FragmentRow>
               );})}
             </TableBody>
           </Table>
