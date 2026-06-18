@@ -28,6 +28,7 @@ import onboardingConnectorsData from '@/data/onboarding/connectors.json';
 import invoiceConnectorsData from '@/data/invoice/connectors.json';
 import contractConnectorsData from '@/data/contract/connectors.json';
 import pricingConnectorsData from '@/data/pricing/connectors.json';
+import inventoryConnectorsData from '@/data/inventory/connectors.json';
 
 // Icon mapping for dispatch connectors
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -704,6 +705,9 @@ export const ConnectorsPage = () => {
   }
   if (agentContext === 'pricing-intelligence') {
     return <PricingConnectorsPage />;
+  }
+  if (agentContext === 'autonomous-inventory') {
+    return <InventoryConnectorsPage />;
   }
   
   return <SupplierPerformanceConnectorsPage />;
