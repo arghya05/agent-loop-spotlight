@@ -99,6 +99,55 @@ export const BucketPage = () => {
 
   const uniqueDCs = [...new Set(vendors.map(v => v.dc))];
 
+  const showReasons = bucket === 'needs_review' || bucket === 'critical';
+
+  const computeReasons = (v: any): { label: string; tone: 'danger' | 'warning' }[] => {
+    const reasons: { label: string; tone: 'danger' | 'warning' }[] = [];
+    const m = v.metrics;
+    if (m.otif.current < m.otif.target) {
+      const gap = m.otif.target - m.otif.current;
+      reasons.push({
+        label: `OTIF ${m.otif.current}% vs target ${m.otif.target}% (−${gap}pp, prev ${m.otif.previous}%)`,
+        tone: m.otif.current < 80 ? 'danger' : 'warning',
+      });
+    }
+    if (m.fillRate.current < m.fillRate.target) {
+      reasons.push({
+        label: `Fill rate ${m.fillRate.current}% below ${m.fillRate.target}% target`,
+        tone: m.fillRate.current < 90 ? 'danger' : 'warning',
+      });
+    }
+    if (m.quality.current < m.quality.target) {
+      reasons.push({
+        label: `Quality ${m.quality.current}% below ${m.quality.target}% target`,
+        tone: m.quality.current < 95 ? 'danger' : 'warning',
+      });
+    }
+    if (m.compliance.current > m.compliance.target) {
+      reasons.push({
+        label: `Compliance breach rate ${m.compliance.current}% above ${m.compliance.target}% threshold`,
+        tone: m.compliance.current > 2 ? 'danger' : 'warning',
+      });
+    }
+    (v.complianceIssues || [])
+      .filter((i: any) => i.status === 'open')
+      .forEach((i: any) =>
+        reasons.push({
+          label: `${i.type}: ${i.evidence}`,
+          tone: i.severity === 'critical' ? 'danger' : 'warning',
+        })
+      );
+    (v.riskDrivers || []).forEach((d: string) => {
+      if (!reasons.some(r => r.label.toLowerCase().includes(d.toLowerCase().split(' ')[0]))) {
+        reasons.push({ label: d, tone: 'warning' });
+      }
+    });
+    if (new Date(v.nextReviewDue) < new Date()) {
+      reasons.push({ label: `Review overdue (was due ${formatDate(v.nextReviewDue)})`, tone: 'warning' });
+    }
+    return reasons;
+  };
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
