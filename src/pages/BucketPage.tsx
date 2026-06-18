@@ -241,7 +241,7 @@ export const BucketPage = () => {
               {filteredVendors.map((vendor) => {
                 const reasons = showReasons ? computeReasons(vendor) : [];
                 return (
-                <>
+                <FragmentRow key={vendor.id}>
                 <TableRow key={vendor.id} className="hover:bg-muted/50">
                   <TableCell>
                     <div>
