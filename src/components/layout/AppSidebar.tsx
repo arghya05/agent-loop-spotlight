@@ -32,7 +32,11 @@ import {
   Package as PackageIcon,
   PackagePlus,
   ArrowLeftRight,
-  Eye
+  Eye,
+  PackageOpen,
+  Sparkles,
+  Rocket,
+  ShieldCheck
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -162,13 +166,25 @@ const inventoryNavItems = [
   { label: 'Admin', path: '/inventory/admin/agents', icon: Shield, description: 'Agent management' }
 ];
 
+// Product Onboarding nav items
+const productNavItems = [
+  { label: 'Onboarding Home', path: '/product/landing', icon: PackageOpen, description: 'New SKU onboarding overview' },
+  { label: 'Enrich', path: '/product/bucket/enrich', icon: Sparkles, description: 'Fill catalog gaps' },
+  { label: 'Validate', path: '/product/bucket/validate', icon: ShieldCheck, description: 'Policy & compliance gates' },
+  { label: 'Activate', path: '/product/bucket/activate', icon: Rocket, description: 'Publish to channels' },
+  { label: 'Analytics', path: '/product/analytics', icon: BarChart3, description: 'Reports & exports' },
+  { label: 'Connectors', path: '/product/connectors', icon: Plug, description: 'PIM · DAM · Taxonomy · Copy AI' },
+  { label: 'Settings', path: '/product/settings', icon: Settings, description: 'Configuration' },
+  { label: 'Admin', path: '/product/admin/agents', icon: Shield, description: 'Agent management' }
+];
+
 export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
   const location = useLocation();
   const agentContext = useAgentContext();
   const { getAttentionQueue } = useGovernanceStore();
   const attentionCount = getAttentionQueue().length;
   
-  const navItems = agentContext === 'dispatch-readiness' ? dispatchNavItems : agentContext === 'supplier-onboarding' ? onboardingNavItems : agentContext === 'invoice-cash-ops' ? invoiceNavItems : agentContext === 'contract-lifecycle' ? contractNavItems : agentContext === 'pricing-intelligence' ? pricingNavItems : agentContext === 'autonomous-inventory' ? inventoryNavItems : supplierNavItems;
+  const navItems = agentContext === 'dispatch-readiness' ? dispatchNavItems : agentContext === 'supplier-onboarding' ? onboardingNavItems : agentContext === 'invoice-cash-ops' ? invoiceNavItems : agentContext === 'contract-lifecycle' ? contractNavItems : agentContext === 'pricing-intelligence' ? pricingNavItems : agentContext === 'autonomous-inventory' ? inventoryNavItems : agentContext === 'product-onboarding' ? productNavItems : supplierNavItems;
   
   const isActive = (path: string) => {
     if (path === '/landing') return location.pathname === '/landing' || location.pathname === '/';

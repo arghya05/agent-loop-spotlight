@@ -1,0 +1,24 @@
+{
+  "modes": ["enrich", "validate", "activate"],
+  "tolerances": {
+    "minCompletenessPct": 90,
+    "minImageResolutionPx": 1500,
+    "maxBulletCopyChars": 240,
+    "maxTimeToLiveDays": 7
+  },
+  "approvalGates": {
+    "autoActivateBelowConfidence": 0.85,
+    "buyerApprovalRequiredCategories": 4,
+    "complianceApprovalRequiredCategories": 6
+  },
+  "autoActions": {
+    "autoEnrichMissingFields": true,
+    "autoGenerateBulletCopy": true,
+    "autoBlockOnComplianceFail": true,
+    "autoPublishOnAllGatesPass": true
+  },
+  "schedule": {
+    "intakeIntervalMinutes": 30,
+    "publishWindow": "00:00-23:59"
+  }
+}

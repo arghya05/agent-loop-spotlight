@@ -785,8 +785,127 @@ export const AnalyticsPage = () => {
   if (agentContext === 'autonomous-inventory') {
     return <InventoryAnalyticsPage />;
   }
+  if (agentContext === 'product-onboarding') {
+    return <ProductAnalyticsPage />;
+  }
   
   return <SupplierPerformanceAnalyticsPage />;
+};
+
+// Product Onboarding Analytics
+const ProductAnalyticsPage = () => {
+  const throughputData = [
+    { month: 'Jan', submitted: 142, activated: 118 },
+    { month: 'Feb', submitted: 168, activated: 144 },
+    { month: 'Mar', submitted: 184, activated: 162 },
+    { month: 'Apr', submitted: 201, activated: 182 },
+    { month: 'May', submitted: 218, activated: 198 },
+    { month: 'Jun', submitted: 236, activated: 220 },
+  ];
+
+  const stageMix = [
+    { name: 'Enrich', value: 64, color: '#3b82f6' },
+    { name: 'Validate', value: 38, color: '#f59e0b' },
+    { name: 'Activate', value: 42, color: '#16a34a' },
+  ];
+
+  const ttlTrend = [
+    { month: 'Jan', ttl: 4.8 },
+    { month: 'Feb', ttl: 4.2 },
+    { month: 'Mar', ttl: 3.6 },
+    { month: 'Apr', ttl: 3.1 },
+    { month: 'May', ttl: 2.6 },
+    { month: 'Jun', ttl: 2.1 },
+  ];
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <BarChart3 className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Product Onboarding Analytics</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Throughput, time-to-live, and enrichment quality trends</p>
+        </div>
+        <Button variant="outline" onClick={() => toast.success('Product onboarding report exported')}><Download className="w-4 h-4 mr-2" />Export Report</Button>
+      </div>
+
+      <div className="grid grid-cols-4 gap-4">
+        {[
+          { label: 'SKUs Activated (MTD)', value: '220', icon: TrendingUp },
+          { label: 'Avg Time-to-Live', value: '2.1d', icon: Clock },
+          { label: 'Auto-Enrichment Rate', value: '78%', icon: BarChart3 },
+          { label: 'Compliance Pass Rate', value: '94%', icon: Package },
+        ].map((kpi) => (
+          <Card key={kpi.label} className="card-elevated">
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <kpi.icon className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">{kpi.label}</p>
+                  <p className="text-xl font-bold">{kpi.value}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        <Card className="card-elevated col-span-2">
+          <CardHeader><CardTitle className="text-sm">Submitted vs Activated SKUs</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={throughputData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="submitted" fill="#94a3b8" name="Submitted" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="activated" fill="#16a34a" name="Activated" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm">Stage Mix (Current Queue)</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={250}>
+              <RechartsPie>
+                <Pie data={stageMix} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label>
+                  {stageMix.map((entry, index) => (
+                    <Cell key={index} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </RechartsPie>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm">Time-to-Live Trend (days)</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={ttlTrend}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Line type="monotone" dataKey="ttl" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4 }} name="Days" />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 };
 
 // Pricing Analytics
