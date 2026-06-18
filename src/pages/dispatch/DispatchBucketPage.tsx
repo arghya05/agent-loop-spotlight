@@ -18,7 +18,7 @@ import {
   Send
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import dispatchVendorsData from '@/data/dispatch/vendors.json';
 import dispatchSettingsData from '@/data/dispatch/settings.json';
 
