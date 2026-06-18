@@ -104,6 +104,19 @@ export const ContractLandingPage = () => {
         </Button>
       </div>
 
+      <AutopilotPanel
+        steps={autopilotSteps}
+        queueCount={enforcementQueue.length}
+        itemLabel="contracts"
+        title="Contract Enforcement Autopilot"
+        onComplete={(n) => {
+          toast.success(`Autopilot complete · ${n} contracts enforced`);
+          addAuditEntry({ actor: 'Autopilot Agent', event: 'Autopilot run', details: `Enforced ${n} contracts` });
+        }}
+      />
+
+
+
       {/* KPI Cards */}
       <div className="grid grid-cols-6 gap-3">
         {[
