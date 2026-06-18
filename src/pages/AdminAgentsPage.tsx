@@ -3,6 +3,7 @@ import onboardingAgentConfigs from '@/data/onboarding/agentConfigs.json';
 import invoiceAgentConfigs from '@/data/invoice/agentConfigs.json';
 import contractAgentConfigs from '@/data/contract/agentConfigs.json';
 import pricingAgentConfigs from '@/data/pricing/agentConfigs.json';
+import inventoryAgentConfigs from '@/data/inventory/agentConfigs.json';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -988,6 +989,9 @@ export const AdminAgentsPage = () => {
   }
   if (agentContext === 'pricing-intelligence') {
     return <PricingAdminAgentsPage />;
+  }
+  if (agentContext === 'autonomous-inventory') {
+    return <InventoryAdminAgentsPage />;
   }
   
   return <SupplierPerformanceAdminAgentsPage />;
