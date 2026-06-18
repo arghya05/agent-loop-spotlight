@@ -21,6 +21,7 @@ import {
   Calendar
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { AutopilotPanel, AutopilotStep } from '@/components/AutopilotPanel';
 
 const bucketConfig = [
   { id: 'compliant', label: 'Compliant', color: 'bg-status-success/10 text-status-success', icon: CheckCircle2 },
