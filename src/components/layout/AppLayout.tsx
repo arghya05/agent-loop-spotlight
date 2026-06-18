@@ -13,7 +13,7 @@ import {
   ShieldCheck,
   Zap,
   FileText,
-  Headphones
+  Tag
 } from 'lucide-react';
 
 const agentTabs = [
@@ -58,12 +58,12 @@ const agentTabs = [
     basePath: '/contract'
   },
   { 
-    id: 'supplier-portal', 
-    label: 'Portal Support',
-    icon: Headphones,
+    id: 'pricing-intelligence', 
+    label: 'Pricing Intelligence',
+    icon: Tag,
     active: true,
     badge: null,
-    basePath: '/support'
+    basePath: '/pricing'
   }
 ];
 
@@ -83,8 +83,8 @@ export const AppLayout = () => {
       setActiveAgent('invoice-cash-ops');
     } else if (location.pathname.startsWith('/contract')) {
       setActiveAgent('contract-lifecycle');
-    } else if (location.pathname.startsWith('/support')) {
-      setActiveAgent('supplier-portal');
+    } else if (location.pathname.startsWith('/pricing')) {
+      setActiveAgent('pricing-intelligence');
     } else {
       setActiveAgent('supplier-performance');
     }
@@ -102,8 +102,8 @@ export const AppLayout = () => {
       navigate('/invoice/landing');
     } else if (tabId === 'contract-lifecycle') {
       navigate('/contract/landing');
-    } else if (tabId === 'supplier-portal') {
-      navigate('/support/portal');
+    } else if (tabId === 'pricing-intelligence') {
+      navigate('/pricing/landing');
     }
   };
 

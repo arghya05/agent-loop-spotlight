@@ -31,13 +31,9 @@ import { ContractDetailPage } from "@/pages/contract/ContractDetailPage";
 import { ContractSupplierPage } from "@/pages/contract/ContractSupplierPage";
 import { ObligationDetailPage } from "@/pages/contract/ObligationDetailPage";
 import { ContractCasePage } from "@/pages/contract/ContractCasePage";
-import { PortalHomePage } from "@/pages/support/PortalHomePage";
-import { PortalTicketPage } from "@/pages/support/PortalTicketPage";
-import { PortalReportsPage } from "@/pages/support/PortalReportsPage";
-import { PortalUsersPage } from "@/pages/support/PortalUsersPage";
-import { ConsoleLandingPage } from "@/pages/support/ConsoleLandingPage";
-import { ConsoleTicketPage } from "@/pages/support/ConsoleTicketPage";
-import { ConsoleKnowledgePage } from "@/pages/support/ConsoleKnowledgePage";
+import { PricingLandingPage } from "@/pages/pricing/PricingLandingPage";
+import { PricingBucketPage } from "@/pages/pricing/PricingBucketPage";
+import { PricingSignalDetailPage } from "@/pages/pricing/PricingSignalDetailPage";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -110,18 +106,14 @@ const App = () => (
             <Route path="/contract/connectors" element={<ConnectorsPage />} />
             <Route path="/contract/settings" element={<SettingsPage />} />
             <Route path="/contract/admin/agents" element={<AdminAgentsPage />} />
-            {/* Supplier Portal Support Agent Routes */}
-            <Route path="/support/portal" element={<PortalHomePage />} />
-            <Route path="/support/portal/ticket/:ticketId" element={<PortalTicketPage />} />
-            <Route path="/support/portal/reports" element={<PortalReportsPage />} />
-            <Route path="/support/portal/users" element={<PortalUsersPage />} />
-            <Route path="/support/console" element={<ConsoleLandingPage />} />
-            <Route path="/support/console/ticket/:ticketId" element={<ConsoleTicketPage />} />
-            <Route path="/support/console/knowledge" element={<ConsoleKnowledgePage />} />
-            <Route path="/support/console/analytics" element={<AnalyticsPage />} />
-            <Route path="/support/console/connectors" element={<ConnectorsPage />} />
-            <Route path="/support/console/settings" element={<SettingsPage />} />
-            <Route path="/support/console/agents" element={<AdminAgentsPage />} />
+            {/* Pricing Intelligence Agent Routes */}
+            <Route path="/pricing/landing" element={<PricingLandingPage />} />
+            <Route path="/pricing/bucket/:bucketId" element={<PricingBucketPage />} />
+            <Route path="/pricing/signal/:signalId" element={<PricingSignalDetailPage />} />
+            <Route path="/pricing/analytics" element={<AnalyticsPage />} />
+            <Route path="/pricing/connectors" element={<ConnectorsPage />} />
+            <Route path="/pricing/settings" element={<SettingsPage />} />
+            <Route path="/pricing/admin/agents" element={<AdminAgentsPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
