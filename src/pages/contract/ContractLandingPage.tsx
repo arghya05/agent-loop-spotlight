@@ -21,6 +21,7 @@ import {
   Calendar
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { AutopilotPanel, AutopilotStep } from '@/components/AutopilotPanel';
 
 const bucketConfig = [
   { id: 'compliant', label: 'Compliant', color: 'bg-status-success/10 text-status-success', icon: CheckCircle2 },
@@ -70,6 +71,20 @@ export const ContractLandingPage = () => {
     toast.success('Data refreshed');
   };
 
+  const autopilotSteps: AutopilotStep[] = [
+    { id: 'scan', label: 'Scanning contracts', duration: 1400,
+      activities: () => [{ message: `Loaded ${contracts.length} contracts · ${totalObligations} obligations monitored`, type: 'info' }] },
+    { id: 'link', label: 'Linking transactions', duration: 1700,
+      activities: () => contracts.slice(0, 5).map(c => ({ message: `Linking POs/GRNs/Invoices to ${c.contractName}`, type: 'action' as const })) },
+    { id: 'detect', label: 'Detecting violations', duration: 1800,
+      activities: () => enforcementQueue.slice(0, 6).map(c => ({ message: `${c.contractName}: ${c.bucketTag.replace('_', ' ')} · $${(c.leakageEstimateDollar / 1000).toFixed(1)}K leakage`, type: 'info' as const })) },
+    { id: 'rebate', label: 'Rebate / penalty calc', duration: 1500,
+      activities: () => enforcementQueue.slice(0, 4).map(c => ({ message: `Calculated rebate adjustment for ${c.supplierName}`, type: 'action' as const })) },
+    { id: 'enforce', label: 'Enforcing actions', duration: 1800,
+      activities: () => enforcementQueue.slice(0, 5).map(c => ({ message: `Filed claim / blocked PO for ${c.supplierName} ($${(c.leakageEstimateDollar / 1000).toFixed(1)}K)`, type: 'success' as const })) },
+    { id: 'complete', label: 'Complete', duration: 400 },
+  ];
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -88,6 +103,19 @@ export const ContractLandingPage = () => {
           {isRefreshing ? 'Refreshing...' : 'Refresh'}
         </Button>
       </div>
+
+      <AutopilotPanel
+        steps={autopilotSteps}
+        queueCount={enforcementQueue.length}
+        itemLabel="contracts"
+        title="Contract Enforcement Autopilot"
+        onComplete={(n) => {
+          toast.success(`Autopilot complete · ${n} contracts enforced`);
+          addAuditEntry({ actor: 'Autopilot Agent', event: 'Autopilot run', details: `Enforced ${n} contracts` });
+        }}
+      />
+
+
 
       {/* KPI Cards */}
       <div className="grid grid-cols-6 gap-3">
