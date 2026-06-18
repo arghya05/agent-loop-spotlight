@@ -2,6 +2,7 @@ import { useState } from 'react';
 import onboardingSettingsData from '@/data/onboarding/settings.json';
 import contractSettingsData from '@/data/contract/settings.json';
 import pricingSettingsData from '@/data/pricing/settings.json';
+import inventorySettingsData from '@/data/inventory/settings.json';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -954,6 +955,9 @@ export const SettingsPage = () => {
   }
   if (agentContext === 'pricing-intelligence') {
     return <PricingSettings />;
+  }
+  if (agentContext === 'autonomous-inventory') {
+    return <InventorySettings />;
   }
   
   return <SupplierPerformanceSettings />;
