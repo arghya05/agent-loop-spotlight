@@ -1,0 +1,10 @@
+[
+  { "id": "dataweave", "name": "DataWeave Competitor Pricing", "type": "api", "status": "connected", "endpoint": "https://api.dataweave.com/v2/competitor-prices", "lastSync": "2026-06-18T08:30:00Z", "description": "External scraped competitor price feed across 18 retailers" },
+  { "id": "price2spy", "name": "Price2Spy Monitor", "type": "api", "status": "connected", "endpoint": "https://app.price2spy.com/api/v1/prices", "lastSync": "2026-06-18T08:15:00Z", "description": "Hourly competitor price + stock monitoring" },
+  { "id": "google-trends", "name": "Google Trends / Demand Signals", "type": "api", "status": "connected", "endpoint": "https://trends.googleapis.com/v1/search-interest", "lastSync": "2026-06-18T07:00:00Z", "description": "Category demand index and seasonality signals" },
+  { "id": "segment", "name": "Segment / CDP", "type": "api", "status": "connected", "endpoint": "https://api.segment.io/v1/track", "lastSync": "2026-06-18T08:45:00Z", "description": "Customer segments for targeted promotions" },
+  { "id": "pos", "name": "Internal POS / Sales", "type": "api", "status": "connected", "endpoint": "https://erp.acme.com/api/v2/sales", "lastSync": "2026-06-18T08:50:00Z", "description": "Sell-through, stock aging, and inventory levels" },
+  { "id": "pim", "name": "PIM / Catalog", "type": "api", "status": "connected", "endpoint": "https://pim.acme.com/api/v1/products", "lastSync": "2026-06-18T06:00:00Z", "description": "Master catalog, cost prices, margin floors" },
+  { "id": "meta-ads", "name": "Meta Ads Insights", "type": "api", "status": "configured", "endpoint": "https://graph.facebook.com/v18.0/insights", "lastSync": null, "description": "Promo channel performance and audience signals" },
+  { "id": "execution", "name": "Price Execution Bus", "type": "webhook", "status": "connected", "endpoint": "https://price-bus.acme.com/v1/publish", "lastSync": "2026-06-18T08:55:00Z", "description": "Pushes approved prices to web, app, POS, marketplaces" }
+]

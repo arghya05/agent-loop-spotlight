@@ -25,7 +25,10 @@ import {
   Ban,
   DollarSign,
   Calendar,
-  Gavel
+  Gavel,
+  Tag,
+  Megaphone,
+  Scissors
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -131,22 +134,16 @@ const contractNavItems = [
   { label: 'Admin', path: '/contract/admin/agents', icon: Shield, description: 'Agent management' }
 ];
 
-// Supplier Portal nav items
-const portalNavItems = [
-  { label: 'Portal Home', path: '/support/portal', icon: LayoutDashboard, description: 'Supplier portal overview' },
-  { label: 'Support Tickets', path: '/support/portal/ticket/new', icon: AlertTriangle, description: 'Get help' },
-  { label: 'Reports', path: '/support/portal/reports', icon: BarChart3, description: 'Download reports' },
-  { label: 'Users', path: '/support/portal/users', icon: Users, description: 'Manage portal users' },
-];
-
-// Support Console nav items
-const consoleNavItems = [
-  { label: 'Console Home', path: '/support/console', icon: LayoutDashboard, description: 'Admin dashboard' },
-  { label: 'Knowledge Base', path: '/support/console/knowledge', icon: FileText, description: 'Articles & SOPs' },
-  { label: 'Analytics', path: '/support/console/analytics', icon: BarChart3, description: 'Reports & exports' },
-  { label: 'Connectors', path: '/support/console/connectors', icon: Plug, description: 'Integrations' },
-  { label: 'Settings', path: '/support/console/settings', icon: Settings, description: 'Configuration' },
-  { label: 'Admin', path: '/support/console/agents', icon: Shield, description: 'Agent management' }
+// Pricing Intelligence nav items
+const pricingNavItems = [
+  { label: 'Pricing Home', path: '/pricing/landing', icon: Tag, description: 'Three-mode pricing overview' },
+  { label: 'Reprice', path: '/pricing/bucket/reprice', icon: TrendingUp, description: 'Competitor-driven reprice' },
+  { label: 'Promote', path: '/pricing/bucket/promote', icon: Megaphone, description: 'Targeted promotions' },
+  { label: 'Markdown', path: '/pricing/bucket/markdown', icon: Scissors, description: 'Clearance & markdown' },
+  { label: 'Analytics', path: '/pricing/analytics', icon: BarChart3, description: 'Reports & exports' },
+  { label: 'Connectors', path: '/pricing/connectors', icon: Plug, description: 'External data sources' },
+  { label: 'Settings', path: '/pricing/settings', icon: Settings, description: 'Configuration' },
+  { label: 'Admin', path: '/pricing/admin/agents', icon: Shield, description: 'Agent management' }
 ];
 
 export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
@@ -155,9 +152,7 @@ export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
   const { getAttentionQueue } = useGovernanceStore();
   const attentionCount = getAttentionQueue().length;
   
-  // Select nav items based on agent context
-  const isConsoleMode = location.pathname.startsWith('/support/console');
-  const navItems = agentContext === 'dispatch-readiness' ? dispatchNavItems : agentContext === 'supplier-onboarding' ? onboardingNavItems : agentContext === 'invoice-cash-ops' ? invoiceNavItems : agentContext === 'contract-lifecycle' ? contractNavItems : agentContext === 'supplier-portal' ? (isConsoleMode ? consoleNavItems : portalNavItems) : supplierNavItems;
+  const navItems = agentContext === 'dispatch-readiness' ? dispatchNavItems : agentContext === 'supplier-onboarding' ? onboardingNavItems : agentContext === 'invoice-cash-ops' ? invoiceNavItems : agentContext === 'contract-lifecycle' ? contractNavItems : agentContext === 'pricing-intelligence' ? pricingNavItems : supplierNavItems;
   
   const isActive = (path: string) => {
     if (path === '/landing') return location.pathname === '/landing' || location.pathname === '/';

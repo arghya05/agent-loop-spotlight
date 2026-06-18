@@ -1,0 +1,24 @@
+{
+  "modes": ["reprice", "promote", "markdown"],
+  "tolerances": {
+    "marginFloorPct": 18,
+    "priceChangeMaxPct": 25,
+    "competitorMatchDeltaPct": 2,
+    "markdownDepthMaxPct": 70
+  },
+  "approvalGates": {
+    "autoExecuteBelowChangePct": 5,
+    "merchApprovalAboveChangePct": 15,
+    "financeApprovalAboveImpact": 50000
+  },
+  "autoActions": {
+    "autoRepriceWithinBand": true,
+    "autoLaunchPromoBelowImpact": 10000,
+    "autoMarkdownAboveStockAgeDays": 90,
+    "blockBelowMarginFloor": true
+  },
+  "schedule": {
+    "signalIntervalMin": 30,
+    "executeWindow": "06:00-22:00"
+  }
+}
