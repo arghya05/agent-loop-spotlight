@@ -782,6 +782,9 @@ export const AnalyticsPage = () => {
   if (agentContext === 'pricing-intelligence') {
     return <PricingAnalyticsPage />;
   }
+  if (agentContext === 'autonomous-inventory') {
+    return <InventoryAnalyticsPage />;
+  }
   
   return <SupplierPerformanceAnalyticsPage />;
 };
@@ -1021,3 +1024,120 @@ const ContractAnalyticsPage = () => {
     </div>
   );
 };
+
+// Autonomous Inventory Analytics
+const InventoryAnalyticsPage = () => {
+  const serviceLevel = [
+    { month: 'Jan', target: 98, actual: 96.2 },
+    { month: 'Feb', target: 98, actual: 96.8 },
+    { month: 'Mar', target: 98, actual: 97.4 },
+    { month: 'Apr', target: 98, actual: 97.9 },
+    { month: 'May', target: 98, actual: 98.3 },
+    { month: 'Jun', target: 98, actual: 98.6 },
+  ];
+
+  const actionMix = [
+    { name: 'Replenish', value: 142, color: '#3b82f6' },
+    { name: 'Transfer', value: 38, color: '#a855f7' },
+    { name: 'Monitor', value: 73, color: '#f59e0b' },
+  ];
+
+  const dohTrend = [
+    { month: 'Jan', stockout: 8.2, overstock: 14.1 },
+    { month: 'Feb', stockout: 7.1, overstock: 12.8 },
+    { month: 'Mar', stockout: 6.4, overstock: 11.2 },
+    { month: 'Apr', stockout: 5.2, overstock: 10.4 },
+    { month: 'May', stockout: 4.6, overstock: 9.1 },
+    { month: 'Jun', stockout: 3.8, overstock: 8.2 },
+  ];
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <BarChart3 className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Autonomous Inventory Analytics</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Service level, action mix, and inventory health trends</p>
+        </div>
+        <Button variant="outline" onClick={() => toast.success('Inventory analytics report exported')}><Download className="w-4 h-4 mr-2" />Export Report</Button>
+      </div>
+
+      <div className="grid grid-cols-4 gap-4">
+        {[
+          { label: 'Service Level', value: '98.6%', icon: TrendingUp },
+          { label: 'Forecast Accuracy', value: '88.2%', icon: BarChart3 },
+          { label: 'Stockouts Avoided', value: '312', icon: Package },
+          { label: 'Working Capital Saved', value: '$2.4M', icon: DollarSign },
+        ].map((kpi) => (
+          <Card key={kpi.label} className="card-elevated">
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <kpi.icon className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">{kpi.label}</p>
+                  <p className="text-xl font-bold">{kpi.value}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        <Card className="card-elevated col-span-2">
+          <CardHeader><CardTitle className="text-sm">Service Level vs Target</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={serviceLevel}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} domain={[94, 100]} />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="target" stroke="#94a3b8" strokeDasharray="4 4" name="Target" />
+                <Line type="monotone" dataKey="actual" stroke="#16a34a" strokeWidth={2} dot={{ r: 4 }} name="Actual" />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm">Action Mix (Last 24h)</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={250}>
+              <RechartsPie>
+                <Pie data={actionMix} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label>
+                  {actionMix.map((entry, index) => (<Cell key={index} fill={entry.color} />))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </RechartsPie>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm">Stockout vs Overstock Rate (%)</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={dohTrend}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="stockout" fill="#dc2626" name="Stockout %" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="overstock" fill="#eab308" name="Overstock %" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+

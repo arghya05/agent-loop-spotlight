@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 import onboardingSettingsData from '@/data/onboarding/settings.json';
 import contractSettingsData from '@/data/contract/settings.json';
 import pricingSettingsData from '@/data/pricing/settings.json';
+import inventorySettingsData from '@/data/inventory/settings.json';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -955,6 +957,9 @@ export const SettingsPage = () => {
   if (agentContext === 'pricing-intelligence') {
     return <PricingSettings />;
   }
+  if (agentContext === 'autonomous-inventory') {
+    return <InventorySettings />;
+  }
   
   return <SupplierPerformanceSettings />;
 };
@@ -1144,3 +1149,96 @@ const ContractSettings = () => {
     </div>
   );
 };
+
+// Autonomous Inventory Settings
+const InventorySettings = () => {
+  const [hasChanges, setHasChanges] = useState(false);
+  const settings = inventorySettingsData as any;
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <SettingsIcon className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">Autonomous Inventory Settings</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Safety stock, approval gates, auto-ordering, and forecast schedule</p>
+        </div>
+        <Button disabled={!hasChanges} onClick={() => { setHasChanges(false); toast.success('Settings saved'); }}>
+          <Save className="w-4 h-4 mr-2" />Save Changes
+        </Button>
+      </div>
+
+      <Tabs defaultValue="tolerances">
+        <TabsList>
+          <TabsTrigger value="tolerances">Guardrails</TabsTrigger>
+          <TabsTrigger value="approvals">Approval Gates</TabsTrigger>
+          <TabsTrigger value="auto">Auto-Actions</TabsTrigger>
+          <TabsTrigger value="schedule">Schedule</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="tolerances" className="space-y-4 mt-4">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm">Stock & Forecast Guardrails</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {Object.entries(settings.tolerances).map(([key, val]) => (
+                <div key={key} className="flex items-center justify-between">
+                  <Label className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</Label>
+                  <Input className="w-24 text-right" defaultValue={String(val)} onChange={() => setHasChanges(true)} />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="approvals" className="space-y-4 mt-4">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm">PO Approval Thresholds</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {Object.entries(settings.approvalGates).map(([key, val]) => (
+                <div key={key} className="flex items-center justify-between">
+                  <Label className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</Label>
+                  <Input className="w-32 text-right" defaultValue={`$${val}`} onChange={() => setHasChanges(true)} />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="auto" className="space-y-4 mt-4">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm">Automation Toggles</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {Object.entries(settings.autoActions).map(([key, val]) => (
+                <div key={key} className="flex items-center justify-between">
+                  <Label className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</Label>
+                  {typeof val === 'boolean' ? (
+                    <Switch defaultChecked={val as boolean} onCheckedChange={() => setHasChanges(true)} />
+                  ) : (
+                    <Input className="w-32 text-right" defaultValue={String(val)} onChange={() => setHasChanges(true)} />
+                  )}
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="schedule" className="space-y-4 mt-4">
+          <Card className="card-elevated">
+            <CardHeader><CardTitle className="text-sm">Forecast & Order Schedule</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {Object.entries(settings.schedule).map(([key, val]) => (
+                <div key={key} className="flex items-center justify-between">
+                  <Label className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</Label>
+                  <Input className="w-32 text-right" defaultValue={String(val)} onChange={() => setHasChanges(true)} />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+

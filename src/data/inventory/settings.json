@@ -1,0 +1,24 @@
+{
+  "modes": ["replenish", "transfer", "monitor"],
+  "tolerances": {
+    "safetyStockDays": 7,
+    "stockoutRiskMaxPct": 5,
+    "overstockMaxDays": 60,
+    "forecastErrorMaxPct": 15
+  },
+  "approvalGates": {
+    "autoOrderBelowValue": 25000,
+    "buyerApprovalAboveValue": 75000,
+    "financeApprovalAboveValue": 250000
+  },
+  "autoActions": {
+    "autoReplenishWithinBudget": true,
+    "autoTransferBetweenDCs": true,
+    "autoBlockSupplierOnRiskScore": 70,
+    "autoExpediteOnStockoutRisk": true
+  },
+  "schedule": {
+    "forecastIntervalHours": 4,
+    "orderWindow": "00:00-23:59"
+  }
+}

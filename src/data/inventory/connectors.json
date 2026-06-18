@@ -1,0 +1,10 @@
+[
+  { "id": "sap-erp", "name": "SAP ERP / Inventory", "type": "api", "status": "connected", "endpoint": "https://erp.acme.com/api/v2/stock", "lastSync": "2026-06-18T08:45:00Z", "description": "Live stock levels, on-order, in-transit across DCs" },
+  { "id": "manhattan-wms", "name": "Manhattan WMS", "type": "api", "status": "connected", "endpoint": "https://wms.acme.com/api/v1/inventory", "lastSync": "2026-06-18T08:40:00Z", "description": "Warehouse stock positions and bin-level visibility" },
+  { "id": "blue-yonder", "name": "Blue Yonder Forecast", "type": "api", "status": "connected", "endpoint": "https://api.blueyonder.com/v1/forecast", "lastSync": "2026-06-18T07:30:00Z", "description": "Demand forecast at SKU/store/week granularity" },
+  { "id": "pos-feed", "name": "POS Sell-through Feed", "type": "api", "status": "connected", "endpoint": "https://pos.acme.com/api/v2/sales", "lastSync": "2026-06-18T08:50:00Z", "description": "Real-time sell-through by store and SKU" },
+  { "id": "weather", "name": "Weather / Seasonality", "type": "api", "status": "connected", "endpoint": "https://api.weather.com/v3/forecast", "lastSync": "2026-06-18T06:00:00Z", "description": "14-day regional weather impacting category demand" },
+  { "id": "supplier-edi", "name": "Supplier EDI 855/856", "type": "edi", "status": "connected", "endpoint": "edi://gateway.acme.com/X12", "lastSync": "2026-06-18T08:20:00Z", "description": "PO acknowledgements and ASNs from 142 suppliers" },
+  { "id": "google-trends-inv", "name": "Google Trends Demand", "type": "api", "status": "configured", "endpoint": "https://trends.googleapis.com/v1/search-interest", "lastSync": null, "description": "External demand signals for trending SKUs" },
+  { "id": "order-bus", "name": "Order Execution Bus", "type": "webhook", "status": "connected", "endpoint": "https://orders.acme.com/v1/po", "lastSync": "2026-06-18T08:55:00Z", "description": "Pushes approved POs and transfer orders to ERP" }
+]
