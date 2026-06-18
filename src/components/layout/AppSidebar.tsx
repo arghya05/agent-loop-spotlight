@@ -35,7 +35,8 @@ import {
   Eye,
   PackageOpen,
   Sparkles,
-  Rocket
+  Rocket,
+  ShieldCheck
 } from 'lucide-react';
 
 interface SidebarProps {
