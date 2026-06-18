@@ -47,6 +47,22 @@ export const InvoiceLandingPage = () => {
     cash_opportunity: ['2/10 net 30', '1.5/15 net 45'],
   };
 
+  const autopilotSteps: AutopilotStep[] = [
+    { id: 'scan', label: 'Scanning AP queue', duration: 1400,
+      activities: () => [{ message: `Found ${invoices.length} invoices (${exceptionInvoices.length} exceptions)`, type: 'info' }] },
+    { id: 'match', label: '3-way matching', duration: 1800,
+      activities: () => invoices.slice(0, 6).map(i => ({ message: `Matching ${i.invoiceNumber} · ${i.supplierName} → PO/GRN`, type: 'action' as const })) },
+    { id: 'detect', label: 'Detecting anomalies', duration: 1600,
+      activities: () => exceptionInvoices.slice(0, 5).map(i => ({ message: `${i.invoiceNumber}: ${i.anomalyFlags[0]?.type?.replace(/_/g, ' ') || 'flagged'} (${i.confidenceScore}% conf)`, type: 'info' as const })) },
+    { id: 'cash', label: 'Cash opportunity scan', duration: 1500,
+      activities: () => cashOpps.map(c => ({ message: `${c.supplierName}: ${c.discountTerms.discountPct}/${c.discountTerms.days} → $${c.decision.expectedSavings.toLocaleString()} savings`, type: 'success' as const })) },
+    { id: 'execute', label: 'Auto-resolving', duration: 1800,
+      activities: () => getBucketInvoices('matched').slice(0, 6).map(i => ({ message: `Auto-approved ${i.invoiceNumber} for payment`, type: 'success' as const })) },
+    { id: 'complete', label: 'Complete', duration: 400 },
+  ];
+
+
+
   return (
     <div className="p-6 space-y-6 max-w-[1400px] mx-auto">
       {/* Header */}
