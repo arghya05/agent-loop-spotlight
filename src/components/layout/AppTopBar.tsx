@@ -6,12 +6,14 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Search, Calendar, MapPin, RefreshCw, LogOut } from 'lucide-react';
 import AlgonomyLogo from '@/components/AlgonomyLogo';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const AppTopBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { currentRole, setCurrentRole } = useAppStore();
   const { searchQuery, setSearchQuery, regionFilter, lastRefresh, refreshData } = useGovernanceStore();
+  const isStoreOps = location.pathname.startsWith('/store-ops');
 
   const formatLastRefresh = (iso: string) => {
     const date = new Date(iso);
@@ -29,7 +31,7 @@ export const AppTopBar = () => {
         {/* Left: Logo */}
         <div 
           className="flex items-center gap-2 cursor-pointer" 
-          onClick={() => navigate('/landing')}
+          onClick={() => navigate(isStoreOps ? '/store-ops/landing' : '/landing')}
         >
           <AlgonomyLogo className="h-8" />
           <span className="text-[10px] font-medium tracking-wide text-header-foreground/60">
@@ -42,7 +44,7 @@ export const AppTopBar = () => {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-header-foreground/50" />
             <Input
-              placeholder="Search vendors..."
+              placeholder={isStoreOps ? 'Search stores...' : 'Search vendors...'}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-64 h-8 pl-9 bg-header-foreground/10 border-header-foreground/20 text-header-foreground placeholder:text-header-foreground/40 text-sm"
@@ -110,6 +112,7 @@ export const AppTopBar = () => {
             onClick={() => {
               sessionStorage.removeItem('algonomy_logged_in');
               sessionStorage.removeItem('algonomy_user');
+              sessionStorage.removeItem('algonomy_workspace');
               navigate('/login');
             }}
             className="h-8 text-xs text-header-foreground hover:bg-header-foreground/10"
