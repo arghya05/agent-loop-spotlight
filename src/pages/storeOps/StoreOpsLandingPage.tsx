@@ -16,6 +16,8 @@ import {
   Bot,
   CalendarClock,
   CheckCircle2,
+  ChevronRight,
+  Clock,
   HeartHandshake,
   Layers,
   Map,
@@ -26,6 +28,8 @@ import {
   Store,
   Zap,
 } from 'lucide-react';
+
+const formatToday = () => new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
 const iconMap = {
   Store,
