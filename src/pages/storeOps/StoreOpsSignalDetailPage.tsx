@@ -27,19 +27,73 @@ import {
   Zap,
 } from 'lucide-react';
 
-const investigationSteps = [
-  { id: 'sense', label: 'Signal Sensing', icon: Database, description: 'Pulling POS, footfall, WFM, shelf, CRM...' },
-  { id: 'kpi', label: 'KPI Monitor', icon: Activity, description: 'Comparing metric vs store threshold...' },
-  { id: 'evidence', label: 'Evidence Collector', icon: FileSearch, description: 'Aggregating shelf, queue, roster evidence...' },
-  { id: 'govern', label: 'Governance Check', icon: ShieldCheck, description: 'Applying category & policy guardrails...' },
-  { id: 'root', label: 'Root Cause Builder', icon: GitBranch, description: 'Building store-level root cause...' },
-  { id: 'plan', label: 'Action Plan Drafting', icon: FileBarChart, description: 'Drafting recommended store action...' },
-];
+const stepIconCycle = [Database, Activity, FileSearch, ShieldCheck, GitBranch, FileBarChart];
 
-const executionPhases = [
-  { id: 'dispatch', label: 'Dispatching', description: 'Preparing task assignment for store...' },
-  { id: 'assign', label: 'Assigning', description: 'Routing to recommended owner...' },
-  { id: 'notify', label: 'Notifying', description: 'Sending nudge to store + regional ops...' },
+const buildInvestigationSteps = (
+  workflow: string[],
+  sources: string[],
+  metricLabel: string,
+  threshold: string,
+  category: string,
+  storeName: string,
+) => {
+  const descriptors: Record<string, string> = {
+    Sense: `Pulling ${sources.slice(0, 3).join(', ')}…`,
+    'Sense Footfall': `Reading footfall + queue cameras at ${storeName}…`,
+    'Read Category Context': `Loading ${category} category rules + calendar…`,
+    'Forecast Demand': `Forecasting ${category} demand for ${storeName}…`,
+    Detect: `Scanning for ${metricLabel} anomalies…`,
+    'Detect Leakage': 'Correlating POS, RFID, refunds, overrides…',
+    'Capture Shelf': 'Ingesting latest shelf image vs approved planogram…',
+    Segment: 'Segmenting loyalty + intent signals…',
+    'Segment Demand': 'Segmenting loyalty + intent signals…',
+    Prioritize: `Comparing ${metricLabel} vs ${threshold}…`,
+    'Predict Queue': 'Forecasting queue wait against SLA…',
+    'Compare Thresholds': `Comparing ${metricLabel} vs ${threshold}…`,
+    'Check Shelf': 'Cross-checking shelf camera + POS velocity…',
+    'Check Skills': 'Mapping roster to skill + clearance rules…',
+    'Compare Layout': 'Diffing shelf image against approved layout…',
+    Diagnose: 'Building root cause across evidence…',
+    'Correlate Evidence': 'Linking POS, RFID, CCTV exception metadata…',
+    Govern: `Applying ${category} guardrails…`,
+    'Explain Variance': 'Explaining category variance…',
+    'Rank Risk': 'Ranking leakage exposure…',
+    'Check Backroom': 'Confirming backroom + nearby-store stock…',
+    'Detect Gap': 'Detecting coverage gap vs forecast…',
+    'Match Campaign': 'Matching active campaign + brand event…',
+    'Detect Gap (planogram)': 'Locating missing blocks / wrong adjacency…',
+    Recommend: 'Drafting recommended store action…',
+    'Recommend Action': 'Drafting recommended store action…',
+    'Recommend Pick/Transfer': 'Drafting pick + inter-store transfer plan…',
+    'Recommend Roster': 'Drafting roster + call-in plan…',
+    Assign: 'Routing to recommended owner…',
+    'Allocate Advisor': 'Allocating advisor / specialist…',
+    'Open Capacity': 'Opening lanes + mobile POS…',
+    'Create Task': 'Creating reset / pick task in task manager…',
+    'Freeze Exposure': 'Freezing high-value transfers…',
+    Notify: 'Sending nudge to store team…',
+    'Notify LP': 'Notifying Loss Prevention…',
+    'Notify Duty Manager': 'Notifying duty manager…',
+    'Notify Manager': 'Notifying store + workforce planner…',
+    'Send Nudge': 'Sending loyalty / advisor nudge…',
+    Monitor: 'Monitoring recovery pulse…',
+    'Confirm Fill': 'Awaiting photo confirmation of shelf fill…',
+    'Verify Photo': 'Awaiting verification photo from associate…',
+    'Resolve POS': 'Rebooting / failover for POS lane…',
+    'Measure Conversion': 'Measuring conversion lift post-action…',
+  };
+  return workflow.map((label, idx) => ({
+    id: `step-${idx}`,
+    label,
+    icon: stepIconCycle[idx % stepIconCycle.length],
+    description: descriptors[label] || `${label}…`,
+  }));
+};
+
+const buildExecutionPhases = (agentShortLabel: string, owner: string) => [
+  { id: 'dispatch', label: 'Dispatching', description: `Preparing ${agentShortLabel} task…` },
+  { id: 'assign', label: 'Assigning', description: `Routing to ${owner}…` },
+  { id: 'notify', label: 'Notifying', description: `Notifying ${owner} + regional ops…` },
   { id: 'complete', label: 'Complete', description: 'Store task active and audit logged' },
 ];
 
@@ -59,6 +113,17 @@ export const StoreOpsSignalDetailPage = () => {
   const agent = getStoreAgent(agentId);
   const { addAuditEntry, updateSignal, signalOverrides } = useStoreOpsStore();
   const signal = useMemo(() => storeOpsSignals.find((item) => item.id === signalId), [signalId]);
+
+  const investigationSteps = useMemo(
+    () => signal
+      ? buildInvestigationSteps(agent.workflow, signal.sources, signal.metricLabel, signal.threshold, signal.category, signal.storeName)
+      : [],
+    [agent, signal],
+  );
+  const executionPhases = useMemo(
+    () => signal ? buildExecutionPhases(agent.shortLabel, signal.recommendedOwner) : [],
+    [agent, signal],
+  );
 
   const [currentStep, setCurrentStep] = useState(-1);
   const [isRunning, setIsRunning] = useState(false);
