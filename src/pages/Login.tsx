@@ -4,8 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Eye, EyeOff, LogIn } from 'lucide-react';
+import { Eye, EyeOff, LogIn, Store, Truck } from 'lucide-react';
 import AlgonomyLogo from '@/components/AlgonomyLogo';
+import { cn } from '@/lib/utils';
 
 const LogoBranding = () => (
   <div className="flex flex-col items-center gap-3">
@@ -21,6 +22,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [workspace, setWorkspace] = useState<'supply-chain' | 'store-ops'>('supply-chain');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,9 +41,10 @@ const Login = () => {
     // Store login state
     sessionStorage.setItem('algonomy_logged_in', 'true');
     sessionStorage.setItem('algonomy_user', username);
+    sessionStorage.setItem('algonomy_workspace', workspace);
     
     setIsLoading(false);
-    navigate('/landing');
+    navigate(workspace === 'store-ops' ? '/store-ops/landing' : '/landing');
   };
 
   return (
@@ -57,12 +60,42 @@ const Login = () => {
           <div>
             <CardTitle className="text-xl font-semibold">Welcome back</CardTitle>
             <CardDescription className="text-muted-foreground">
-              Sign in to access the agents platform
+              Choose your agent workspace and sign in
             </CardDescription>
           </div>
         </CardHeader>
         
         <CardContent className="pt-4">
+          <div className="grid grid-cols-2 gap-2 mb-5">
+            {[
+              { id: 'supply-chain' as const, label: 'Supply Chain Agents', icon: Truck, description: 'Supplier, dispatch, invoice, contract, pricing, inventory, product' },
+              { id: 'store-ops' as const, label: 'Store Ops Agents', icon: Store, description: 'Store command, checkout, replenishment, planogram, workforce' },
+            ].map((option) => {
+              const Icon = option.icon;
+              const isSelected = workspace === option.id;
+
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => setWorkspace(option.id)}
+                  className={cn(
+                    'rounded-lg border p-3 text-left transition-all',
+                    isSelected
+                      ? 'border-primary bg-primary/10 text-foreground shadow-sm'
+                      : 'border-border bg-muted/30 text-muted-foreground hover:bg-muted/60 hover:text-foreground'
+                  )}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <Icon className={cn('w-4 h-4', isSelected ? 'text-primary' : 'text-muted-foreground')} />
+                    <span className="text-xs font-semibold">{option.label}</span>
+                  </div>
+                  <p className="text-[10px] leading-relaxed text-muted-foreground">{option.description}</p>
+                </button>
+              );
+            })}
+          </div>
+
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="username">Username</Label>

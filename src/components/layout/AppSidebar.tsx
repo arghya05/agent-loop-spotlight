@@ -5,6 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { useGovernanceStore } from '@/store/governanceStore';
 import { useAgentContext } from '@/hooks/useAgentContext';
+import { storeOpsAgents } from '@/data/storeOps';
 import {
   LayoutDashboard,
   Box,
@@ -19,6 +20,7 @@ import {
   Package,
   AlertTriangle,
   CheckCircle2,
+  Zap,
   TrendingUp,
   FileText,
   XCircle,
@@ -36,7 +38,15 @@ import {
   PackageOpen,
   Sparkles,
   Rocket,
-  ShieldCheck
+  ShieldCheck,
+  Store,
+  Layers,
+  ShieldAlert,
+  ShoppingCart,
+  PackageSearch,
+  Map,
+  HeartHandshake,
+  CalendarClock
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -178,13 +188,56 @@ const productNavItems = [
   { label: 'Admin', path: '/product/admin/agents', icon: Shield, description: 'Agent management' }
 ];
 
+const storeIconMap = {
+  Store,
+  Layers,
+  ShieldAlert,
+  ShoppingCart,
+  PackageSearch,
+  Map,
+  HeartHandshake,
+  CalendarClock,
+};
+
+const getStoreOpsNavItems = (pathname: string) => {
+  const activeAgent = storeOpsAgents.find((agent) => pathname.startsWith(`/store-ops/${agent.id}`));
+
+  if (!activeAgent) {
+    return [
+      { label: 'Store Ops Home', path: '/store-ops/landing', icon: Store, description: 'Store agent suite' },
+      ...storeOpsAgents.map((agent) => ({
+        label: agent.shortLabel,
+        path: `/store-ops/${agent.id}/landing`,
+        icon: storeIconMap[agent.icon as keyof typeof storeIconMap] || Store,
+        description: agent.primaryKpi,
+      })),
+      { label: 'Analytics', path: '/store-ops/store-command/analytics', icon: BarChart3, description: 'Reports & exports' },
+      { label: 'Connectors', path: '/store-ops/store-command/connectors', icon: Plug, description: 'POS · WFM · CRM' },
+      { label: 'Settings', path: '/store-ops/store-command/settings', icon: Settings, description: 'Store guardrails' },
+      { label: 'Admin', path: '/store-ops/store-command/admin/agents', icon: Shield, description: 'Agent management' },
+    ];
+  }
+
+  return [
+    { label: 'Store Ops Home', path: '/store-ops/landing', icon: Store, description: 'Store agent suite' },
+    { label: `${activeAgent.shortLabel} Home`, path: `/store-ops/${activeAgent.id}/landing`, icon: storeIconMap[activeAgent.icon as keyof typeof storeIconMap] || Store, description: activeAgent.primaryKpi },
+    { label: 'Breached', path: `/store-ops/${activeAgent.id}/bucket/breached`, icon: AlertTriangle, description: 'Threshold crossed' },
+    { label: 'At Risk', path: `/store-ops/${activeAgent.id}/bucket/at-risk`, icon: Zap, description: 'Predicted breach' },
+    { label: 'Optimized', path: `/store-ops/${activeAgent.id}/bucket/optimized`, icon: CheckCircle2, description: 'Healthy stores' },
+    { label: 'Analytics', path: `/store-ops/${activeAgent.id}/analytics`, icon: BarChart3, description: 'Reports & exports' },
+    { label: 'Connectors', path: `/store-ops/${activeAgent.id}/connectors`, icon: Plug, description: 'POS · WFM · CRM' },
+    { label: 'Settings', path: `/store-ops/${activeAgent.id}/settings`, icon: Settings, description: 'Store guardrails' },
+    { label: 'Admin', path: `/store-ops/${activeAgent.id}/admin/agents`, icon: Shield, description: 'Agent management' },
+  ];
+};
+
 export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
   const location = useLocation();
   const agentContext = useAgentContext();
   const { getAttentionQueue } = useGovernanceStore();
   const attentionCount = getAttentionQueue().length;
   
-  const navItems = agentContext === 'dispatch-readiness' ? dispatchNavItems : agentContext === 'supplier-onboarding' ? onboardingNavItems : agentContext === 'invoice-cash-ops' ? invoiceNavItems : agentContext === 'contract-lifecycle' ? contractNavItems : agentContext === 'pricing-intelligence' ? pricingNavItems : agentContext === 'autonomous-inventory' ? inventoryNavItems : agentContext === 'product-onboarding' ? productNavItems : supplierNavItems;
+  const navItems = agentContext === 'store-ops' ? getStoreOpsNavItems(location.pathname) : agentContext === 'dispatch-readiness' ? dispatchNavItems : agentContext === 'supplier-onboarding' ? onboardingNavItems : agentContext === 'invoice-cash-ops' ? invoiceNavItems : agentContext === 'contract-lifecycle' ? contractNavItems : agentContext === 'pricing-intelligence' ? pricingNavItems : agentContext === 'autonomous-inventory' ? inventoryNavItems : agentContext === 'product-onboarding' ? productNavItems : supplierNavItems;
   
   const isActive = (path: string) => {
     if (path === '/landing') return location.pathname === '/landing' || location.pathname === '/';
@@ -192,6 +245,7 @@ export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
     if (path === '/onboarding/landing') return location.pathname === '/onboarding/landing' || location.pathname === '/onboarding';
     if (path === '/invoice/landing') return location.pathname === '/invoice/landing' || location.pathname === '/invoice';
     if (path === '/contract/landing') return location.pathname === '/contract/landing' || location.pathname === '/contract';
+    if (path === '/store-ops/landing') return location.pathname === '/store-ops/landing' || location.pathname === '/store-ops';
     if (path === '/bucket') return location.pathname.startsWith('/bucket') && !location.pathname.startsWith('/dispatch');
     if (path.startsWith('/dispatch/bucket/')) return location.pathname === path;
     if (path.startsWith('/onboarding/bucket/')) return location.pathname === path;
@@ -204,7 +258,7 @@ export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
   return (
     <aside 
       className={cn(
-        "fixed left-0 top-[104px] bottom-0 z-40 flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300",
+        "fixed left-0 top-[120px] bottom-0 z-40 flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300",
         collapsed ? "w-16" : "w-56"
       )}
     >
