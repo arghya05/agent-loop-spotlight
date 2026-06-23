@@ -262,7 +262,6 @@ export const AppLayout = () => {
       />
       <main 
         className={cn(
-          "pt-[104px] pb-16 min-h-screen transition-all duration-300",
           "pt-[120px]",
           sidebarCollapsed ? "pl-16" : "pl-56"
         )}

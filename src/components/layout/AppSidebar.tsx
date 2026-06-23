@@ -258,8 +258,7 @@ export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
   return (
     <aside 
       className={cn(
-        "fixed left-0 top-[104px] bottom-0 z-40 flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300",
-        "top-[120px]",
+        "fixed left-0 top-[120px] bottom-0 z-40 flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300",
         collapsed ? "w-16" : "w-56"
       )}
     >
