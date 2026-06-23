@@ -40,6 +40,10 @@ import { InventorySignalDetailPage } from "@/pages/inventory/InventorySignalDeta
 import { ProductLandingPage } from "@/pages/product/ProductLandingPage";
 import { ProductBucketPage } from "@/pages/product/ProductBucketPage";
 import { ProductItemDetailPage } from "@/pages/product/ProductItemDetailPage";
+import { StoreOpsLandingPage } from "@/pages/storeOps/StoreOpsLandingPage";
+import { StoreOpsBucketPage } from "@/pages/storeOps/StoreOpsBucketPage";
+import { StoreOpsSignalDetailPage } from "@/pages/storeOps/StoreOpsSignalDetailPage";
+import { StoreOpsUtilityPage } from "@/pages/storeOps/StoreOpsUtilityPage";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -136,6 +140,16 @@ const App = () => (
             <Route path="/product/connectors" element={<ConnectorsPage />} />
             <Route path="/product/settings" element={<SettingsPage />} />
             <Route path="/product/admin/agents" element={<AdminAgentsPage />} />
+            {/* Store Ops Agent Routes */}
+            <Route path="/store-ops" element={<StoreOpsLandingPage />} />
+            <Route path="/store-ops/landing" element={<StoreOpsLandingPage />} />
+            <Route path="/store-ops/:agentId/landing" element={<StoreOpsLandingPage />} />
+            <Route path="/store-ops/:agentId/bucket/:bucketId" element={<StoreOpsBucketPage />} />
+            <Route path="/store-ops/:agentId/signal/:signalId" element={<StoreOpsSignalDetailPage />} />
+            <Route path="/store-ops/:agentId/analytics" element={<StoreOpsUtilityPage type="analytics" />} />
+            <Route path="/store-ops/:agentId/connectors" element={<StoreOpsUtilityPage type="connectors" />} />
+            <Route path="/store-ops/:agentId/settings" element={<StoreOpsUtilityPage type="settings" />} />
+            <Route path="/store-ops/:agentId/admin/agents" element={<StoreOpsUtilityPage type="admin" />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

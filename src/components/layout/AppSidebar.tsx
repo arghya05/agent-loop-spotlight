@@ -20,6 +20,7 @@ import {
   Package,
   AlertTriangle,
   CheckCircle2,
+  Zap,
   TrendingUp,
   FileText,
   XCircle,
