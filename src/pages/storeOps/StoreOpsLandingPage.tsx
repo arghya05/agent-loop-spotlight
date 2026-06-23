@@ -16,6 +16,8 @@ import {
   Bot,
   CalendarClock,
   CheckCircle2,
+  ChevronRight,
+  Clock,
   HeartHandshake,
   Layers,
   Map,
@@ -26,6 +28,8 @@ import {
   Store,
   Zap,
 } from 'lucide-react';
+
+const formatToday = () => new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
 const iconMap = {
   Store,
@@ -214,6 +218,27 @@ export const StoreOpsLandingPage = () => {
 
   return (
     <div className="p-6 space-y-6">
+      {/* Guided Demo Mode Banner */}
+      <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-lg p-4">
+        <div className="flex items-center gap-6 flex-wrap">
+          <div className="flex items-center gap-2 text-sm font-semibold text-primary">
+            <Zap className="w-4 h-4" />
+            Guided Demo
+          </div>
+          <div className="flex items-center gap-4 text-sm text-foreground flex-wrap">
+            {['Choose bucket', 'Pick store exception', 'Run investigation', 'Enforce & notify'].map((label, i) => (
+              <div key={label} className="flex items-center gap-2">
+                <span className={cn('w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center', i === 0 ? 'bg-primary text-white' : 'bg-muted text-muted-foreground')}>
+                  {i + 1}
+                </span>
+                <span>{label}</span>
+                {i < 3 && <ChevronRight className="w-4 h-4 text-muted-foreground ml-2" />}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2 mb-1">
@@ -222,11 +247,18 @@ export const StoreOpsLandingPage = () => {
           </div>
           <p className="text-sm text-muted-foreground">{activeAgent.description}</p>
         </div>
-        <Button variant="outline" onClick={refresh} disabled={isRefreshing}>
-          <RefreshCw className={cn('w-4 h-4 mr-2', isRefreshing && 'animate-spin')} />
-          {isRefreshing ? 'Refreshing...' : 'Pull Store Signals'}
-        </Button>
+        <div className="flex items-center gap-4">
+          <Button variant="outline" onClick={refresh} disabled={isRefreshing}>
+            <RefreshCw className={cn('w-4 h-4 mr-2', isRefreshing && 'animate-spin')} />
+            {isRefreshing ? 'Refreshing...' : 'Pull Store Signals'}
+          </Button>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Clock className="w-3.5 h-3.5" />
+            <span>Last refresh: {formatToday()}</span>
+          </div>
+        </div>
       </div>
+
 
       <AutopilotPanel
         steps={autopilotSteps}
