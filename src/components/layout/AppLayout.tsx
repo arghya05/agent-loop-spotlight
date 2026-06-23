@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils';
 import { AppSidebar } from './AppSidebar';
 import { AppTopBar } from './AppTopBar';
 import { BottomDrawer } from '@/components/BottomDrawer';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { storeOpsAgents } from '@/data/storeOps';
 import { 
   TrendingUp, 
   Truck, 
@@ -15,7 +15,15 @@ import {
   FileText,
   Tag,
   Package,
-  PackageOpen
+  PackageOpen,
+  Store,
+  Layers,
+  ShieldAlert,
+  ShoppingCart,
+  PackageSearch,
+  Map,
+  HeartHandshake,
+  CalendarClock
 } from 'lucide-react';
 
 const agentTabs = [
@@ -85,15 +93,49 @@ const agentTabs = [
   }
 ];
 
+const storeIconMap = {
+  Store,
+  Layers,
+  ShieldAlert,
+  ShoppingCart,
+  PackageSearch,
+  Map,
+  HeartHandshake,
+  CalendarClock,
+};
+
+const storeAgentTabs = [
+  {
+    id: 'store-ops-suite',
+    label: 'Store Ops Home',
+    icon: Store,
+    active: true,
+    badge: null,
+    basePath: '/store-ops/landing'
+  },
+  ...storeOpsAgents.map((agent) => ({
+    id: agent.id,
+    label: agent.shortLabel,
+    icon: storeIconMap[agent.icon as keyof typeof storeIconMap] || Store,
+    active: true,
+    badge: null,
+    basePath: `/store-ops/${agent.id}`
+  }))
+];
+
 export const AppLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeAgent, setActiveAgent] = useState('supplier-performance');
   const navigate = useNavigate();
   const location = useLocation();
+  const activeWorkspace = location.pathname.startsWith('/store-ops') ? 'store-ops' : 'supply-chain';
 
   // Sync active agent with current route
   useEffect(() => {
-    if (location.pathname.startsWith('/dispatch')) {
+    if (location.pathname.startsWith('/store-ops')) {
+      const activeStoreAgent = storeOpsAgents.find((agent) => location.pathname.startsWith(`/store-ops/${agent.id}`));
+      setActiveAgent(activeStoreAgent?.id || 'store-ops-suite');
+    } else if (location.pathname.startsWith('/dispatch')) {
       setActiveAgent('dispatch-readiness');
     } else if (location.pathname.startsWith('/onboarding')) {
       setActiveAgent('supplier-onboarding');
@@ -112,8 +154,19 @@ export const AppLayout = () => {
     }
   }, [location.pathname]);
 
+  const handleWorkspaceChange = (workspace: 'supply-chain' | 'store-ops') => {
+    sessionStorage.setItem('algonomy_workspace', workspace);
+    navigate(workspace === 'store-ops' ? '/store-ops/landing' : '/landing');
+  };
+
   const handleTabChange = (tabId: string) => {
     setActiveAgent(tabId);
+    const storeTab = storeAgentTabs.find((tab) => tab.id === tabId);
+    if (storeTab) {
+      navigate(tabId === 'store-ops-suite' ? '/store-ops/landing' : `/store-ops/${tabId}/landing`);
+      return;
+    }
+
     if (tabId === 'supplier-performance') {
       navigate('/landing');
     } else if (tabId === 'dispatch-readiness') {
@@ -137,10 +190,42 @@ export const AppLayout = () => {
     <div className="min-h-screen bg-background">
       <AppTopBar />
       
-      {/* Agent Tabs Bar */}
-      <div className="fixed top-14 left-0 right-0 z-40 h-11 bg-muted/30 border-b border-border flex items-center px-4 backdrop-blur-sm">
-        <div className="flex items-center gap-1">
-          {agentTabs.map((tab) => {
+      {/* Workspace + Agent Tabs Bar */}
+      <div className="fixed top-14 left-0 right-0 z-40 h-16 bg-muted/30 border-b border-border px-4 py-1.5 backdrop-blur-sm">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-1 rounded-lg bg-background/70 border border-border p-0.5">
+            {[
+              { id: 'supply-chain' as const, label: 'Supply Chain Agents', icon: Truck },
+              { id: 'store-ops' as const, label: 'Store Ops Agents', icon: Store },
+            ].map((workspace) => {
+              const Icon = workspace.icon;
+              const isActive = activeWorkspace === workspace.id;
+
+              return (
+                <button
+                  key={workspace.id}
+                  onClick={() => handleWorkspaceChange(workspace.id)}
+                  className={cn(
+                    "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all whitespace-nowrap",
+                    isActive ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  )}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{workspace.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active Agent Indicator */}
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-status-success/10 text-status-success text-[10px] font-medium">
+            <Zap className="w-3 h-3" />
+            <span>Active</span>
+          </div>
+        </div>
+
+        <div className="mt-1 flex items-center gap-1 overflow-x-auto scrollbar-thin">
+          {(activeWorkspace === 'store-ops' ? storeAgentTabs : agentTabs).map((tab) => {
             const Icon = tab.icon;
             const isActive = activeAgent === tab.id;
             
@@ -169,14 +254,6 @@ export const AppLayout = () => {
             );
           })}
         </div>
-        
-        {/* Active Agent Indicator */}
-        <div className="ml-auto flex items-center gap-2">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-status-success/10 text-status-success text-[10px] font-medium">
-            <Zap className="w-3 h-3" />
-            <span>Active</span>
-          </div>
-        </div>
       </div>
 
       <AppSidebar 
@@ -186,6 +263,7 @@ export const AppLayout = () => {
       <main 
         className={cn(
           "pt-[104px] pb-16 min-h-screen transition-all duration-300",
+          "pt-[120px]",
           sidebarCollapsed ? "pl-16" : "pl-56"
         )}
       >
