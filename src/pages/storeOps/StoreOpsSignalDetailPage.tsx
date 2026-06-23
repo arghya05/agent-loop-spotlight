@@ -114,6 +114,17 @@ export const StoreOpsSignalDetailPage = () => {
   const { addAuditEntry, updateSignal, signalOverrides } = useStoreOpsStore();
   const signal = useMemo(() => storeOpsSignals.find((item) => item.id === signalId), [signalId]);
 
+  const investigationSteps = useMemo(
+    () => signal
+      ? buildInvestigationSteps(agent.workflow, signal.sources, signal.metricLabel, signal.threshold, signal.category, signal.storeName)
+      : [],
+    [agent, signal],
+  );
+  const executionPhases = useMemo(
+    () => signal ? buildExecutionPhases(agent.shortLabel, signal.recommendedOwner) : [],
+    [agent, signal],
+  );
+
   const [currentStep, setCurrentStep] = useState(-1);
   const [isRunning, setIsRunning] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
