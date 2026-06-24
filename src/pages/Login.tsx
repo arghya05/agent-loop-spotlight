@@ -4,9 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Eye, EyeOff, LogIn, Store, Truck } from 'lucide-react';
+import { Eye, EyeOff, LogIn } from 'lucide-react';
 import AlgonomyLogo from '@/components/AlgonomyLogo';
-import { cn } from '@/lib/utils';
 
 const LogoBranding = () => (
   <div className="flex flex-col items-center gap-3">
