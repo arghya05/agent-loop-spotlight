@@ -35,6 +35,12 @@ import {
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { supplyChainAgents } from '@/data/supplyChainAgents';
+import { Truck, Rocket, Gavel, Tag, PackageOpen } from 'lucide-react';
+
+const agentIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Users, Truck, Rocket, DollarSign, Gavel, Tag, Package, PackageOpen,
+};
 
 const bucketConfig: Record<BucketTag, { label: string; shortLabel: string; planType: string; color: string; bgColor: string; icon: React.ReactNode }> = {
   good: { 
@@ -771,6 +777,74 @@ export const LandingPage = () => {
           })}
         </div>
       </div>
+
+      {/* Supply Chain Agent Catalog */}
+      <Card className="card-elevated">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Bot className="w-5 h-5 text-primary" />
+                Supply Chain Agents
+              </CardTitle>
+              <p className="text-xs text-muted-foreground mt-1">
+                What each agent does and the steps it follows from sense to notify
+              </p>
+            </div>
+            <Badge variant="outline" className="text-xs">{supplyChainAgents.length} agents</Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4">
+            {supplyChainAgents.map((agent) => {
+              const Icon = agentIconMap[agent.icon] || Bot;
+              return (
+                <div
+                  key={agent.id}
+                  className="rounded-lg border border-border bg-muted/20 p-4 hover:bg-muted/40 transition-colors cursor-pointer"
+                  onClick={() => navigate(agent.path)}
+                >
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <h3 className="font-semibold text-sm">{agent.label}</h3>
+                        <Badge variant="secondary" className="text-[9px] whitespace-nowrap">
+                          {agent.primaryKpi}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground italic">{agent.mission}</p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-foreground/80 mb-3 leading-relaxed">
+                    {agent.description}
+                  </p>
+                  <div className="border-t border-border/60 pt-3">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+                      How it works
+                    </p>
+                    <ol className="space-y-1.5">
+                      {agent.workflow.map((step, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-foreground/80">
+                          <span className="w-4 h-4 rounded-full bg-primary/10 text-primary text-[9px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                            {i + 1}
+                          </span>
+                          <span>{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                  <Button size="sm" variant="ghost" className="w-full mt-3 text-xs h-7">
+                    Open {agent.shortLabel} <ChevronRight className="w-3 h-3 ml-1" />
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Attention Queue */}
       <Card className="card-elevated">
