@@ -39,10 +39,10 @@ const Login = () => {
     // Store login state
     sessionStorage.setItem('algonomy_logged_in', 'true');
     sessionStorage.setItem('algonomy_user', username);
-    sessionStorage.setItem('algonomy_workspace', workspace);
+    sessionStorage.removeItem('algonomy_workspace');
     
     setIsLoading(false);
-    navigate(workspace === 'store-ops' ? '/store-ops/landing' : '/landing');
+    navigate('/landing');
   };
 
   return (
