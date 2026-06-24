@@ -21,7 +21,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [workspace, setWorkspace] = useState<'supply-chain' | 'store-ops'>('supply-chain');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
