@@ -160,35 +160,75 @@ export const StoreOpsLandingPage = () => {
           }}
         />
 
-        <div className="grid grid-cols-4 gap-4">
-          {storeOpsAgents.map((agent) => {
-            const Icon = iconMap[agent.icon as keyof typeof iconMap] || Store;
-            const agentSignals = storeOpsSignals.filter((signal) => signal.agentId === agent.id);
-            const agentBreaches = agentSignals.filter((signal) => signal.bucket === 'breached').length;
+        <Card className="card-elevated">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Bot className="w-5 h-5 text-primary" />
+                  Store Ops Agents
+                </CardTitle>
+                <p className="text-xs text-muted-foreground mt-1">
+                  What each store agent does and the steps it follows from sense to notify
+                </p>
+              </div>
+              <Badge variant="outline" className="text-xs">{storeOpsAgents.length} agents</Badge>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-4">
+              {storeOpsAgents.map((agent) => {
+                const Icon = iconMap[agent.icon as keyof typeof iconMap] || Store;
+                const agentSignals = storeOpsSignals.filter((signal) => signal.agentId === agent.id);
+                const agentBreaches = agentSignals.filter((signal) => signal.bucket === 'breached').length;
 
-            return (
-              <Card key={agent.id} className="card-elevated cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate(`/store-ops/${agent.id}/landing`)}>
-                <CardContent className="pt-5 space-y-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <Icon className="w-5 h-5 text-primary" />
+                return (
+                  <div
+                    key={agent.id}
+                    className="rounded-lg border border-border bg-muted/20 p-4 hover:bg-muted/40 transition-colors cursor-pointer"
+                    onClick={() => navigate(`/store-ops/${agent.id}/landing`)}
+                  >
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Icon className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <h3 className="font-semibold text-sm">{agent.label}</h3>
+                          <Badge variant="outline" className={cn('text-[9px] whitespace-nowrap', agentBreaches > 0 ? storeBucketMeta.breached.badgeClass : storeBucketMeta.optimized.badgeClass)}>
+                            {agentBreaches > 0 ? `${agentBreaches} breached` : 'healthy'}
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground italic">{agent.mission}</p>
+                      </div>
                     </div>
-                    <Badge variant="outline" className={cn('text-[10px]', agentBreaches > 0 ? storeBucketMeta.breached.badgeClass : storeBucketMeta.optimized.badgeClass)}>
-                      {agentBreaches > 0 ? `${agentBreaches} breached` : 'healthy'}
-                    </Badge>
+                    <p className="text-xs text-foreground/80 mb-3 leading-relaxed">
+                      {agent.description}
+                    </p>
+                    <div className="border-t border-border/60 pt-3">
+                      <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+                        How it works
+                      </p>
+                      <ol className="space-y-1.5">
+                        {agent.workflow.map((step, i) => (
+                          <li key={i} className="flex items-start gap-2 text-xs text-foreground/80">
+                            <span className="w-4 h-4 rounded-full bg-primary/10 text-primary text-[9px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                              {i + 1}
+                            </span>
+                            <span>{step}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                    <Button size="sm" variant="ghost" className="w-full mt-3 text-xs h-7">
+                      Open {agent.shortLabel} <ArrowRight className="w-3 h-3 ml-1" />
+                    </Button>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-sm">{agent.label}</h3>
-                    <p className="text-xs text-muted-foreground mt-1 line-clamp-3">{agent.mission}</p>
-                  </div>
-                  <Button size="sm" variant="outline" className="w-full text-xs">
-                    Open Agent <ArrowRight className="w-3 h-3 ml-1" />
-                  </Button>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
 
         <Card className="card-elevated">
           <CardHeader><CardTitle className="text-base flex items-center gap-2"><Zap className="w-4 h-4 text-primary" />Top Breached Reasons</CardTitle></CardHeader>
