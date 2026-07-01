@@ -34,8 +34,8 @@ export const supplyChainAgents: SupplyChainAgent[] = [
     shortLabel: 'Dispatch',
     path: '/dispatch/landing',
     icon: 'Truck',
-    mission: 'Predicts PO dispatch slippage and orchestrates upstream fixes before the ship-by date.',
-    description: 'Reads PO milestones, material readiness, capacity, QA, and logistics windows. Flags Slipping / Watchlist / On Track and dispatches tasks to the right owner.',
+    mission: 'Owns supplier-side, pre-ship execution — ensures the PO is production-ready and clears the supplier dock on time.',
+    description: 'Tracks PO milestones, material readiness, capacity, QA sign-off, and outbound logistics windows AT THE SUPPLIER. Once the load leaves the supplier, ownership passes to the Transport & Logistics Control Tower.',
     primaryKpi: 'On-Time Dispatch %',
     workflow: [
       'Sense · pull PO milestones, materials, capacity, QA, logistics',
