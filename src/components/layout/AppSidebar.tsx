@@ -200,6 +200,11 @@ const storeIconMap = {
   Map,
   HeartHandshake,
   CalendarClock,
+  Leaf,
+  Megaphone,
+  Truck,
+  Headset,
+  CloudSun,
 };
 
 const getStoreOpsNavItems = (pathname: string) => {
