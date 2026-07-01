@@ -198,10 +198,10 @@ export const storeOpsAgents: StoreOpsAgent[] = [
     label: 'Local Demand & Event Intelligence Agent',
     shortLabel: 'Local Demand',
     icon: 'CloudSun',
-    mission: 'Localizes replenishment, staffing, and displays using weather, events, and competition.',
-    description: 'Uses weather, holidays, local events, school calendars, nearby competitor activity, and store trends to adjust replenishment, staffing, and in-store displays.',
-    primaryKpi: 'Forecast Accuracy',
-    workflow: ['Ingest External Signals', 'Correlate to Store', 'Adjust Forecast', 'Recommend Ops Change', 'Measure Lift'],
+    mission: 'Turns external local signals into per-store execution moves — display, staffing tweak, micro-promo, endcap change.',
+    description: 'Consumes the network forecast from Demand Sensing and layers store-specific weather, holidays, school calendars, nearby events, and competitor activity on top. Does NOT rebuild the base forecast — it activates it locally.',
+    primaryKpi: 'Local Sales Lift',
+    workflow: ['Ingest External Signals', 'Correlate to Store', 'Activate Local Play', 'Brief Store Manager', 'Measure Lift'],
   },
 ];
 
