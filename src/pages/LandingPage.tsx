@@ -36,10 +36,11 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { supplyChainAgents } from '@/data/supplyChainAgents';
-import { Truck, Rocket, Gavel, Tag, PackageOpen } from 'lucide-react';
+import { Truck, Rocket, Gavel, Tag, PackageOpen, Radar, Shuffle, Warehouse, Route, PackageCheck, AlertTriangle as AlertTriangleIcon, PiggyBank, MessageSquare } from 'lucide-react';
 
 const agentIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Users, Truck, Rocket, DollarSign, Gavel, Tag, Package, PackageOpen,
+  Radar, Shuffle, Warehouse, Route, PackageCheck, AlertTriangle: AlertTriangleIcon, PiggyBank, MessageSquare,
 };
 
 const bucketConfig: Record<BucketTag, { label: string; shortLabel: string; planType: string; color: string; bgColor: string; icon: React.ReactNode }> = {
