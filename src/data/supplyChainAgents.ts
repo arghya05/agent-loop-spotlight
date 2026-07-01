@@ -153,8 +153,8 @@ export const supplyChainAgents: SupplyChainAgent[] = [
     shortLabel: 'Demand Sensing',
     path: '/landing',
     icon: 'Radar',
-    mission: 'Detects demand spikes and drops from sales, weather, festivals, promotions, local events, and online signals.',
-    description: 'Blends POS velocity, web traffic, weather, event calendars, and promo plans to refresh the SKU-location forecast intraday and trigger downstream inventory and supplier actions.',
+    mission: 'Owns the network-wide SKU × location × day forecast — the single source of truth every downstream agent plans against.',
+    description: 'Blends POS velocity, ecom traffic, weather, event calendars, promo plans, and competitor signals to refresh forecasts intraday. Publishes the numbers other agents consume; does NOT execute in-store activation (see Local Demand & Event Intelligence for store-level display, staffing, and micro-promo moves).',
     primaryKpi: 'Forecast Accuracy (MAPE)',
     workflow: [
       'Sense · POS, ecom traffic, weather, events, social, promo calendar',
