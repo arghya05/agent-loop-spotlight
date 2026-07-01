@@ -125,7 +125,8 @@ const agentTabs = [
     active: true,
     badge: null,
     basePath: '/product'
-  }
+  },
+  ...extraSupplyAgentTabs,
 ];
 
 const storeIconMap = {
