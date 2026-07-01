@@ -6,7 +6,12 @@ export type StoreAgentId =
   | 'store-replenishment'
   | 'planogram'
   | 'customer-engagement'
-  | 'workforce';
+  | 'workforce'
+  | 'freshness-waste'
+  | 'promo-execution'
+  | 'omnichannel-fulfilment'
+  | 'associate-copilot'
+  | 'local-demand';
 
 export type StoreBucketId = 'breached' | 'at-risk' | 'optimized';
 
