@@ -6,7 +6,12 @@ export type StoreAgentId =
   | 'store-replenishment'
   | 'planogram'
   | 'customer-engagement'
-  | 'workforce';
+  | 'workforce'
+  | 'freshness-waste'
+  | 'promo-execution'
+  | 'omnichannel-fulfilment'
+  | 'associate-copilot'
+  | 'local-demand';
 
 export type StoreBucketId = 'breached' | 'at-risk' | 'optimized';
 
@@ -147,6 +152,56 @@ export const storeOpsAgents: StoreOpsAgent[] = [
     description: 'Optimizes rosters using WFM, attendance, booking density, category skill rules, and holiday surge models.',
     primaryKpi: 'Coverage Fit',
     workflow: ['Forecast Demand', 'Check Skills', 'Detect Gap', 'Recommend Roster', 'Notify Manager'],
+  },
+  {
+    id: 'freshness-waste',
+    label: 'Freshness, Waste & Markdown Agent',
+    shortLabel: 'Freshness',
+    icon: 'Leaf',
+    mission: 'Protects margin by acting on expiry risk, sell-through, and food waste in real time.',
+    description: 'Identifies products nearing expiry, predicts sell-through, and recommends markdowns, transfers, or donations before waste occurs.',
+    primaryKpi: 'Waste %',
+    workflow: ['Scan Expiry Dates', 'Predict Sell-Through', 'Recommend Markdown/Transfer', 'Trigger Donation', 'Track Waste'],
+  },
+  {
+    id: 'promo-execution',
+    label: 'Promotion Execution Agent',
+    shortLabel: 'Promo Exec',
+    icon: 'Megaphone',
+    mission: 'Ensures every live promo has correct price, signage, display stock, and staff briefing.',
+    description: 'Checks that promotions are live in the right stores with correct price, signage, display quantity, replenishment, and staff awareness. Flags promos losing money to execution failure.',
+    primaryKpi: 'Promo Compliance',
+    workflow: ['Read Promo Calendar', 'Verify Price/Signage', 'Check Display Stock', 'Brief Staff', 'Measure Uplift'],
+  },
+  {
+    id: 'omnichannel-fulfilment',
+    label: 'Omnichannel Fulfilment Agent',
+    shortLabel: 'Fulfilment',
+    icon: 'Truck',
+    mission: 'Runs click-and-collect, ship-from-store, and substitution workflow without SLA slippage.',
+    description: 'Prioritizes online orders, picker routes, substitutions, order ageing, and customer communication across click-and-collect and ship-from-store.',
+    primaryKpi: 'Fulfilment SLA',
+    workflow: ['Ingest Orders', 'Optimize Picker Route', 'Recommend Substitutions', 'Notify Customer', 'Track SLA'],
+  },
+  {
+    id: 'associate-copilot',
+    label: 'Store Associate Copilot',
+    shortLabel: 'Copilot',
+    icon: 'Headset',
+    mission: 'Puts instant product, policy, and selling answers in every associate\'s hand.',
+    description: 'Gives frontline staff instant answers on product location, availability, substitutions, policies, customer queries, and selling prompts through a chat/voice interface.',
+    primaryKpi: 'Query Resolution',
+    workflow: ['Receive Query', 'Ground in Store Data', 'Suggest Answer/Action', 'Log Outcome', 'Improve Model'],
+  },
+  {
+    id: 'local-demand',
+    label: 'Local Demand & Event Intelligence Agent',
+    shortLabel: 'Local Demand',
+    icon: 'CloudSun',
+    mission: 'Localizes replenishment, staffing, and displays using weather, events, and competition.',
+    description: 'Uses weather, holidays, local events, school calendars, nearby competitor activity, and store trends to adjust replenishment, staffing, and in-store displays.',
+    primaryKpi: 'Forecast Accuracy',
+    workflow: ['Ingest External Signals', 'Correlate to Store', 'Adjust Forecast', 'Recommend Ops Change', 'Measure Lift'],
   },
 ];
 
@@ -445,6 +500,166 @@ export const storeOpsSignals: StoreOpsSignal[] = [
     evidence: ['Adherence 97.2%', 'No-shows: 0 this week', 'Skill coverage 100%'],
     sources: ['WFM', 'Attendance'],
     actionTrace: ['Forecast: stable', 'Check: clean', 'Detect: no gap', 'Maintain', 'Notify: weekly digest'],
+  },
+
+  // ───────── FRESHNESS, WASTE & MARKDOWN ─────────
+  {
+    id: 'FW-001', agentId: 'freshness-waste', bucket: 'breached', storeId: 'DXB-031', storeName: 'Mirdif City Centre', country: 'UAE', category: 'Grocery', department: 'Bakery & Dairy', severity: 'critical', status: 'open',
+    metricLabel: 'Waste %', metricValue: '9.4%', threshold: '≤ 4%', confidence: 0.92, estimatedImpact: 38000,
+    recommendedOwner: 'Hala M. — Fresh Category Lead', dueIn: '2h',
+    recommendedAction: 'Apply auto-markdown: 30% off 42 bakery units expiring ≤24h; transfer 18 laban 1L to DXB-014 (higher velocity); dispatch 26 units to Emirates Red Crescent donation partner before 21:00 cut-off.',
+    reason: 'Ramadan iftar demand plan overstated bakery + short-shelf dairy by 22%; sell-through fell as Eid weekend dropped footfall 18%.',
+    evidence: ['42 bakery SKUs expire ≤24h', 'Laban 1L cover 3.1d vs 1.2 avg', 'Sell-through −22% vs plan', 'Donation slot open 20:00–21:00'],
+    sources: ['Freshness Tracker (Wasteless)', 'POS Velocity', 'Donation Portal (ERC)', 'Category Forecast'],
+    actionTrace: ['Scan Expiry: 42 SKUs flagged', 'Predict: sell-through insufficient', 'Recommend: markdown + IST + donation', 'Trigger: ESL price push + donation slot', 'Track: 22:00 spoilage reconciliation'],
+  },
+  {
+    id: 'FW-002', agentId: 'freshness-waste', bucket: 'at-risk', storeId: 'JED-027', storeName: 'Mall of Arabia — Jeddah', country: 'KSA', category: 'Grocery', department: 'Fresh Meat & Poultry', severity: 'high', status: 'monitoring',
+    metricLabel: 'Predicted Waste Value (48h)', metricValue: 'SAR 14,200', threshold: '≤ SAR 6,000', confidence: 0.85, estimatedImpact: 14200,
+    recommendedOwner: 'Rakan A. — Meat Counter Lead', dueIn: '6h',
+    recommendedAction: 'Stage 15% markdown starting 18:00 on 34 tray-packs (chicken breast, lamb kofta); brief butcher to promote grill-ready cuts at counter.',
+    reason: 'Cool-chain delivery arrived 3h late — usable shelf life shortened; weekday demand insufficient to clear without price nudge.',
+    evidence: ['34 tray-packs shelf-life 36h', 'Truck ARR 09:15 vs 06:00 SLA', 'Weekday velocity 62% of weekend', 'Similar action Mar-11 cleared 88%'],
+    sources: ['Cold Chain (Emerson)', 'POS', 'ESL (Pricer)', 'Counter Task App'],
+    actionTrace: ['Scan Expiry: shelf-life reduced', 'Predict: 48h waste risk', 'Recommend: staged markdown + push', 'Trigger: ESL schedule', 'Track: hourly sell-through'],
+  },
+  {
+    id: 'FW-003', agentId: 'freshness-waste', bucket: 'optimized', storeId: 'MCT-003', storeName: 'Muscat Grand Mall', country: 'Oman', category: 'Grocery', department: 'Produce', severity: 'low', status: 'monitoring',
+    metricLabel: 'Waste %', metricValue: '2.8%', threshold: '≤ 4%', confidence: 0.9, estimatedImpact: 3000,
+    recommendedOwner: 'Yusuf B. — Store Manager', dueIn: '24h',
+    recommendedAction: 'Maintain evening cull-and-donate routine; continue Wasteless dynamic pricing on tomatoes + cucumbers.',
+    reason: 'Dynamic pricing loop stable; donation partner pickup on schedule.',
+    evidence: ['Waste 2.8% trailing 14d', 'Donation pickups 7/7 on time', 'No spoilage escalations'],
+    sources: ['Freshness Tracker', 'Donation Portal', 'POS'],
+    actionTrace: ['Scan: healthy', 'Predict: stable', 'Maintain', 'Track', 'Notify: weekly digest'],
+  },
+
+  // ───────── PROMOTION EXECUTION ─────────
+  {
+    id: 'PE-001', agentId: 'promo-execution', bucket: 'breached', storeId: 'RUH-022', storeName: 'Riyadh Park', country: 'KSA', category: 'Cosmetics', department: 'Fragrance Endcap', severity: 'high', status: 'open',
+    metricLabel: 'Promo Execution Score', metricValue: '48%', threshold: '≥ 90%', confidence: 0.89, estimatedImpact: 46000,
+    recommendedOwner: 'Sara T. — Beauty Floor Lead', dueIn: '3h',
+    recommendedAction: 'Push corrected ESL price for Dior Sauvage 100ml (SAR 545, not SAR 620); print + install "Buy 1 Get Sample" shelf talker; brief 3 advisors on offer terms; refill endcap to 24 facings.',
+    reason: 'Promo went live at 00:01 but ESL price sync failed; shelf-talker missing; 2 associates unaware of offer — losing conversion on inbound traffic.',
+    evidence: ['ESL price mismatch (620 vs 545)', 'Shelf-talker absent (photo audit)', '2/5 associates failed knowledge check', 'Endcap 14/24 facings'],
+    sources: ['Promo Calendar (RPM)', 'ESL (SES-imagotag)', 'Shelf Camera (Trax)', 'Reflexis Knowledge Quiz'],
+    actionTrace: ['Read Promo Calendar: live SKU', 'Verify Price/Signage: 3 failures', 'Check Display Stock: short', 'Brief Staff: quiz + huddle', 'Measure Uplift: 4h re-audit'],
+  },
+  {
+    id: 'PE-002', agentId: 'promo-execution', bucket: 'at-risk', storeId: 'AUH-006', storeName: 'Yas Mall', country: 'UAE', category: 'Toys', department: 'LEGO Endcap', severity: 'medium', status: 'monitoring',
+    metricLabel: 'Weekend Promo Readiness', metricValue: '76%', threshold: '≥ 90% by Fri 12:00', confidence: 0.83, estimatedImpact: 18000,
+    recommendedOwner: 'Ahmad K. — Toys Cat. Lead', dueIn: '18h',
+    recommendedAction: 'Schedule overnight reset for LEGO Technic weekend promo: print A2 signage, pre-pick 96 units to floor cage, assign VM associate 06:00 Fri.',
+    reason: 'Two upcoming SKUs still in backroom; signage not yet printed; historically weekend LEGO promos underperform 22% without Fri-AM setup.',
+    evidence: ['Signage queue: not printed', '96 units backroom, 0 on floor', 'Historical -22% when late setup', 'VM associate available 06:00 Fri'],
+    sources: ['Promo Calendar', 'Print Queue', 'Backroom RFID', 'WFM'],
+    actionTrace: ['Read Promo Calendar', 'Verify Signage: pending', 'Check Display Stock: 0 on floor', 'Brief Staff: assign VM', 'Measure Uplift: Sat AM audit'],
+  },
+  {
+    id: 'PE-003', agentId: 'promo-execution', bucket: 'optimized', storeId: 'KWT-008', storeName: 'The Avenues — Phase IV', country: 'Kuwait', category: 'Fashion', department: 'Denim Wall', severity: 'low', status: 'monitoring',
+    metricLabel: 'Promo Execution Score', metricValue: '96%', threshold: '≥ 90%', confidence: 0.91, estimatedImpact: 5000,
+    recommendedOwner: 'Ahmad R. — Store Manager', dueIn: '24h',
+    recommendedAction: 'Maintain; refresh shelf-talkers Sunday.',
+    reason: 'All 6 promo SKUs priced, signed, staffed, and stocked; conversion +14% vs baseline.',
+    evidence: ['6/6 SKUs price-verified', 'All shelf-talkers present', 'Staff quiz 5/5', 'Uplift +14%'],
+    sources: ['ESL', 'Shelf Camera', 'Reflexis'],
+    actionTrace: ['Read', 'Verify', 'Check', 'Brief', 'Measure'],
+  },
+
+  // ───────── OMNICHANNEL FULFILMENT ─────────
+  {
+    id: 'OF-001', agentId: 'omnichannel-fulfilment', bucket: 'breached', storeId: 'DXB-014', storeName: 'Dubai Mall Flagship', country: 'UAE', category: 'Fashion', department: 'Ship-from-Store', severity: 'critical', status: 'open',
+    metricLabel: 'Order Ageing > 4h', metricValue: '38 orders', threshold: '≤ 5 orders', confidence: 0.94, estimatedImpact: 62000,
+    recommendedOwner: 'Omar L. — Fulfilment Lead', dueIn: '1h',
+    recommendedAction: 'Reassign 2 pickers from floor to backroom SFS wave; auto-substitute 11 out-of-stock lines with matched SKUs (customer opt-in); push 90-min ETA SMS to 38 customers; escalate 6 next-day orders to MOE store.',
+    reason: 'Morning picker attendance short 3 vs plan; SFS orders backed up while walk-in returns absorbed capacity.',
+    evidence: ['38 orders aged 4–7h', 'Pickers on: 4 vs plan 7', 'Returns queue +140% AM', '11 lines OOS with clean substitutions'],
+    sources: ['OMS (Manhattan)', 'WFM', 'Inventory', 'Twilio SMS'],
+    actionTrace: ['Ingest Orders: SFS queue', 'Optimize Route: batch by zone', 'Recommend Substitutions: 11 lines', 'Notify Customer: ETA SMS', 'Track SLA: hourly'],
+  },
+  {
+    id: 'OF-002', agentId: 'omnichannel-fulfilment', bucket: 'at-risk', storeId: 'JED-027', storeName: 'Mall of Arabia — Jeddah', country: 'KSA', category: 'Grocery', department: 'Click & Collect', severity: 'high', status: 'monitoring',
+    metricLabel: 'C&C Pick-to-Ready SLA', metricValue: '48 min avg', threshold: '≤ 30 min', confidence: 0.86, estimatedImpact: 21000,
+    recommendedOwner: 'Tariq H. — Duty Manager', dueIn: '4h',
+    recommendedAction: 'Batch 22 open C&C orders by aisle zone; assign 2 dedicated pickers 15:00–19:00; pre-stage cold items in insulated locker T-5 min before customer arrival.',
+    reason: 'Single-order picking used instead of zone batching; cold items sitting too long in staging.',
+    evidence: ['22 orders pending', 'Avg walk-distance 380m/order (batchable 140m)', 'Cold staging temp drift 2°C', 'SLA breach in 90 min if unchanged'],
+    sources: ['OMS', 'Picker App', 'Cold Locker IoT', 'Inventory'],
+    actionTrace: ['Ingest Orders', 'Optimize Route: zone batch', 'Recommend Substitutions: 0 needed', 'Notify Customer: on-time', 'Track SLA'],
+  },
+  {
+    id: 'OF-003', agentId: 'omnichannel-fulfilment', bucket: 'optimized', storeId: 'MCT-003', storeName: 'Muscat Grand Mall', country: 'Oman', category: 'Cosmetics', department: 'Ship-from-Store', severity: 'low', status: 'monitoring',
+    metricLabel: 'Fulfilment SLA', metricValue: '98.4%', threshold: '≥ 95%', confidence: 0.92, estimatedImpact: 4000,
+    recommendedOwner: 'Mariam J. — Beauty Lead', dueIn: '24h',
+    recommendedAction: 'Maintain 2-picker morning wave; keep Aramex 14:00 handover.',
+    reason: 'On-time pick + handover consistent for 21 days.',
+    evidence: ['SLA 98.4% (30d)', '0 substitutions this week', 'Aramex handover on time 21/21'],
+    sources: ['OMS', 'Carrier API', 'Inventory'],
+    actionTrace: ['Ingest', 'Optimize', 'Substitute: none', 'Notify', 'Track'],
+  },
+
+  // ───────── ASSOCIATE COPILOT ─────────
+  {
+    id: 'AC-001', agentId: 'associate-copilot', bucket: 'breached', storeId: 'DXB-031', storeName: 'Mirdif City Centre', country: 'UAE', category: 'Grocery', department: 'Floor', severity: 'medium', status: 'open',
+    metricLabel: 'Unresolved Associate Queries (24h)', metricValue: '31', threshold: '≤ 8', confidence: 0.88, estimatedImpact: 12000,
+    recommendedOwner: 'Hala M. — Category Lead', dueIn: '6h',
+    recommendedAction: 'Publish 4 new grounded answers to Copilot KB (chilled-yoghurt aisle location post-reset, halal beef substitute SKUs, Ramadan return policy, ESL price-check flow); push forced-refresh to 42 associate handhelds.',
+    reason: 'Fresh-aisle planogram reset last week + Ramadan return policy update — Copilot returning "unsure" on 31 queries; associates escalating to floor lead instead.',
+    evidence: ['31 unresolved (was 6 pre-reset)', '18/31 tied to Aisle 4 reset', '7/31 return-policy questions', 'Handhelds on Copilot v2.3.1'],
+    sources: ['Copilot Query Log', 'KB CMS', 'Planogram DAM', 'Policy Repository'],
+    actionTrace: ['Receive Query: clustered', 'Ground in Store Data: gaps found', 'Suggest Answer: 4 new articles drafted', 'Log Outcome: escalation reduction', 'Improve Model: nightly retrain'],
+  },
+  {
+    id: 'AC-002', agentId: 'associate-copilot', bucket: 'at-risk', storeId: 'RUH-022', storeName: 'Riyadh Park', country: 'KSA', category: 'Cosmetics', department: 'Beauty Floor', severity: 'medium', status: 'monitoring',
+    metricLabel: 'New-Hire Query Volume', metricValue: '4.2 queries/hr/associate', threshold: '≤ 2.5', confidence: 0.82, estimatedImpact: 8000,
+    recommendedOwner: 'Noura S. — Store Manager', dueIn: '10h',
+    recommendedAction: 'Assign 2 seasonal hires to CT launch onboarding module (30 min video + Copilot guided tour); enable "buddy answer" review by senior advisor for 48h.',
+    reason: 'Two Charlotte Tilbury launch-week hires driving 60% of query volume — brand knowledge gap slowing service.',
+    evidence: ['CT hires query rate 4.2 vs 1.8 avg', '60% of queries: shade matching', 'Seniors interrupted 22×/shift', 'Onboarding module completion 40%'],
+    sources: ['Copilot Query Log', 'LMS', 'WFM Tenure'],
+    actionTrace: ['Receive Query', 'Ground in Store Data', 'Suggest Answer: enable buddy mode', 'Log Outcome', 'Improve Model'],
+  },
+  {
+    id: 'AC-003', agentId: 'associate-copilot', bucket: 'optimized', storeId: 'KWT-008', storeName: 'The Avenues — Phase IV', country: 'Kuwait', category: 'Toys', department: 'Floor', severity: 'low', status: 'monitoring',
+    metricLabel: 'Query Resolution Rate', metricValue: '94%', threshold: '≥ 85%', confidence: 0.9, estimatedImpact: 2000,
+    recommendedOwner: 'Ahmad R. — Store Manager', dueIn: '24h',
+    recommendedAction: 'Maintain; nightly KB retrain.',
+    reason: 'Copilot grounded in current planogram, promo, and policy; associate CSAT 4.6/5.',
+    evidence: ['Resolution 94%', 'CSAT 4.6', 'Avg response 1.4s'],
+    sources: ['Copilot', 'Associate CSAT'],
+    actionTrace: ['Receive', 'Ground', 'Suggest', 'Log', 'Improve'],
+  },
+
+  // ───────── LOCAL DEMAND & EVENT ─────────
+  {
+    id: 'LD-001', agentId: 'local-demand', bucket: 'breached', storeId: 'DOH-012', storeName: 'Villaggio Mall — Doha', country: 'Qatar', category: 'Grocery', department: 'Beverages + Snacks', severity: 'high', status: 'open',
+    metricLabel: 'Forecast Deviation', metricValue: '+41% vs baseline', threshold: '±15%', confidence: 0.9, estimatedImpact: 34000,
+    recommendedOwner: 'Layla F. — Store Manager', dueIn: '3h',
+    recommendedAction: 'Uplift replen for water 1.5L (+180 units), Gatorade 500ml (+96), chips (+240) ahead of Al Rayyan vs Al Sadd match at Khalifa Stadium tonight; add 2 associates to Aisle 6 restock cadence.',
+    reason: 'Baseline forecast missed local football fixture 2km from store; historical match-day uplift +38% on these SKUs.',
+    evidence: ['QSL match Al Rayyan-Al Sadd 20:00 (Khalifa Stadium)', 'Historical match-day uplift +38%', 'Weather 41°C (thirst driver)', 'Current cover 0.9d water 1.5L'],
+    sources: ['Sports Fixture API', 'Weather (OpenWeather)', 'POS History', 'Inventory'],
+    actionTrace: ['Ingest External: fixture + weather', 'Correlate to Store: 2km radius', 'Adjust Forecast: +41%', 'Recommend Ops Change: replen + staff', 'Measure Lift: T+24h'],
+  },
+  {
+    id: 'LD-002', agentId: 'local-demand', bucket: 'at-risk', storeId: 'JED-011', storeName: 'Red Sea Mall — Jeddah', country: 'KSA', category: 'Fashion', department: 'Kids & Uniform', severity: 'medium', status: 'monitoring',
+    metricLabel: 'Back-to-School Readiness', metricValue: '68%', threshold: '≥ 90% by T-14d', confidence: 0.84, estimatedImpact: 22000,
+    recommendedOwner: 'Mohammed Q. — Kids Cat. Lead', dueIn: '48h',
+    recommendedAction: 'Accelerate school-uniform IST from RDC (350 units, sizes 6–12); brief kids-floor team on 5 nearby school start dates (Aug 25–Sep 1); set up "School Ready" endcap by Aug 20.',
+    reason: 'MoE calendar shows Jeddah private schools starting Aug 25 (7 days earlier than public); current stock + display not aligned.',
+    evidence: ['5 schools starting Aug 25–Sep 1', 'Uniform cover 8d vs need 14d', 'No endcap set', 'Competitor Panda Kids ran 20% promo yesterday'],
+    sources: ['MoE Calendar (KSA)', 'Competitor Monitor', 'Inventory', 'Planogram'],
+    actionTrace: ['Ingest External: school calendar + competitor', 'Correlate: catchment overlap', 'Adjust Forecast: pull-forward', 'Recommend: IST + endcap', 'Measure Lift'],
+  },
+  {
+    id: 'LD-003', agentId: 'local-demand', bucket: 'optimized', storeId: 'AUH-006', storeName: 'Yas Mall', country: 'UAE', category: 'Toys', department: 'Storewide', severity: 'low', status: 'monitoring',
+    metricLabel: 'Forecast Accuracy (7d)', metricValue: '93%', threshold: '≥ 85%', confidence: 0.9, estimatedImpact: 4000,
+    recommendedOwner: 'Saif K. — Toys Cat. Lead', dueIn: '24h',
+    recommendedAction: 'Maintain; refresh model post Yas Marina F1 weekend.',
+    reason: 'Model captured Formula 1 weekend + school holiday overlap correctly.',
+    evidence: ['Forecast accuracy 93%', 'F1 weekend uplift matched (+27%)', 'No stock-outs'],
+    sources: ['Event Calendar', 'Weather', 'POS'],
+    actionTrace: ['Ingest', 'Correlate', 'Adjust', 'Recommend', 'Measure'],
   },
 ];
 
