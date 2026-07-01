@@ -221,8 +221,8 @@ export const supplyChainAgents: SupplyChainAgent[] = [
     shortLabel: 'Fulfilment',
     path: '/landing',
     icon: 'PackageCheck',
-    mission: 'Protects ecommerce, B2B, and omnichannel delivery commitments before they break.',
-    description: 'Continuously re-scores each open order against inventory, node capacity, and carrier ETA; then finds alternate node, split shipment, substitute, or route change to keep the promise.',
+    mission: 'Protects the customer promise upstream in the OMS — sourcing node, split, substitute, or carrier swap before the order is picked.',
+    description: 'Continuously re-scores each open order against inventory, node capacity, and carrier ETA to keep the promise date. Hands the winning plan to store or DC teams — the actual in-store pick, pack, and handover SLA is owned by the Omnichannel Fulfilment agent in Store Ops.',
     primaryKpi: 'Promise Kept %',
     workflow: [
       'Sense · OMS orders, node inventory, carrier ETA, capacity',
