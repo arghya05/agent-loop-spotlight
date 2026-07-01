@@ -204,8 +204,8 @@ export const supplyChainAgents: SupplyChainAgent[] = [
     shortLabel: 'Control Tower',
     path: '/landing',
     icon: 'Route',
-    mission: 'Monitors shipment delays, route disruption, carrier underperformance, low truck fill, and ETA risk.',
-    description: 'Fuses TMS, telematics, carrier EDI, weather, and traffic to reroute loads, switch carrier, consolidate shipments, or expedite critical orders before OTIF slips.',
+    mission: 'Owns in-transit shipments across the own network — from the moment freight leaves origin to the moment it hits the destination dock.',
+    description: 'Fuses TMS, telematics, carrier EDI, weather, and traffic to reroute loads, switch carrier, consolidate shipments, or expedite before OTIF slips. Starts where Dispatch Readiness ends (supplier gate-out) and ends where Warehouse Ops takes over (dock-in).',
     primaryKpi: 'OTIF % & Cost per Load',
     workflow: [
       'Sense · TMS, GPS, carrier EDI, weather, traffic feeds',
