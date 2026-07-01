@@ -18,14 +18,19 @@ import {
   CheckCircle2,
   ChevronRight,
   Clock,
+  CloudSun,
+  Headset,
   HeartHandshake,
   Layers,
+  Leaf,
   Map,
+  Megaphone,
   PackageSearch,
   RefreshCw,
   ShieldAlert,
   ShoppingCart,
   Store,
+  Truck,
   Zap,
 } from 'lucide-react';
 
@@ -40,6 +45,11 @@ const iconMap = {
   Map,
   HeartHandshake,
   CalendarClock,
+  Leaf,
+  Megaphone,
+  Truck,
+  Headset,
+  CloudSun,
 };
 
 const bucketOrder: StoreBucketId[] = ['breached', 'at-risk', 'optimized'];
