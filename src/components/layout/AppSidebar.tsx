@@ -46,7 +46,11 @@ import {
   PackageSearch,
   Map,
   HeartHandshake,
-  CalendarClock
+  CalendarClock,
+  Leaf,
+  Megaphone as MegaphoneIcon,
+  Headset,
+  CloudSun
 } from 'lucide-react';
 
 interface SidebarProps {
