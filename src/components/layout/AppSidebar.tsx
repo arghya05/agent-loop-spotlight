@@ -48,7 +48,6 @@ import {
   HeartHandshake,
   CalendarClock,
   Leaf,
-  Megaphone as MegaphoneIcon,
   Headset,
   CloudSun
 } from 'lucide-react';
