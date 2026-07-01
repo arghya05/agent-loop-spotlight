@@ -119,9 +119,9 @@ export const supplyChainAgents: SupplyChainAgent[] = [
     shortLabel: 'Inventory',
     path: '/inventory/landing',
     icon: 'Package',
-    mission: 'Decides between Replenish, Transfer, and Monitor across the store and DC network.',
-    description: 'Reads POS sell-through, WMS stock, in-transit, and supplier EDI to keep cover within target without overstocking.',
-    primaryKpi: 'In-Stock %',
+    mission: 'Owns end-to-end replenishment policy from supplier to DC to store — scope, cadence, and order sizing.',
+    description: 'Sets min/max, safety stock, and reorder logic per SKU-node. Places purchase orders on suppliers and DC allocation orders to stores. Does NOT run in-network transfers (see Rebalancing) or intra-store moves (see Store Replenishment).',
+    primaryKpi: 'In-Stock % vs Working Capital',
     workflow: [
       'Sense · POS sell-through, WMS stock, in-transit',
       'Project · forward cover vs target',
