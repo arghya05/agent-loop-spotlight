@@ -170,8 +170,8 @@ export const supplyChainAgents: SupplyChainAgent[] = [
     shortLabel: 'Rebalancing',
     path: '/landing',
     icon: 'Shuffle',
-    mission: 'Spots surplus in one DC or region and shortage risk in another, then recommends the transfer that fixes both.',
-    description: 'Scores inventory health per SKU-node against demand and cover targets, and proposes inter-DC, DC-to-store, or store-to-store transfers with cost, ETA, and margin impact.',
+    mission: 'Runs network-only stock transfers — moves existing inventory between DCs and stores, never places a new purchase order.',
+    description: 'Finds surplus-shortage pairs across nodes and proposes inter-DC, DC-to-store, or store-to-store transfers with cost, ETA, and margin impact. Complements Autonomous Inventory (which decides new POs) and Store Replenishment (which handles backroom-to-shelf inside a single store).',
     primaryKpi: 'Weeks-of-Cover Variance',
     workflow: [
       'Sense · on-hand, in-transit, forecast, and cover per node',
