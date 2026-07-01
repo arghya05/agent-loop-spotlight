@@ -6,6 +6,7 @@ import { AppTopBar } from './AppTopBar';
 import { BottomDrawer } from '@/components/BottomDrawer';
 import { Badge } from '@/components/ui/badge';
 import { storeOpsAgents } from '@/data/storeOps';
+import { supplyChainAgents } from '@/data/supplyChainAgents';
 import { 
   TrendingUp, 
   Truck, 
@@ -23,8 +24,42 @@ import {
   PackageSearch,
   Map,
   HeartHandshake,
-  CalendarClock
+  CalendarClock,
+  Radar,
+  Shuffle,
+  Warehouse,
+  Route,
+  PackageCheck,
+  AlertTriangle,
+  PiggyBank,
+  MessageSquare,
+  Users,
+  Rocket,
+  DollarSign,
+  Gavel,
+  LucideIcon,
 } from 'lucide-react';
+
+const supplyIconMap: Record<string, LucideIcon> = {
+  Users, Truck, Rocket, DollarSign, Gavel, Tag, Package, PackageOpen,
+  Radar, Shuffle, Warehouse, Route, PackageCheck, AlertTriangle, PiggyBank, MessageSquare,
+};
+
+const existingSupplyIds = new Set([
+  'supplier-performance','dispatch-readiness','supplier-onboarding','invoice-cash-ops',
+  'contract-lifecycle','pricing-intelligence','autonomous-inventory','product-onboarding',
+]);
+
+const extraSupplyAgentTabs = supplyChainAgents
+  .filter((a) => !existingSupplyIds.has(a.id))
+  .map((a) => ({
+    id: a.id,
+    label: a.shortLabel,
+    icon: supplyIconMap[a.icon] || TrendingUp,
+    active: true,
+    badge: null as string | null,
+    basePath: a.path,
+  }));
 
 const agentTabs = [
   { 
