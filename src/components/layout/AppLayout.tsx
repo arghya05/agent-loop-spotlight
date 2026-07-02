@@ -37,6 +37,7 @@ import {
   Rocket,
   DollarSign,
   Gavel,
+  ArrowLeftRight,
   LucideIcon,
 } from 'lucide-react';
 

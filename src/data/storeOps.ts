@@ -672,6 +672,58 @@ export const storeOpsSignals: StoreOpsSignal[] = [
     sources: ['Event Calendar', 'Weather', 'POS'],
     actionTrace: ['Ingest', 'Correlate', 'Adjust', 'Recommend', 'Measure'],
   },
+
+  // ───────── STORE-TO-STORE TRANSFER ─────────
+  {
+    id: 'ST-001', agentId: 'store-transfer', bucket: 'breached', storeId: 'DXB-014', storeName: 'Dubai Mall Flagship', country: 'UAE', category: 'Fashion', department: 'Women\'s Denim', severity: 'critical', status: 'open',
+    metricLabel: 'Backroom Cover — Slim-Straight M/L', metricValue: '0 days', threshold: '≥ 2 days', confidence: 0.94, estimatedImpact: 42000,
+    recommendedOwner: 'Reem K. — Store Manager (DXB-014)', dueIn: '3h',
+    recommendedAction: 'Approve IST of 46 units (SKU DNM-SLM-STR M×24 / L×22) from Mall of the Emirates (DXB-009); book 15:00 shuttle van slot; ETA 16:45.',
+    reason: 'Backroom exhausted during evening peak while sister store DXB-009 sits at 3.4× target cover for same SKU — well below the network rebalancing threshold, so Autonomous Inventory + Rebalancing will not act.',
+    evidence: ['DXB-014 backroom: 0 units, shelf 4 units, hourly sell-rate 6', 'DXB-009 backroom: 118 units, cover 21 days', 'Cluster van 15:00 (DXB-East) has 2.1 m³ free', 'Historic donor lead time DXB-009→DXB-014: 1h 45m'],
+    sources: ['Store Inventory (SAP IS-Retail)', 'Cluster Van Manifest (Aramex ISM)', 'POS Live', 'Planogram Master'],
+    actionTrace: ['Detect Cluster Imbalance: deficit −46 vs surplus +82 at DXB-009', 'Match Donor: DXB-009 wins on distance + cover + van slot', 'Approve Transfer: within store-manager auto-approve cap (≤ AED 60k)', 'Book Van: cluster shuttle 15:00 confirmed', 'Chargeback: at-cost IST journal queued'],
+  },
+  {
+    id: 'ST-002', agentId: 'store-transfer', bucket: 'at-risk', storeId: 'RUH-022', storeName: 'Riyadh Park', country: 'KSA', category: 'Cosmetics', department: 'Charlotte Tilbury Endcap', severity: 'high', status: 'monitoring',
+    metricLabel: 'Predicted Stockout — Pillow Talk Lipstick', metricValue: 'Breach in 6h', threshold: '≥ 24h cover', confidence: 0.88, estimatedImpact: 28000,
+    recommendedOwner: 'Noura S. — Store Manager (RUH-022)', dueIn: '5h',
+    recommendedAction: 'Pull 32 units from Riyadh Gallery (RUH-018), 12 km away, on the 17:30 cluster round; keep Kingdom Centre stock intact (VIP launch tomorrow).',
+    reason: 'Launch event driving 3.2× baseline; donor selection filtered out Kingdom Centre because its own event is <18h away.',
+    evidence: ['Booking-driven demand: 142 units next 24h', 'Current stock: 38 units', 'RUH-018 cover 11 days, no event flag', 'RUH-002 (Kingdom) protected — launch in 16h'],
+    sources: ['Booking Calendar (Mindbody)', 'Store Inventory', 'Event Calendar', 'Cluster Van Manifest'],
+    actionTrace: ['Detect: 6h projected breach', 'Match Donor: RUH-018 over RUH-002 (event guard)', 'Approve: within cap', 'Book Van: 17:30 slot', 'Notify: Store Manager + BA Lead'],
+  },
+  {
+    id: 'ST-003', agentId: 'store-transfer', bucket: 'breached', storeId: 'JED-027', storeName: 'Mall of Arabia — Jeddah', country: 'KSA', category: 'Toys', department: 'LEGO Technic', severity: 'high', status: 'investigating',
+    metricLabel: 'Cluster Imbalance Index — LEGO 42154', metricValue: '3.9', threshold: '≤ 2.0', confidence: 0.9, estimatedImpact: 19000,
+    recommendedOwner: 'Tariq H. — Duty Manager', dueIn: '6h',
+    recommendedAction: 'Consolidate 24 units across 3 donor stores (JED-011 ×10, JED-014 ×8, JED-019 ×6) into JED-027 on tomorrow 09:00 milk-run.',
+    reason: 'Post-Eid demand skew: JED-027 catchment absorbed school-holiday demand; 3 sister stores over-stocked. Multi-donor consolidation avoids single-store depletion.',
+    evidence: ['JED-027 cover 0.8 days vs sell-rate 14/day', 'Donor cover: JED-011 (18d), JED-014 (15d), JED-019 (12d)', 'Milk-run 09:00 already scheduled', 'Historical fill 96% on 3-way IST pattern'],
+    sources: ['Inventory', 'Milk-run Schedule (KSA-West)', 'POS'],
+    actionTrace: ['Detect: cluster index 3.9', 'Match Donor: 3-way consolidation optimum', 'Approve: batched at cluster level', 'Book Van: milk-run', 'Chargeback: proportional per donor'],
+  },
+  {
+    id: 'ST-004', agentId: 'store-transfer', bucket: 'at-risk', storeId: 'DOH-012', storeName: 'Villaggio Mall — Doha', country: 'Qatar', category: 'Grocery', department: 'Chilled Dairy', severity: 'medium', status: 'monitoring',
+    metricLabel: 'Cold-Chain IST Feasibility', metricValue: 'Blocked', threshold: 'Reefer available', confidence: 0.82, estimatedImpact: 9000,
+    recommendedOwner: 'Layla F. — Fresh Cat. Lead', dueIn: '4h',
+    recommendedAction: 'Hold IST request; route to Autonomous Inventory for direct-to-store PO. Reason: no reefer van in cluster before expiry window.',
+    reason: 'Guardrail correctly blocked ambient-van transfer of chilled SKU; escalation path enforced instead of forcing a policy exception.',
+    evidence: ['SKU 7842-LBN-500 requires ≤ 4°C', 'DOH cluster reefer van next slot 22:00 (too late)', 'Expiry margin 38h', 'PO lead time from Al Rawabi: 12h'],
+    sources: ['Cold-Chain SOP', 'Van Manifest', 'Vendor Lead-time Master'],
+    actionTrace: ['Detect Cluster Imbalance', 'Match Donor: found but reefer unavailable', 'Policy Check: BLOCK ambient transfer', 'Escalate: hand-off to Autonomous Inventory', 'Notify: Fresh Cat Lead'],
+  },
+  {
+    id: 'ST-005', agentId: 'store-transfer', bucket: 'optimized', storeId: 'KWT-008', storeName: 'The Avenues — Phase IV', country: 'Kuwait', category: 'Jewellery', department: 'Damas Watches', severity: 'low', status: 'monitoring',
+    metricLabel: 'IST Fill Rate (30d)', metricValue: '98%', threshold: '≥ 95%', confidence: 0.93, estimatedImpact: 3000,
+    recommendedOwner: 'Ahmad R. — Store Manager', dueIn: '24h',
+    recommendedAction: 'Maintain; weekly cluster balance review Sunday 08:00.',
+    reason: 'High-value transfers running clean with dual-sign chain-of-custody and armoured-carrier bookings honoured.',
+    evidence: ['30d IST fill 98%', 'Zero chain-of-custody exceptions', 'Armoured-carrier SLA 100%', 'Chargeback disputes: 0'],
+    sources: ['IST Ledger', 'Brinks Manifest', 'Finance Journal'],
+    actionTrace: ['Monitor cluster', 'No imbalance flagged', 'No action', 'Weekly digest', 'Audit clean'],
+  },
 ];
 
 export const storeOpsConnectors = [
