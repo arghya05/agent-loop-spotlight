@@ -11,7 +11,8 @@ export type StoreAgentId =
   | 'promo-execution'
   | 'omnichannel-fulfilment'
   | 'associate-copilot'
-  | 'local-demand';
+  | 'local-demand'
+  | 'store-transfer';
 
 export type StoreBucketId = 'breached' | 'at-risk' | 'optimized';
 
@@ -202,6 +203,16 @@ export const storeOpsAgents: StoreOpsAgent[] = [
     description: 'Consumes the network forecast from Demand Sensing and layers store-specific weather, holidays, school calendars, nearby events, and competitor activity on top. Does NOT rebuild the base forecast — it activates it locally.',
     primaryKpi: 'Local Sales Lift',
     workflow: ['Ingest External Signals', 'Correlate to Store', 'Activate Local Play', 'Brief Store Manager', 'Measure Lift'],
+  },
+  {
+    id: 'store-transfer',
+    label: 'Store-to-Store Transfer Agent',
+    shortLabel: 'Store Transfer',
+    icon: 'ArrowLeftRight',
+    mission: 'Owns the execution of inter-store transfers inside a cluster — moves stock from a surplus sister store to a deficit store before it becomes a network rebalancing problem.',
+    description: 'Picks up when Store Replenishment reports an empty backroom but a neighbour store in the same cluster is over-stocked. Runs the request → approval → van slot → pick/pack → receiving → inter-store chargeback workflow. Distinct from supply-chain Inventory Rebalancing, which decides cross-region DC↔DC or cross-cluster moves.',
+    primaryKpi: 'Transfer Fill Rate',
+    workflow: ['Detect Cluster Imbalance', 'Match Donor Store', 'Approve Transfer', 'Book Van Slot', 'Confirm Receipt & Chargeback'],
   },
 ];
 
