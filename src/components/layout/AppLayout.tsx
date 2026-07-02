@@ -37,6 +37,7 @@ import {
   Rocket,
   DollarSign,
   Gavel,
+  ArrowLeftRight,
   LucideIcon,
 } from 'lucide-react';
 
@@ -138,6 +139,7 @@ const storeIconMap = {
   Map,
   HeartHandshake,
   CalendarClock,
+  ArrowLeftRight,
 };
 
 const storeAgentTabs = [
