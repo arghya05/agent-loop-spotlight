@@ -139,6 +139,7 @@ const storeIconMap = {
   Map,
   HeartHandshake,
   CalendarClock,
+  ArrowLeftRight,
 };
 
 const storeAgentTabs = [
