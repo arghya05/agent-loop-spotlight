@@ -45,6 +45,7 @@ import { StoreOpsBucketPage } from "@/pages/storeOps/StoreOpsBucketPage";
 import { StoreOpsSignalDetailPage } from "@/pages/storeOps/StoreOpsSignalDetailPage";
 import { StoreOpsUtilityPage } from "@/pages/storeOps/StoreOpsUtilityPage";
 import Login from "./pages/Login";
+import WorkspaceSelect from "./pages/WorkspaceSelect";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -67,6 +68,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/workspaces" element={<ProtectedRoute><WorkspaceSelect /></ProtectedRoute>} />
           <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
             <Route path="/landing" element={<LandingPage />} />
             <Route path="/bucket/:bucketId" element={<BucketPage />} />
