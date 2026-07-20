@@ -170,15 +170,15 @@ const areas: AgentArea[] = [
 ];
 
 const statusStyles: Record<AgentArea['status'], string> = {
-  active: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-  beta: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-  'coming-soon': 'bg-muted text-muted-foreground border-border',
+  active: 'bg-emerald-500 text-white',
+  beta: 'bg-orange-500 text-white',
+  'coming-soon': 'bg-zinc-700 text-zinc-300',
 };
 
 const statusLabel: Record<AgentArea['status'], string> = {
   active: 'Active',
   beta: 'Beta',
-  'coming-soon': 'Coming Soon',
+  'coming-soon': 'Soon',
 };
 
 export const SuperAgentsHub = () => {
@@ -199,22 +199,22 @@ export const SuperAgentsHub = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <header className="border-b border-border/40 backdrop-blur-sm bg-background/30">
+      <header className="border-b border-white/5 bg-black/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <AlgonomyLogo className="h-7" />
-            <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
+            <div className="hidden sm:flex items-center gap-2 text-xs text-zinc-500">
+              <span className="w-1 h-1 rounded-full bg-zinc-600" />
               <span>Super Agents Platform</span>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground hidden sm:inline">
-              Signed in as <span className="text-foreground font-medium">{user}</span>
+            <span className="text-xs text-zinc-500 hidden sm:inline">
+              Signed in as <span className="text-white font-medium">{user}</span>
             </span>
-            <Button variant="ghost" size="sm" onClick={handleLogout}>
+            <Button variant="ghost" size="sm" onClick={handleLogout} className="text-zinc-400 hover:text-white hover:bg-white/5">
               <LogOut className="w-4 h-4 mr-1.5" /> Sign out
             </Button>
           </div>
@@ -222,22 +222,22 @@ export const SuperAgentsHub = () => {
       </header>
 
       {/* Hero */}
-      <section className="max-w-7xl mx-auto px-6 pt-12 pb-6 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-4">
-          <Sparkles className="w-3.5 h-3.5" />
+      <section className="max-w-7xl mx-auto px-6 pt-14 pb-8 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-xs font-medium mb-5">
+          <Sparkles className="w-3.5 h-3.5 text-purple-400" />
           Algonomy Super Agents
         </div>
-        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-foreground">
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
           Pick an agent area to enter
         </h1>
-        <p className="mt-3 text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
+        <p className="mt-3 text-sm sm:text-base text-zinc-500 max-w-2xl mx-auto">
           Each area is a suite of specialized agents. Enter Supply Chain or Store Ops today — more agent areas are coming online.
         </p>
       </section>
 
       {/* Grid */}
-      <section className="max-w-7xl mx-auto px-6 pb-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <section className="max-w-7xl mx-auto px-6 pb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {areas.map((area) => {
             const Icon = area.icon;
             const clickable = area.status !== 'coming-soon' && !!area.path;
@@ -247,17 +247,17 @@ export const SuperAgentsHub = () => {
                 onClick={() => handleOpen(area)}
                 disabled={!clickable}
                 className={cn(
-                  'group relative text-left rounded-2xl border border-border/60 bg-card/40 backdrop-blur-sm p-5 transition-all',
+                  'group relative text-left rounded-2xl border border-white/5 bg-[#0d0d10] p-6 transition-all min-h-[260px] flex flex-col',
                   clickable
-                    ? 'hover:border-primary/50 hover:bg-card/70 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/5 cursor-pointer'
-                    : 'opacity-75 cursor-not-allowed',
+                    ? 'hover:border-white/20 hover:bg-[#131318] cursor-pointer'
+                    : 'opacity-70 cursor-not-allowed',
                 )}
               >
                 {/* Status pill */}
-                <div className="absolute top-4 right-4">
+                <div className="absolute top-5 right-5">
                   <span
                     className={cn(
-                      'text-[10px] font-semibold px-2 py-0.5 rounded-full border',
+                      'text-[11px] font-semibold px-2.5 py-0.5 rounded-full',
                       statusStyles[area.status],
                     )}
                   >
@@ -265,36 +265,33 @@ export const SuperAgentsHub = () => {
                   </span>
                 </div>
 
-                {/* Icon */}
-                <div
-                  className={cn(
-                    'w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center mb-4 border border-border/40',
-                    area.gradient,
-                  )}
-                >
-                  <Icon className="w-6 h-6 text-foreground" />
+                {/* Icon — purple gradient tile */}
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-5 shadow-lg shadow-purple-900/30">
+                  <Icon className="w-6 h-6 text-white" strokeWidth={2} />
                 </div>
 
-                {/* Title + tagline */}
-                <h3 className="text-base font-semibold text-foreground">{area.title}</h3>
-                <p className="text-[11px] text-primary/80 mt-0.5 font-medium">{area.tagline}</p>
+                {/* Title */}
+                <h3 className={cn(
+                  'text-lg font-semibold transition-colors',
+                  clickable ? 'text-white group-hover:text-sky-400' : 'text-white',
+                )}>
+                  {area.title}
+                </h3>
 
                 {/* Description */}
-                <p className="mt-2.5 text-xs text-muted-foreground leading-relaxed line-clamp-4">
+                <p className="mt-2 text-sm text-zinc-500 leading-relaxed line-clamp-5">
                   {area.description}
                 </p>
 
                 {/* Footer */}
-                <div className="mt-4 pt-3 border-t border-border/40 flex items-center justify-between">
-                  <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                <div className="mt-auto pt-4 flex items-center justify-between text-[11px]">
+                  <span className="text-zinc-600 uppercase tracking-wide">
                     {area.agentCount ?? '—'} agents
                   </span>
-                  {clickable ? (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-primary group-hover:gap-2 transition-all">
+                  {clickable && (
+                    <span className="inline-flex items-center gap-1 font-medium text-sky-400 group-hover:gap-2 transition-all">
                       Enter <ArrowRight className="w-3.5 h-3.5" />
                     </span>
-                  ) : (
-                    <span className="text-[10px] text-muted-foreground">On the roadmap</span>
                   )}
                 </div>
               </button>
@@ -302,7 +299,7 @@ export const SuperAgentsHub = () => {
           })}
         </div>
 
-        <p className="mt-8 text-center text-xs text-muted-foreground">
+        <p className="mt-10 text-center text-xs text-zinc-600">
           More agent areas being built. Have a suggestion? Ask the team to add it to the roadmap.
         </p>
       </section>
@@ -311,3 +308,4 @@ export const SuperAgentsHub = () => {
 };
 
 export default SuperAgentsHub;
+
