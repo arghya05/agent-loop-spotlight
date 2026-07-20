@@ -227,46 +227,27 @@ export const AppLayout = () => {
   return (
     <div className="min-h-screen bg-background">
       <AppTopBar />
-      
-      {/* Workspace + Agent Tabs Bar */}
-      <div className="fixed top-14 left-0 right-0 z-40 h-16 bg-muted/30 border-b border-border px-4 py-1.5 backdrop-blur-sm">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-1 rounded-lg bg-background/70 border border-border p-0.5">
-            {[
-              { id: 'supply-chain' as const, label: 'Supply Chain Agents', icon: Truck },
-              { id: 'store-ops' as const, label: 'Store Ops Agents', icon: Store },
-            ].map((workspace) => {
-              const Icon = workspace.icon;
-              const isActive = activeWorkspace === workspace.id;
 
-              return (
-                <button
-                  key={workspace.id}
-                  onClick={() => handleWorkspaceChange(workspace.id)}
-                  className={cn(
-                    "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all whitespace-nowrap",
-                    isActive ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  )}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{workspace.label}</span>
-                </button>
-              );
-            })}
-          </div>
+      {/* Agent Tabs Bar (workspace is chosen on the post-login screen) */}
+      <div className="fixed top-14 left-0 right-0 z-40 h-11 bg-muted/30 border-b border-border px-4 flex items-center gap-2 backdrop-blur-sm">
+        <button
+          onClick={() => navigate('/workspaces')}
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold text-muted-foreground hover:bg-muted hover:text-foreground transition-colors whitespace-nowrap flex-shrink-0"
+          title="Change workspace"
+        >
+          {activeWorkspace === 'store-ops' ? <Store className="w-3.5 h-3.5" /> : <Truck className="w-3.5 h-3.5" />}
+          <span>{activeWorkspace === 'store-ops' ? 'Store Ops' : 'Supply Chain'}</span>
+          <span className="text-muted-foreground/60">·</span>
+          <span className="text-primary">Change</span>
+        </button>
 
-          {/* Active Agent Indicator */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-status-success/10 text-status-success text-[10px] font-medium">
-            <Zap className="w-3 h-3" />
-            <span>Active</span>
-          </div>
-        </div>
+        <div className="h-5 w-px bg-border flex-shrink-0" />
 
-        <div className="mt-1 flex items-center gap-1 overflow-x-auto scrollbar-thin">
+        <div className="flex items-center gap-1 overflow-x-auto scrollbar-thin flex-1">
           {(activeWorkspace === 'store-ops' ? storeAgentTabs : agentTabs).map((tab) => {
             const Icon = tab.icon;
             const isActive = activeAgent === tab.id;
-            
+
             return (
               <button
                 key={tab.id}
@@ -274,9 +255,9 @@ export const AppLayout = () => {
                 disabled={!tab.active}
                 className={cn(
                   "flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all whitespace-nowrap",
-                  isActive 
-                    ? "bg-primary text-primary-foreground shadow-sm" 
-                    : tab.active 
+                  isActive
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : tab.active
                       ? "text-foreground/80 hover:bg-muted hover:text-foreground"
                       : "text-muted-foreground/40 cursor-not-allowed"
                 )}
@@ -294,13 +275,13 @@ export const AppLayout = () => {
         </div>
       </div>
 
-      <AppSidebar 
-        collapsed={sidebarCollapsed} 
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} 
+      <AppSidebar
+        collapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
-      <main 
+      <main
         className={cn(
-          "pt-[120px] pb-16 min-h-screen transition-all duration-300",
+          "pt-[100px] pb-16 min-h-screen transition-all duration-300",
           sidebarCollapsed ? "pl-16" : "pl-56"
         )}
       >
