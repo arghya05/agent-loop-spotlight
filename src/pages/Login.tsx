@@ -42,7 +42,7 @@ const Login = () => {
     sessionStorage.removeItem('algonomy_workspace');
     
     setIsLoading(false);
-    navigate('/workspaces');
+    navigate('/landing');
   };
 
   return (
