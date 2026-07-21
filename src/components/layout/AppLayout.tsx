@@ -229,37 +229,26 @@ export const AppLayout = () => {
     <div className="min-h-screen bg-background">
       <AppTopBar />
       
-      {/* Workspace + Agent Tabs Bar */}
+      {/* Agent Tabs Bar */}
       <div className="fixed top-14 left-0 right-0 z-40 h-16 bg-muted/30 border-b border-border px-4 py-1.5 backdrop-blur-sm">
         <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-1 rounded-lg bg-background/70 border border-border p-0.5">
-            {[
-              { id: 'supply-chain' as const, label: 'Supply Chain Agents', icon: Truck },
-              { id: 'store-ops' as const, label: 'Store Ops Agents', icon: Store },
-            ].map((workspace) => {
-              const Icon = workspace.icon;
-              const isActive = activeWorkspace === workspace.id;
+          <button
+            onClick={() => navigate('/hub')}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Super Agents</span>
+          </button>
 
-              return (
-                <button
-                  key={workspace.id}
-                  onClick={() => handleWorkspaceChange(workspace.id)}
-                  className={cn(
-                    "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all whitespace-nowrap",
-                    isActive ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  )}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{workspace.label}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Agent Indicator */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-status-success/10 text-status-success text-[10px] font-medium">
-            <Zap className="w-3 h-3" />
-            <span>Active</span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-background/70 border border-border text-[11px] font-semibold text-foreground">
+              {activeWorkspace === 'store-ops' ? <Store className="w-3.5 h-3.5" /> : <Truck className="w-3.5 h-3.5" />}
+              <span>{activeWorkspace === 'store-ops' ? 'Store Ops Agents' : 'Supply Chain Agents'}</span>
+            </div>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-status-success/10 text-status-success text-[10px] font-medium">
+              <Zap className="w-3 h-3" />
+              <span>Active</span>
+            </div>
           </div>
         </div>
 
