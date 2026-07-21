@@ -7,7 +7,7 @@ import { BottomDrawer } from '@/components/BottomDrawer';
 import { Badge } from '@/components/ui/badge';
 import { storeOpsAgents } from '@/data/storeOps';
 import { supplyChainAgents } from '@/data/supplyChainAgents';
-import { 
+import {
   TrendingUp, 
   Truck, 
   Factory,
@@ -38,6 +38,7 @@ import {
   DollarSign,
   Gavel,
   ArrowLeftRight,
+  ArrowLeft,
   LucideIcon,
 } from 'lucide-react';
 
