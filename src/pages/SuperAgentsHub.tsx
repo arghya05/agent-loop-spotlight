@@ -66,7 +66,8 @@ const areas: AgentArea[] = [
       'Personalization, loyalty intelligence, next-best-offer, churn prevention, journey orchestration, and CX copilot across web, app, email, and store.',
     icon: Sparkles,
     gradient: 'from-fuchsia-500/20 to-pink-500/20',
-    status: 'coming-soon',
+    status: 'active',
+    externalUrl: 'https://lifecycle-analyzer.store/auth',
     agentCount: 8,
   },
   {
