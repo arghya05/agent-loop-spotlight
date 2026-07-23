@@ -47,6 +47,7 @@ import { StoreOpsUtilityPage } from "@/pages/storeOps/StoreOpsUtilityPage";
 import Login from "./pages/Login";
 import { SuperAgentsHub } from "./pages/SuperAgentsHub";
 import { SupplyChainAgentPage } from "./pages/SupplyChainAgentPage";
+import { SupplyChainBucketPage } from "./pages/SupplyChainBucketPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
