@@ -342,7 +342,7 @@ export const StoreOpsSignalDetailPage = () => {
             </CardHeader>
             <CardContent>
               {isComplete ? (
-                <RootCauseSummary signal={signal} domainLabel="Store Ops agent" />
+                <RootCauseSummary signal={{ ...signal, entity: `${signal.department} · ${signal.category}`, location: `${signal.storeName} · ${signal.country}` }} domainLabel="Store Ops agent" />
               ) : (
                 <div className="flex items-center justify-center h-48 text-muted-foreground">
                   <p className="text-sm">Run investigation to see analysis</p>
