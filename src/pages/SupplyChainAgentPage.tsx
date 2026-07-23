@@ -1,5 +1,5 @@
-import { useMemo, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState, useRef } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -40,6 +40,7 @@ const fmtCurrency = (v: number) =>
 export const SupplyChainAgentPage = () => {
   const { agentId } = useParams();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const agent = supplyChainAgents.find((a) => a.id === agentId);
   const signals = useMemo(
     () => supplyChainSignals.filter((s) => s.agentId === agentId),
@@ -63,6 +64,23 @@ export const SupplyChainAgentPage = () => {
     ? Math.round((signals.reduce((a, s) => a + s.confidence, 0) / signals.length) * 100)
     : 0;
   const criticalCount = signals.filter((s) => s.severity === 'critical' || s.severity === 'high').length;
+
+  useEffect(() => {
+    const signalId = searchParams.get('signal');
+    if (!signalId) return;
+
+    const signal = signals.find((s) => s.id === signalId);
+    if (signal) {
+      setSelected(signal);
+    }
+  }, [searchParams, signals]);
+
+  const closeReview = () => {
+    setSelected(null);
+    if (searchParams.has('signal')) {
+      setSearchParams({}, { replace: true });
+    }
+  };
 
   if (!agent) {
     return (
@@ -326,7 +344,7 @@ export const SupplyChainAgentPage = () => {
       <p className="text-xs text-muted-foreground text-right">Last signal pull: {new Date().toLocaleString()}</p>
 
       {/* Detail dialog (unchanged) */}
-      <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
+      <Dialog open={!!selected} onOpenChange={(o) => !o && closeReview()}>
         <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
           {selected && (
             <>
@@ -390,13 +408,13 @@ export const SupplyChainAgentPage = () => {
               </div>
 
               <div className="flex gap-2 mt-3">
-                <Button size="sm" onClick={() => { toast.success('Action executed and logged to audit trail'); setSelected(null); }}>
+                <Button size="sm" onClick={() => { toast.success('Action executed and logged to audit trail'); closeReview(); }}>
                   Fix Now
                 </Button>
                 <Button size="sm" variant="outline" onClick={() => { toast.info('Investigation opened'); }}>
                   Investigate
                 </Button>
-                <Button size="sm" variant="ghost" onClick={() => setSelected(null)}>Close</Button>
+                <Button size="sm" variant="ghost" onClick={closeReview}>Close</Button>
               </div>
             </>
           )}
