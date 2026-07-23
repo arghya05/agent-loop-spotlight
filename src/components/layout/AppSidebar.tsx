@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { useGovernanceStore } from '@/store/governanceStore';
 import { useAgentContext } from '@/hooks/useAgentContext';
 import { storeOpsAgents } from '@/data/storeOps';
+import { supplyChainAgents } from '@/data/supplyChainAgents';
 import {
   LayoutDashboard,
   Box,
@@ -50,6 +51,12 @@ import {
   Leaf,
   Headset,
   CloudSun
+  , Radar,
+  Shuffle,
+  Route,
+  PackageCheck,
+  PiggyBank,
+  MessageSquare
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -191,6 +198,54 @@ const productNavItems = [
   { label: 'Admin', path: '/product/admin/agents', icon: Shield, description: 'Agent management' }
 ];
 
+const supplyIconMap = {
+  Radar,
+  Shuffle,
+  Warehouse,
+  Route,
+  PackageCheck,
+  AlertTriangle,
+  PiggyBank,
+  MessageSquare,
+};
+
+const existingSupplyIds = new Set([
+  'supplier-performance',
+  'dispatch-readiness',
+  'supplier-onboarding',
+  'invoice-cash-ops',
+  'contract-lifecycle',
+  'pricing-intelligence',
+  'autonomous-inventory',
+  'product-onboarding',
+]);
+
+const extraSupplyAgents = supplyChainAgents.filter((agent) => !existingSupplyIds.has(agent.id));
+
+const getSupplyChainNavItems = (pathname: string) => {
+  const activeAgent = extraSupplyAgents.find((agent) => pathname.startsWith(`/supply-chain/${agent.id}`));
+
+  if (!activeAgent) {
+    return extraSupplyAgents.map((agent) => ({
+      label: agent.shortLabel,
+      path: `/supply-chain/${agent.id}`,
+      icon: supplyIconMap[agent.icon as keyof typeof supplyIconMap] || Package,
+      description: agent.primaryKpi,
+    }));
+  }
+
+  return [
+    { label: `${activeAgent.shortLabel} Home`, path: `/supply-chain/${activeAgent.id}`, icon: supplyIconMap[activeAgent.icon as keyof typeof supplyIconMap] || Package, description: activeAgent.primaryKpi },
+    { label: 'Breached', path: `/supply-chain/${activeAgent.id}/bucket/breached`, icon: AlertTriangle, description: 'Threshold crossed' },
+    { label: 'At Risk', path: `/supply-chain/${activeAgent.id}/bucket/at-risk`, icon: Zap, description: 'Predicted breach' },
+    { label: 'Optimized', path: `/supply-chain/${activeAgent.id}/bucket/optimized`, icon: CheckCircle2, description: 'Healthy signals' },
+    { label: 'Analytics', path: `/supply-chain/${activeAgent.id}/analytics`, icon: BarChart3, description: 'Reports & exports' },
+    { label: 'Connectors', path: `/supply-chain/${activeAgent.id}/connectors`, icon: Plug, description: 'Operational data feeds' },
+    { label: 'Settings', path: `/supply-chain/${activeAgent.id}/settings`, icon: Settings, description: 'Agent guardrails' },
+    { label: 'Admin', path: `/supply-chain/${activeAgent.id}/admin/agents`, icon: Shield, description: 'Agent management' },
+  ];
+};
+
 const storeIconMap = {
   Store,
   Layers,
@@ -245,7 +300,7 @@ export const AppSidebar = ({ collapsed, onToggle }: SidebarProps) => {
   const { getAttentionQueue } = useGovernanceStore();
   const attentionCount = getAttentionQueue().length;
   
-  const navItems = agentContext === 'store-ops' ? getStoreOpsNavItems(location.pathname) : agentContext === 'dispatch-readiness' ? dispatchNavItems : agentContext === 'supplier-onboarding' ? onboardingNavItems : agentContext === 'invoice-cash-ops' ? invoiceNavItems : agentContext === 'contract-lifecycle' ? contractNavItems : agentContext === 'pricing-intelligence' ? pricingNavItems : agentContext === 'autonomous-inventory' ? inventoryNavItems : agentContext === 'product-onboarding' ? productNavItems : supplierNavItems;
+  const navItems = agentContext === 'store-ops' ? getStoreOpsNavItems(location.pathname) : agentContext === 'supply-chain' ? getSupplyChainNavItems(location.pathname) : agentContext === 'dispatch-readiness' ? dispatchNavItems : agentContext === 'supplier-onboarding' ? onboardingNavItems : agentContext === 'invoice-cash-ops' ? invoiceNavItems : agentContext === 'contract-lifecycle' ? contractNavItems : agentContext === 'pricing-intelligence' ? pricingNavItems : agentContext === 'autonomous-inventory' ? inventoryNavItems : agentContext === 'product-onboarding' ? productNavItems : supplierNavItems;
   
   const isActive = (path: string) => {
     if (path === '/landing') return location.pathname === '/landing' || location.pathname === '/';

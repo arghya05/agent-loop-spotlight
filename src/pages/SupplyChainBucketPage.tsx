@@ -126,7 +126,7 @@ export const SupplyChainBucketPage = () => {
                         size="sm"
                         variant="default"
                         className="h-7 text-xs"
-                        onClick={() => navigate(`/supply-chain/${agentId}?signal=${s.id}`)}
+                        onClick={() => navigate(`/supply-chain/${agentId}/signal/${s.id}`)}
                       >
                         Review <ExternalLink className="w-3 h-3 ml-1" />
                       </Button>
