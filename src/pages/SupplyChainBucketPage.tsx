@@ -9,7 +9,8 @@ import {
   supplyBucketMeta,
   SupplyBucketId,
 } from '@/data/supplyChainSignals';
-import { ArrowLeft, ExternalLink, MapPin, Clock, DollarSign, AlertTriangle, TrendingDown, CheckCircle2 } from 'lucide-react';
+import { getAgentBucketNarrative } from '@/data/supplyChainAgentBuckets';
+import { ArrowLeft, ExternalLink, MapPin, Clock, DollarSign, AlertTriangle, TrendingDown, CheckCircle2, Target, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const bucketIcon: Record<SupplyBucketId, typeof AlertTriangle> = {
