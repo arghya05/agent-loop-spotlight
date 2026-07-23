@@ -188,6 +188,10 @@ export const SuperAgentsHub = () => {
   const user = sessionStorage.getItem('algonomy_user') || 'there';
 
   const handleOpen = (area: AgentArea) => {
+    if (area.externalUrl) {
+      window.open(area.externalUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
     if (area.status === 'coming-soon' || !area.path) return;
     if (area.id === 'supply-chain') sessionStorage.setItem('algonomy_workspace', 'supply-chain');
     if (area.id === 'store-ops') sessionStorage.setItem('algonomy_workspace', 'store-ops');
