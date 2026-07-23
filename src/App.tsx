@@ -48,6 +48,8 @@ import Login from "./pages/Login";
 import { SuperAgentsHub } from "./pages/SuperAgentsHub";
 import { SupplyChainAgentPage } from "./pages/SupplyChainAgentPage";
 import { SupplyChainBucketPage } from "./pages/SupplyChainBucketPage";
+import { SupplyChainSignalDetailPage } from "./pages/SupplyChainSignalDetailPage";
+import { SupplyChainUtilityPage } from "./pages/SupplyChainUtilityPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -147,6 +149,11 @@ const App = () => (
             {/* Extra Supply Chain Agent Routes */}
             <Route path="/supply-chain/:agentId" element={<SupplyChainAgentPage />} />
             <Route path="/supply-chain/:agentId/bucket/:bucketId" element={<SupplyChainBucketPage />} />
+            <Route path="/supply-chain/:agentId/signal/:signalId" element={<SupplyChainSignalDetailPage />} />
+            <Route path="/supply-chain/:agentId/analytics" element={<SupplyChainUtilityPage type="analytics" />} />
+            <Route path="/supply-chain/:agentId/connectors" element={<SupplyChainUtilityPage type="connectors" />} />
+            <Route path="/supply-chain/:agentId/settings" element={<SupplyChainUtilityPage type="settings" />} />
+            <Route path="/supply-chain/:agentId/admin/agents" element={<SupplyChainUtilityPage type="admin" />} />
             {/* Store Ops Agent Routes */}
             <Route path="/store-ops" element={<StoreOpsLandingPage />} />
             <Route path="/store-ops/landing" element={<StoreOpsLandingPage />} />

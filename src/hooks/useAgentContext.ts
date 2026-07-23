@@ -1,11 +1,12 @@
 import { useLocation } from 'react-router-dom';
 
-export type AgentContext = 'supplier-performance' | 'dispatch-readiness' | 'supplier-onboarding' | 'invoice-cash-ops' | 'contract-lifecycle' | 'pricing-intelligence' | 'autonomous-inventory' | 'product-onboarding' | 'store-ops';
+export type AgentContext = 'supplier-performance' | 'dispatch-readiness' | 'supplier-onboarding' | 'invoice-cash-ops' | 'contract-lifecycle' | 'pricing-intelligence' | 'autonomous-inventory' | 'product-onboarding' | 'supply-chain' | 'store-ops';
 
 export const useAgentContext = (): AgentContext => {
   const location = useLocation();
   
   if (location.pathname.startsWith('/store-ops')) return 'store-ops';
+  if (location.pathname.startsWith('/supply-chain')) return 'supply-chain';
   if (location.pathname.startsWith('/dispatch')) return 'dispatch-readiness';
   if (location.pathname.startsWith('/onboarding')) return 'supplier-onboarding';
   if (location.pathname.startsWith('/invoice')) return 'invoice-cash-ops';
@@ -25,6 +26,7 @@ export const getAgentLabel = (context: AgentContext): string => {
   if (context === 'pricing-intelligence') return 'Pricing Intelligence Agent';
   if (context === 'autonomous-inventory') return 'Autonomous Inventory Agent';
   if (context === 'product-onboarding') return 'Product Onboarding Agent';
+  if (context === 'supply-chain') return 'Supply Chain Agent';
   if (context === 'store-ops') return 'Store Ops Agent';
   return 'Supplier Performance Agent';
 };

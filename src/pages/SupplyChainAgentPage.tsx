@@ -328,7 +328,7 @@ export const SupplyChainAgentPage = () => {
                         {s.estimatedImpact > 0 ? fmtCurrency(s.estimatedImpact) : '—'}
                       </td>
                       <td className="py-2.5 px-3">
-                        <Button size="sm" variant="default" className="h-7 text-xs" onClick={() => setSelected(s)}>
+                        <Button size="sm" variant="default" className="h-7 text-xs" onClick={() => navigate(`/supply-chain/${agentId}/signal/${s.id}`)}>
                           Review <ExternalLink className="w-3 h-3 ml-1" />
                         </Button>
                       </td>
