@@ -34,67 +34,99 @@ export const SupplyChainUtilityPage = ({ type }: SupplyChainUtilityPageProps) =>
 };
 
 const SupplyChainAnalytics = ({ agentId, agentLabel }: { agentId: string; agentLabel: string }) => {
+  const analytics = getAgentAnalytics(agentId);
   const signals = supplyChainSignals.filter((signal) => signal.agentId === agentId);
-  const bucketData = [
-    { name: 'Breached', value: signals.filter((signal) => signal.bucket === 'breached').length, color: 'hsl(var(--status-danger))' },
-    { name: 'At Risk', value: signals.filter((signal) => signal.bucket === 'at-risk').length, color: 'hsl(var(--status-warning))' },
-    { name: 'Optimized', value: signals.filter((signal) => signal.bucket === 'optimized').length, color: 'hsl(var(--status-success))' },
-  ];
-  const severityData = ['critical', 'high', 'medium', 'low'].map((severity) => ({
-    severity,
-    count: signals.filter((signal) => signal.severity === severity).length,
-  }));
-  const trend = [
-    { week: 'W1', health: 74, exceptions: 17 },
-    { week: 'W2', health: 79, exceptions: 13 },
-    { week: 'W3', health: 83, exceptions: 10 },
-    { week: 'W4', health: 88, exceptions: 7 },
-  ];
+
+  if (!analytics) {
+    const bucketData = [
+      { name: 'Breached', value: signals.filter((s) => s.bucket === 'breached').length, color: 'hsl(var(--status-danger))' },
+      { name: 'At Risk', value: signals.filter((s) => s.bucket === 'at-risk').length, color: 'hsl(var(--status-warning))' },
+      { name: 'Optimized', value: signals.filter((s) => s.bucket === 'optimized').length, color: 'hsl(var(--status-success))' },
+    ];
+    return (
+      <div className="p-6 space-y-6">
+        <div className="flex items-center gap-2 mb-1"><BarChart3 className="w-5 h-5 text-primary" /><h1 className="text-2xl font-bold text-foreground">{agentLabel} Analytics</h1></div>
+        <div className="grid grid-cols-3 gap-4">
+          {bucketData.map((item) => (<Card key={item.name} className="card-elevated"><CardContent className="pt-4"><p className="text-xs text-muted-foreground">{item.name}</p><p className="text-2xl font-bold mt-1">{item.value}</p></CardContent></Card>))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <div className="flex items-center gap-2 mb-1"><BarChart3 className="w-5 h-5 text-primary" /><h1 className="text-2xl font-bold text-foreground">{agentLabel} Analytics</h1></div>
-          <p className="text-sm text-muted-foreground">Signal mix, severity exposure, and recovery trend for this supply-chain agent</p>
+          <div className="flex items-center gap-2 mb-1"><BarChart3 className="w-5 h-5 text-primary" /><h1 className="text-2xl font-bold text-foreground">{agentLabel} · Analytics</h1></div>
+          <p className="text-sm text-muted-foreground">{analytics.headline}</p>
         </div>
-        <Button variant="outline" onClick={() => toast.success('Supply-chain analytics report exported')}><Download className="w-4 h-4 mr-2" />Export Report</Button>
+        <Button variant="outline" onClick={() => toast.success(`${agentLabel} analytics report exported`)}><Download className="w-4 h-4 mr-2" />Export Report</Button>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
-        {[
-          { label: 'Agent Health', value: '88%' },
-          { label: 'Breached', value: bucketData[0].value },
-          { label: 'At Risk', value: bucketData[1].value },
-          { label: 'Impact Protected', value: `AED ${(signals.reduce((sum, signal) => sum + signal.estimatedImpact, 0) / 1000).toFixed(0)}K` },
-        ].map((item) => (
-          <Card key={item.label} className="card-elevated"><CardContent className="pt-4"><p className="text-xs text-muted-foreground">{item.label}</p><p className="text-2xl font-bold mt-1">{item.value}</p></CardContent></Card>
+        {analytics.kpis.map((kpi) => (
+          <Card key={kpi.label} className="card-elevated">
+            <CardContent className="pt-4">
+              <p className="text-xs text-muted-foreground">{kpi.label}</p>
+              <p className="text-2xl font-bold mt-1">{kpi.value}</p>
+              <p className={cn('text-xs mt-1', kpi.positive ? 'text-status-success' : 'text-status-danger')}>{kpi.delta}</p>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
       <div className="grid grid-cols-2 gap-6">
-        <Card className="card-elevated">
-          <CardHeader><CardTitle className="text-sm">Signal Mix</CardTitle></CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart><Pie data={bucketData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={88} label>{bucketData.map((entry) => <Cell key={entry.name} fill={entry.color} />)}</Pie><Tooltip /><Legend /></PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-        <Card className="card-elevated">
-          <CardHeader><CardTitle className="text-sm">Severity Mix</CardTitle></CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={severityData}><CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" /><XAxis dataKey="severity" tick={{ fontSize: 12 }} /><YAxis allowDecimals={false} tick={{ fontSize: 12 }} /><Tooltip /><Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} /></BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
         <Card className="card-elevated col-span-2">
-          <CardHeader><CardTitle className="text-sm">Recovery Trend</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-sm">{analytics.trend.title}</CardTitle><p className="text-xs text-muted-foreground">{analytics.trend.subtitle}</p></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={280}>
+              <LineChart data={analytics.trend.data}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey={analytics.trend.xKey} tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Legend />
+                {analytics.trend.series.map((series) => (
+                  <Line key={series.key} type="monotone" dataKey={series.key} stroke={series.color} strokeWidth={2} name={series.label} dot={false} />
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm">{analytics.distribution.title}</CardTitle><p className="text-xs text-muted-foreground">{analytics.distribution.subtitle}</p></CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={260}>
-              <LineChart data={trend}><CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" /><XAxis dataKey="week" tick={{ fontSize: 12 }} /><YAxis tick={{ fontSize: 12 }} /><Tooltip /><Legend /><Line type="monotone" dataKey="health" stroke="hsl(var(--primary))" strokeWidth={2} name="Health Score" /><Line type="monotone" dataKey="exceptions" stroke="hsl(var(--status-danger))" strokeWidth={2} name="Open Exceptions" /></LineChart>
+              {analytics.distribution.type === 'pie' ? (
+                <PieChart>
+                  <Pie data={analytics.distribution.data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label>
+                    {analytics.distribution.data.map((entry, index) => <Cell key={entry.name} fill={entry.color ?? `hsl(var(--primary) / ${1 - index * 0.15})`} />)}
+                  </Pie>
+                  <Tooltip /><Legend />
+                </PieChart>
+              ) : (
+                <BarChart data={analytics.distribution.data}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                  <YAxis tick={{ fontSize: 12 }} />
+                  <Tooltip />
+                  <Bar dataKey="value" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              )}
             </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="card-elevated">
+          <CardHeader><CardTitle className="text-sm">Operational highlights</CardTitle><p className="text-xs text-muted-foreground">Notable movements in the last cycle</p></CardHeader>
+          <CardContent className="space-y-3">
+            {analytics.highlights.map((highlight) => (
+              <div key={highlight.label} className="flex items-start justify-between gap-3 p-3 rounded-lg bg-muted/40">
+                <div className="flex-1"><p className="text-sm font-medium">{highlight.label}</p><p className="text-xs text-muted-foreground mt-0.5">{highlight.hint}</p></div>
+                <p className="text-sm font-bold text-primary whitespace-nowrap">{highlight.value}</p>
+              </div>
+            ))}
           </CardContent>
         </Card>
       </div>
