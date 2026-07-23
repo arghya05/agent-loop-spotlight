@@ -29,6 +29,7 @@ type AgentArea = {
   gradient: string;
   status: 'active' | 'beta' | 'coming-soon';
   path?: string;
+  externalUrl?: string;
   agentCount?: number;
 };
 
