@@ -88,7 +88,8 @@ const areas: AgentArea[] = [
       'Assortment planning, clustering, space & planogram optimization, category role definition, and lifecycle management.',
     icon: ShoppingBag,
     gradient: 'from-amber-500/20 to-yellow-500/20',
-    status: 'coming-soon',
+    status: 'active',
+    externalUrl: 'https://lifecycle-analyzer.com/',
     agentCount: 6,
   },
   {
