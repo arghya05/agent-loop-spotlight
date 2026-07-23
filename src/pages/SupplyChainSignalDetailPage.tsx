@@ -290,28 +290,10 @@ export const SupplyChainSignalDetailPage = () => {
 
         <div className="col-span-4">
           <Card className="card-elevated h-full">
-            <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Root Cause Analysis</CardTitle></CardHeader>
+            <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Root Cause · What & Why</CardTitle></CardHeader>
             <CardContent>
               {isComplete ? (
-                <div className="space-y-4">
-                  <div className="p-4 rounded-lg bg-muted/50 border border-border">
-                    <p className="text-sm font-medium mb-2">Primary Root Cause ({Math.round(signal.confidence * 100)}% confidence)</p>
-                    <p className="text-sm text-muted-foreground">{signal.reason}</p>
-                  </div>
-                  <div>
-                    <div className="flex items-center justify-between text-xs mb-2"><span className="text-muted-foreground">Agent confidence</span><span className="font-medium">{Math.round(signal.confidence * 100)}%</span></div>
-                    <Progress value={signal.confidence * 100} className="h-2" />
-                  </div>
-                  <div className="space-y-2 pt-2 border-t border-border">
-                    <p className="text-xs font-medium text-muted-foreground uppercase">Evidence Used</p>
-                    {signal.evidence.map((item) => (
-                      <div key={item} className="flex items-start gap-2 p-2 rounded bg-muted/30 text-sm">
-                        <CheckCircle2 className="w-4 h-4 text-status-success mt-0.5 flex-shrink-0" />
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <RootCauseSummary signal={signal} domainLabel="Supply Chain agent" />
               ) : (
                 <div className="flex items-center justify-center h-48 text-muted-foreground"><p className="text-sm">Run investigation to see analysis</p></div>
               )}
