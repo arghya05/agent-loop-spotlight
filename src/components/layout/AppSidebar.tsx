@@ -50,8 +50,9 @@ import {
   CalendarClock,
   Leaf,
   Headset,
-  CloudSun
-  , Radar,
+  CloudSun,
+  Warehouse,
+  Radar,
   Shuffle,
   Route,
   PackageCheck,
