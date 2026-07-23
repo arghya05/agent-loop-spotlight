@@ -9,7 +9,8 @@ import {
   supplyBucketMeta,
   SupplyBucketId,
 } from '@/data/supplyChainSignals';
-import { ArrowLeft, ExternalLink, MapPin, Clock, DollarSign, AlertTriangle, TrendingDown, CheckCircle2 } from 'lucide-react';
+import { getAgentBucketNarrative } from '@/data/supplyChainAgentBuckets';
+import { ArrowLeft, ExternalLink, MapPin, Clock, DollarSign, AlertTriangle, TrendingDown, CheckCircle2, Target, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const bucketIcon: Record<SupplyBucketId, typeof AlertTriangle> = {
@@ -47,6 +48,8 @@ export const SupplyChainBucketPage = () => {
 
   const totalImpact = items.reduce((a, s) => a + s.estimatedImpact, 0);
 
+  const narrative = getAgentBucketNarrative(agentId!, bucket);
+
   return (
     <div className="p-6 space-y-6">
       <Button variant="ghost" size="sm" onClick={() => navigate(`/supply-chain/${agentId}`)}>
@@ -57,11 +60,11 @@ export const SupplyChainBucketPage = () => {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Badge variant="outline" className={cn('text-xs', meta.badgeClass)}>
-              <Icon className="w-3 h-3 mr-1" /> MODE · {meta.label.toUpperCase()}
+              <Icon className="w-3 h-3 mr-1" /> {agent.shortLabel.toUpperCase()} · {meta.label.toUpperCase()}
             </Badge>
           </div>
-          <h1 className="text-2xl font-bold">{meta.label} Bucket · {agent.label}</h1>
-          <p className="text-sm text-muted-foreground">{meta.description}</p>
+          <h1 className="text-2xl font-bold">{narrative?.title ?? meta.label} · {agent.label}</h1>
+          <p className="text-sm text-muted-foreground max-w-3xl mt-1">{narrative?.meaning ?? meta.description}</p>
         </div>
         <div className="text-right">
           <p className="text-xs text-muted-foreground">Signals in bucket</p>
@@ -73,6 +76,14 @@ export const SupplyChainBucketPage = () => {
           )}
         </div>
       </div>
+
+      {narrative && (
+        <div className="grid grid-cols-3 gap-3">
+          <Card className="card-elevated"><CardContent className="pt-4 space-y-1"><div className="flex items-center gap-2 text-xs text-muted-foreground"><Zap className="w-3.5 h-3.5" />Agent playbook</div><p className="text-sm font-medium">{narrative.playbook}</p></CardContent></Card>
+          <Card className="card-elevated"><CardContent className="pt-4 space-y-1"><div className="flex items-center gap-2 text-xs text-muted-foreground"><Target className="w-3.5 h-3.5" />Primary metric</div><p className="text-sm font-medium">{narrative.primaryMetric}</p></CardContent></Card>
+          <Card className="card-elevated"><CardContent className="pt-4 space-y-1"><div className="flex items-center gap-2 text-xs text-muted-foreground"><Clock className="w-3.5 h-3.5" />SLA window</div><p className="text-sm font-medium">{narrative.slaWindow}</p></CardContent></Card>
+        </div>
+      )}
 
       <Card className="card-elevated">
         <CardHeader><CardTitle className="text-base">{meta.label} Signals</CardTitle></CardHeader>
