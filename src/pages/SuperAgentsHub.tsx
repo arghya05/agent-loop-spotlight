@@ -29,6 +29,7 @@ type AgentArea = {
   gradient: string;
   status: 'active' | 'beta' | 'coming-soon';
   path?: string;
+  externalUrl?: string;
   agentCount?: number;
 };
 
@@ -87,7 +88,8 @@ const areas: AgentArea[] = [
       'Assortment planning, clustering, space & planogram optimization, category role definition, and lifecycle management.',
     icon: ShoppingBag,
     gradient: 'from-amber-500/20 to-yellow-500/20',
-    status: 'coming-soon',
+    status: 'active',
+    externalUrl: 'https://lifecycle-analyzer.com/',
     agentCount: 6,
   },
   {
@@ -186,6 +188,10 @@ export const SuperAgentsHub = () => {
   const user = sessionStorage.getItem('algonomy_user') || 'there';
 
   const handleOpen = (area: AgentArea) => {
+    if (area.externalUrl) {
+      window.open(area.externalUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
     if (area.status === 'coming-soon' || !area.path) return;
     if (area.id === 'supply-chain') sessionStorage.setItem('algonomy_workspace', 'supply-chain');
     if (area.id === 'store-ops') sessionStorage.setItem('algonomy_workspace', 'store-ops');
@@ -240,7 +246,7 @@ export const SuperAgentsHub = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {areas.map((area) => {
             const Icon = area.icon;
-            const clickable = area.status !== 'coming-soon' && !!area.path;
+            const clickable = !!area.externalUrl || (area.status !== 'coming-soon' && !!area.path);
             return (
               <button
                 key={area.id}
