@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { supplyChainAgents } from '@/data/supplyChainAgents';
 import { supplyChainSignals } from '@/data/supplyChainSignals';
 import { getAgentContext, type AgentContextConfig } from '@/data/supplyChainAgentContext';
+import { getAgentAnalytics } from '@/data/supplyChainAgentAnalytics';
 import { BarChart, Bar, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { BarChart3, Bot, CheckCircle2, Download, History, Loader2, Play, Plug, RefreshCw, Save, Settings, XCircle } from 'lucide-react';
 
