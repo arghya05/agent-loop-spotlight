@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { supplyChainAgents } from '@/data/supplyChainAgents';
 import { supplyChainSignals } from '@/data/supplyChainSignals';
+import { getAgentContext, type AgentContextConfig } from '@/data/supplyChainAgentContext';
 import { BarChart, Bar, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { BarChart3, Bot, CheckCircle2, Download, History, Loader2, Play, Plug, RefreshCw, Save, Settings, XCircle } from 'lucide-react';
 
@@ -23,11 +24,12 @@ const getAgent = (agentId?: string) => supplyChainAgents.find((agent) => agent.i
 export const SupplyChainUtilityPage = ({ type }: SupplyChainUtilityPageProps) => {
   const { agentId } = useParams();
   const agent = getAgent(agentId);
+  const context = getAgentContext(agent.id);
 
   if (type === 'analytics') return <SupplyChainAnalytics agentId={agent.id} agentLabel={agent.label} />;
-  if (type === 'connectors') return <SupplyChainConnectors agentLabel={agent.shortLabel} />;
-  if (type === 'settings') return <SupplyChainSettings agentLabel={agent.label} />;
-  return <SupplyChainAdmin />;
+  if (type === 'connectors') return <SupplyChainConnectors agent={agent} context={context} />;
+  if (type === 'settings') return <SupplyChainSettings agent={agent} context={context} />;
+  return <SupplyChainAdmin currentAgentId={agent.id} />;
 };
 
 const SupplyChainAnalytics = ({ agentId, agentLabel }: { agentId: string; agentLabel: string }) => {
