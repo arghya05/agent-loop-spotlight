@@ -14,7 +14,7 @@ import {
 import {
   ArrowLeft, Sparkles, Target, Workflow, Activity, AlertTriangle,
   TrendingDown, CheckCircle2, Clock, DollarSign, User, MapPin, ChevronRight,
-  Radar, ListChecks, Database, Wand2,
+  Radar, ListChecks, Database, Wand2, Play,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
