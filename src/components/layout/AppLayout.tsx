@@ -60,7 +60,7 @@ const extraSupplyAgentTabs = supplyChainAgents
     icon: supplyIconMap[a.icon] || TrendingUp,
     active: true,
     badge: null as string | null,
-    basePath: a.path,
+    basePath: `/supply-chain/${a.id}`,
   }));
 
 const agentTabs = [
@@ -174,6 +174,9 @@ export const AppLayout = () => {
     if (location.pathname.startsWith('/store-ops')) {
       const activeStoreAgent = storeOpsAgents.find((agent) => location.pathname.startsWith(`/store-ops/${agent.id}`));
       setActiveAgent(activeStoreAgent?.id || 'store-ops-suite');
+    } else if (location.pathname.startsWith('/supply-chain/')) {
+      const id = location.pathname.split('/')[2];
+      setActiveAgent(id || 'supplier-performance');
     } else if (location.pathname.startsWith('/dispatch')) {
       setActiveAgent('dispatch-readiness');
     } else if (location.pathname.startsWith('/onboarding')) {
@@ -222,6 +225,9 @@ export const AppLayout = () => {
       navigate('/inventory/landing');
     } else if (tabId === 'product-onboarding') {
       navigate('/product/landing');
+    } else {
+      const extra = extraSupplyAgentTabs.find((t) => t.id === tabId);
+      if (extra) navigate(extra.basePath);
     }
   };
 
