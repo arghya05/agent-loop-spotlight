@@ -95,8 +95,9 @@ export const StoreOpsBucketPage = () => {
               </span>
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground">{agent.label} · {meta.label}</h1>
-              <p className="text-sm text-muted-foreground">{meta.description}</p>
+              <h1 className="text-2xl font-bold text-foreground">{agent.label} · {narrative.title}</h1>
+              <p className="text-sm text-muted-foreground">{narrative.meaning}</p>
+              <p className="text-xs text-muted-foreground mt-1"><span className="font-medium text-foreground">Playbook:</span> {narrative.playbook} · <span className="font-medium text-foreground">Metric:</span> {narrative.primaryMetric} · <span className="font-medium text-foreground">SLA:</span> {narrative.slaWindow}</p>
             </div>
           </div>
         </div>
