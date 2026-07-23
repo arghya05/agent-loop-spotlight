@@ -14,7 +14,7 @@ import {
 import {
   ArrowLeft, Sparkles, Target, Workflow, Activity, AlertTriangle,
   TrendingDown, CheckCircle2, Clock, DollarSign, User, MapPin, ChevronRight,
-  Radar, ListChecks, Database, Wand2,
+  Radar, ListChecks, Database, Wand2, Play,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -59,6 +59,15 @@ export const SupplyChainAgentPage = () => {
     );
   }
 
+  const [isRunning, setIsRunning] = useState(false);
+  const runAgent = async () => {
+    setIsRunning(true);
+    toast.info(`${agent.shortLabel} agent running — sensing, diagnosing, and recommending…`);
+    await new Promise((r) => setTimeout(r, 1400));
+    setIsRunning(false);
+    toast.success(`${agent.shortLabel} run complete · ${signals.length} signals refreshed · ${byBucket.breached.length} breached, ${byBucket['at-risk'].length} at risk`);
+  };
+
   return (
     <div className="p-6 space-y-6 max-w-7xl">
       {/* Header */}
@@ -70,7 +79,13 @@ export const SupplyChainAgentPage = () => {
           <h1 className="text-2xl font-bold">{agent.label}</h1>
           <p className="text-sm text-muted-foreground mt-1 max-w-3xl">{agent.mission}</p>
         </div>
-        <Badge className="bg-status-success/10 text-status-success border-status-success/20">Active</Badge>
+        <div className="flex items-center gap-2">
+          <Badge className="bg-status-success/10 text-status-success border-status-success/20">Active</Badge>
+          <Button size="sm" onClick={runAgent} disabled={isRunning} className="gap-1.5">
+            <Play className="w-3.5 h-3.5" />
+            {isRunning ? 'Running…' : 'Run Agent'}
+          </Button>
+        </div>
       </div>
 
       {/* KPI + description */}
