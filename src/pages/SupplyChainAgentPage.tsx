@@ -193,7 +193,7 @@ export const SupplyChainAgentPage = () => {
             <Card
               key={b}
               className="card-elevated cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => scrollToTable(b)}
+              onClick={() => navigate(`/supply-chain/${agentId}/bucket/${b}`)}
             >
               <CardContent className="pt-5">
                 <div className="flex items-center justify-between mb-3">

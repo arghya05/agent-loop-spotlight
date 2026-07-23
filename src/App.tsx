@@ -47,6 +47,7 @@ import { StoreOpsUtilityPage } from "@/pages/storeOps/StoreOpsUtilityPage";
 import Login from "./pages/Login";
 import { SuperAgentsHub } from "./pages/SuperAgentsHub";
 import { SupplyChainAgentPage } from "./pages/SupplyChainAgentPage";
+import { SupplyChainBucketPage } from "./pages/SupplyChainBucketPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -145,6 +146,7 @@ const App = () => (
             <Route path="/product/admin/agents" element={<AdminAgentsPage />} />
             {/* Extra Supply Chain Agent Routes */}
             <Route path="/supply-chain/:agentId" element={<SupplyChainAgentPage />} />
+            <Route path="/supply-chain/:agentId/bucket/:bucketId" element={<SupplyChainBucketPage />} />
             {/* Store Ops Agent Routes */}
             <Route path="/store-ops" element={<StoreOpsLandingPage />} />
             <Route path="/store-ops/landing" element={<StoreOpsLandingPage />} />
