@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { getStoreAgent, storeBucketMeta, storeOpsSignals, StoreBucketId } from '@/data/storeOps';
+import { getStoreAgentContext } from '@/data/storeOpsAgentContext';
 import {
   AlertCircle,
   AlertTriangle,
