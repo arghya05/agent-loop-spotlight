@@ -77,7 +77,8 @@ const areas: AgentArea[] = [
       'Campaign planning, creative generation, media mix optimization, budget pacing, attribution, and audience discovery.',
     icon: Megaphone,
     gradient: 'from-orange-500/20 to-rose-500/20',
-    status: 'coming-soon',
+    status: 'active',
+    externalUrl: 'https://lifecycle-analyzer.info/',
     agentCount: 7,
   },
   {
