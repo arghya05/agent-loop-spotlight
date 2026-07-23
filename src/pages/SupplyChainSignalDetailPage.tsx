@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { useAppStore } from '@/store/appStore';
 import { supplyBucketMeta, supplyChainSignals } from '@/data/supplyChainSignals';
 import { supplyChainAgents } from '@/data/supplyChainAgents';
+import { RootCauseSummary } from '@/components/RootCauseSummary';
 import {
   Activity,
   ArrowRight,
