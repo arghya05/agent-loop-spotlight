@@ -37,6 +37,7 @@ export const StoreOpsBucketPage = () => {
   const agent = getStoreAgent(agentId);
   const bucket = (bucketId || 'breached') as StoreBucketId;
   const meta = storeBucketMeta[bucket] || storeBucketMeta.breached;
+  const narrative = getStoreAgentContext(agent.id).buckets[bucket];
 
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState<string>('all');
