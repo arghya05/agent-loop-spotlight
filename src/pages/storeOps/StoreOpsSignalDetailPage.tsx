@@ -8,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { useStoreOpsStore } from '@/store/storeOpsStore';
 import { getStoreAgent, storeBucketMeta, storeOpsSignals } from '@/data/storeOps';
+import { RootCauseSummary } from '@/components/RootCauseSummary';
 import {
   Activity,
   ArrowRight,
