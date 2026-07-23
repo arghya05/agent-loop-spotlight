@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -14,10 +14,11 @@ import {
 import {
   ArrowLeft, Sparkles, Target, Workflow, Activity, AlertTriangle,
   TrendingDown, CheckCircle2, Clock, DollarSign, User, MapPin, ChevronRight,
-  Radar, ListChecks, Database, Wand2, Play,
+  Radar, ListChecks, Database, Wand2, Play, RefreshCw, Zap, Layers, ExternalLink,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { AutopilotPanel, AutopilotStep } from '@/components/AutopilotPanel';
 
 const bucketOrder: SupplyBucketId[] = ['breached', 'at-risk', 'optimized'];
 
@@ -25,6 +26,12 @@ const bucketIcon: Record<SupplyBucketId, typeof AlertTriangle> = {
   breached: AlertTriangle,
   'at-risk': TrendingDown,
   optimized: CheckCircle2,
+};
+
+const bucketAccent: Record<SupplyBucketId, string> = {
+  breached: 'bg-status-danger/10 text-status-danger',
+  'at-risk': 'bg-status-warning/10 text-status-warning',
+  optimized: 'bg-status-success/10 text-status-success',
 };
 
 const fmtCurrency = (v: number) =>
@@ -39,6 +46,10 @@ export const SupplyChainAgentPage = () => {
     [agentId]
   );
   const [selected, setSelected] = useState<SupplyChainSignal | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+  const [bucketFilter, setBucketFilter] = useState<SupplyBucketId | 'all'>('all');
+  const tableRef = useRef<HTMLDivElement>(null);
 
   const byBucket = useMemo(() => {
     const map = { breached: [], 'at-risk': [], optimized: [] } as Record<SupplyBucketId, SupplyChainSignal[]>;
@@ -47,6 +58,11 @@ export const SupplyChainAgentPage = () => {
   }, [signals]);
 
   const totalImpact = signals.reduce((a, s) => a + s.estimatedImpact, 0);
+  const pending = byBucket.breached.length + byBucket['at-risk'].length;
+  const avgConfidence = signals.length
+    ? Math.round((signals.reduce((a, s) => a + s.confidence, 0) / signals.length) * 100)
+    : 0;
+  const criticalCount = signals.filter((s) => s.severity === 'critical' || s.severity === 'high').length;
 
   if (!agent) {
     return (
@@ -59,7 +75,13 @@ export const SupplyChainAgentPage = () => {
     );
   }
 
-  const [isRunning, setIsRunning] = useState(false);
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await new Promise((r) => setTimeout(r, 1200));
+    setIsRefreshing(false);
+    toast.success(`${agent.shortLabel} signals refreshed`);
+  };
+
   const runAgent = async () => {
     setIsRunning(true);
     toast.info(`${agent.shortLabel} agent running — sensing, diagnosing, and recommending…`);
@@ -68,19 +90,59 @@ export const SupplyChainAgentPage = () => {
     toast.success(`${agent.shortLabel} run complete · ${signals.length} signals refreshed · ${byBucket.breached.length} breached, ${byBucket['at-risk'].length} at risk`);
   };
 
+  // Build agent-contextual autopilot steps from the workflow
+  const autopilotSteps: AutopilotStep[] = [
+    ...agent.workflow.map((step, i) => ({
+      id: `step-${i}`,
+      label: `Step ${i + 1} · ${step}`,
+      duration: 1300 + (i % 3) * 150,
+      activities: () => {
+        // Distribute signals across steps for a lively log
+        const slice = signals.slice(
+          Math.floor((signals.length * i) / agent.workflow.length),
+          Math.floor((signals.length * (i + 1)) / agent.workflow.length)
+        );
+        if (!slice.length) return [{ message: `${agent.shortLabel}: ${step}`, type: 'info' as const }];
+        return slice.map((s) => ({
+          message: `${s.entity} @ ${s.location} — ${s.metricLabel} ${s.metricValue} vs ${s.threshold}`,
+          type: (s.bucket === 'breached' ? 'action' : s.bucket === 'optimized' ? 'success' : 'info') as
+            'info' | 'action' | 'success',
+        }));
+      },
+    })),
+    {
+      id: 'complete',
+      label: `Complete · ${agent.shortLabel} recommendations issued`,
+      duration: 400,
+    },
+  ];
+
+  const filteredSignals = bucketFilter === 'all' ? signals : byBucket[bucketFilter];
+
+  const scrollToTable = (b: SupplyBucketId) => {
+    setBucketFilter(b);
+    setTimeout(() => tableRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  };
+
   return (
-    <div className="p-6 space-y-6 max-w-7xl">
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4">
+    <div className="p-6 space-y-6">
+      {/* Header — matches Product Onboarding layout */}
+      <div className="flex items-center justify-between">
         <div>
-          <Badge variant="outline" className="mb-2 text-[10px] bg-primary/10 text-primary border-primary/20">
-            <Sparkles className="w-3 h-3 mr-1" /> SUPPLY CHAIN AGENT
-          </Badge>
-          <h1 className="text-2xl font-bold">{agent.label}</h1>
-          <p className="text-sm text-muted-foreground mt-1 max-w-3xl">{agent.mission}</p>
+          <div className="flex items-center gap-2 mb-1">
+            <Sparkles className="w-5 h-5 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">
+              {agent.label} — Sense · Diagnose · Recommend
+            </h1>
+          </div>
+          <p className="text-sm text-muted-foreground max-w-4xl">{agent.mission}</p>
         </div>
         <div className="flex items-center gap-2">
           <Badge className="bg-status-success/10 text-status-success border-status-success/20">Active</Badge>
+          <Button variant="outline" onClick={handleRefresh} disabled={isRefreshing}>
+            <RefreshCw className={cn('w-4 h-4 mr-2', isRefreshing && 'animate-spin')} />
+            {isRefreshing ? 'Refreshing...' : 'Pull Signals'}
+          </Button>
           <Button size="sm" onClick={runAgent} disabled={isRunning} className="gap-1.5">
             <Play className="w-3.5 h-3.5" />
             {isRunning ? 'Running…' : 'Run Agent'}
@@ -88,57 +150,90 @@ export const SupplyChainAgentPage = () => {
         </div>
       </div>
 
-      {/* KPI + description */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="card-elevated">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-              <Target className="w-3.5 h-3.5" /> Primary KPI
-            </CardTitle>
-          </CardHeader>
-          <CardContent><p className="text-base font-semibold">{agent.primaryKpi}</p></CardContent>
-        </Card>
-        <Card className="card-elevated">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-              <AlertTriangle className="w-3.5 h-3.5" /> Open Signals
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{byBucket.breached.length + byBucket['at-risk'].length}</p>
-            <p className="text-[11px] text-muted-foreground">{byBucket.breached.length} breached · {byBucket['at-risk'].length} at risk</p>
-          </CardContent>
-        </Card>
-        <Card className="card-elevated">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-              <DollarSign className="w-3.5 h-3.5" /> Impact at stake
-            </CardTitle>
-          </CardHeader>
-          <CardContent><p className="text-2xl font-bold">{fmtCurrency(totalImpact)}</p></CardContent>
-        </Card>
-        <Card className="card-elevated">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-              <Activity className="w-3.5 h-3.5" /> What this agent does
-            </CardTitle>
-          </CardHeader>
-          <CardContent><p className="text-xs leading-relaxed text-muted-foreground">{agent.description}</p></CardContent>
-        </Card>
+      {/* Autopilot panel — contextual to this agent's workflow */}
+      <AutopilotPanel
+        steps={autopilotSteps}
+        queueCount={pending}
+        itemLabel="signals"
+        title={`${agent.shortLabel} Autopilot`}
+        onComplete={(n) => {
+          toast.success(`Autopilot complete · ${n} ${agent.shortLabel.toLowerCase()} actions executed`);
+        }}
+      />
+
+      {/* KPI Cards — 6 across, matches Product Onboarding */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        {[
+          { label: 'Live Signals', value: signals.length, icon: Layers },
+          { label: 'Pending Actions', value: pending, icon: Zap },
+          {
+            label: 'Breached / At Risk / Optimized',
+            value: `${byBucket.breached.length} / ${byBucket['at-risk'].length} / ${byBucket.optimized.length}`,
+            icon: Activity,
+          },
+          { label: 'Impact at Stake', value: fmtCurrency(totalImpact), icon: DollarSign },
+          { label: 'Avg Confidence', value: `${avgConfidence}%`, icon: Target },
+          { label: 'Critical/High', value: criticalCount, icon: AlertTriangle },
+        ].map((kpi) => (
+          <Card key={kpi.label} className="card-elevated">
+            <CardContent className="pt-4 pb-3">
+              <div className="flex items-center gap-2 mb-2">
+                <kpi.icon className="w-4 h-4 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground line-clamp-1">{kpi.label}</span>
+              </div>
+              <p className="text-lg font-bold text-foreground">{kpi.value}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      {/* Workflow */}
+      {/* Three Mode/Bucket Cards — mirror Product's Enrich/Validate/Activate */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {bucketOrder.map((b) => {
+          const meta = supplyBucketMeta[b];
+          const Icon = bucketIcon[b];
+          const count = byBucket[b].length;
+          return (
+            <Card
+              key={b}
+              className="card-elevated cursor-pointer hover:shadow-md transition-shadow"
+              onClick={() => scrollToTable(b)}
+            >
+              <CardContent className="pt-5">
+                <div className="flex items-center justify-between mb-3">
+                  <div className={cn('w-10 h-10 rounded-lg flex items-center justify-center', bucketAccent[b])}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <Badge variant="outline" className={cn('text-xs', meta.badgeClass)}>
+                    MODE · {meta.label.toUpperCase()}
+                  </Badge>
+                </div>
+                <h3 className="font-semibold text-base mb-1">{meta.label}</h3>
+                <p className="text-xs text-muted-foreground mb-3">{meta.description}</p>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">{count} signals</span>
+                  <span className="font-medium">View queue</span>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* Workflow strip */}
       <Card className="card-elevated">
-        <CardHeader>
+        <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Workflow className="w-4 h-4" /> How it works
+            <Workflow className="w-4 h-4 text-primary" /> How it works
           </CardTitle>
         </CardHeader>
         <CardContent>
           <ol className="grid grid-cols-1 md:grid-cols-5 gap-3">
             {agent.workflow.map((step, i) => (
               <li key={i} className="flex gap-2 items-start p-3 rounded-lg bg-muted/40 border border-border/50">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center">{i + 1}</div>
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center">
+                  {i + 1}
+                </div>
                 <p className="text-xs leading-relaxed">{step}</p>
               </li>
             ))}
@@ -146,85 +241,95 @@ export const SupplyChainAgentPage = () => {
         </CardContent>
       </Card>
 
-      {/* Buckets */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <Radar className="w-4 h-4 text-primary" /> Live signals
-          </h2>
-          <p className="text-xs text-muted-foreground">Click any signal for reasoning trace, evidence, and recommended action</p>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {bucketOrder.map((b) => {
-            const meta = supplyBucketMeta[b];
-            const items = byBucket[b];
-            const Icon = bucketIcon[b];
-            return (
-              <Card key={b} className={cn('card-elevated border', meta.panelClass)}>
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-sm flex items-center gap-1.5">
-                      <Icon className="w-4 h-4" /> {meta.label}
-                    </CardTitle>
-                    <Badge variant="outline" className={cn('text-[10px]', meta.badgeClass)}>{items.length}</Badge>
-                  </div>
-                  <p className="text-[11px] text-muted-foreground mt-1">{meta.description}</p>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  {items.length === 0 && (
-                    <p className="text-xs text-muted-foreground italic py-4 text-center">No signals in this bucket</p>
-                  )}
-                  {items.map((s) => (
-                    <button
-                      key={s.id}
-                      onClick={() => setSelected(s)}
-                      className="w-full text-left p-3 rounded-lg bg-background hover:bg-accent/50 border border-border/60 transition-colors group"
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium truncate">{s.entity}</p>
-                          <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
-                            <MapPin className="w-3 h-3" /> {s.location}
-                          </p>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground flex-shrink-0" />
-                      </div>
-                      <div className="flex items-center gap-2 mt-2 text-[11px]">
-                        <span className="font-medium">{s.metricLabel}:</span>
-                        <span className="font-mono">{s.metricValue}</span>
+      {/* Action Queue Table — mirrors Product Onboarding queue */}
+      <Card className="card-elevated" ref={tableRef}>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Zap className="w-4 h-4 text-primary" />
+              Today's {agent.shortLabel} Signal Queue
+            </CardTitle>
+            <div className="flex items-center gap-2">
+              {(['all', ...bucketOrder] as const).map((b) => (
+                <Button
+                  key={b}
+                  size="sm"
+                  variant={bucketFilter === b ? 'default' : 'outline'}
+                  className="h-7 text-xs"
+                  onClick={() => setBucketFilter(b)}
+                >
+                  {b === 'all' ? `All (${signals.length})` : `${supplyBucketMeta[b].label} (${byBucket[b].length})`}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground">Entity</th>
+                  <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground">Location</th>
+                  <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground">Bucket</th>
+                  <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground">Metric</th>
+                  <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground">Confidence</th>
+                  <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground">Owner</th>
+                  <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground">Due</th>
+                  <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground">Impact</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredSignals.length === 0 && (
+                  <tr>
+                    <td colSpan={9} className="text-center py-6 text-xs text-muted-foreground italic">
+                      No signals in this bucket
+                    </td>
+                  </tr>
+                )}
+                {filteredSignals.map((s) => {
+                  const meta = supplyBucketMeta[s.bucket];
+                  return (
+                    <tr key={s.id} className="border-b border-border/50 hover:bg-muted/30">
+                      <td className="py-2.5 px-3 font-medium">{s.entity}</td>
+                      <td className="py-2.5 px-3 text-muted-foreground text-xs">
+                        <span className="inline-flex items-center gap-1"><MapPin className="w-3 h-3" />{s.location}</span>
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <Badge variant="outline" className={cn('text-[10px]', meta.badgeClass)}>
+                          {meta.label}
+                        </Badge>
+                      </td>
+                      <td className="py-2.5 px-3 text-xs">
+                        <span className="font-mono">{s.metricValue}</span>{' '}
                         <span className="text-muted-foreground">vs {s.threshold}</span>
-                      </div>
-                      <p className="text-[11px] text-muted-foreground mt-1.5 line-clamp-2">
-                        <span className="font-medium text-foreground">Why:</span> {s.reason}
-                      </p>
-                      <div className="flex items-center gap-3 mt-2 text-[10px] text-muted-foreground">
-                        <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {s.dueIn}</span>
-                        <span className="flex items-center gap-1"><User className="w-3 h-3" /> {s.recommendedOwner}</span>
-                        {s.estimatedImpact > 0 && (
-                          <span className="flex items-center gap-1 font-medium text-foreground">
-                            <DollarSign className="w-3 h-3" /> {fmtCurrency(s.estimatedImpact)}
-                          </span>
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </div>
+                      </td>
+                      <td className="py-2.5 px-3 font-semibold">{Math.round(s.confidence * 100)}%</td>
+                      <td className="py-2.5 px-3 text-xs text-muted-foreground">{s.recommendedOwner}</td>
+                      <td className="py-2.5 px-3 text-xs">
+                        <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" />{s.dueIn}</span>
+                      </td>
+                      <td className="py-2.5 px-3 text-xs font-medium">
+                        {s.estimatedImpact > 0 ? fmtCurrency(s.estimatedImpact) : '—'}
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <Button size="sm" variant="default" className="h-7 text-xs" onClick={() => setSelected(s)}>
+                          Review <ExternalLink className="w-3 h-3 ml-1" />
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
 
-      <div className="rounded-lg border border-dashed border-border p-4 text-center bg-muted/20">
-        <p className="text-xs text-muted-foreground">
-          Signals stream from connected systems. Configure sources in{' '}
-          <button className="text-primary underline" onClick={() => navigate('/connectors')}>Connectors</button>
-          {' '}or tune policies in{' '}
-          <button className="text-primary underline" onClick={() => navigate('/settings')}>Settings</button>.
-        </p>
-      </div>
+      <p className="text-xs text-muted-foreground text-right">Last signal pull: {new Date().toLocaleString()}</p>
 
-      {/* Detail dialog */}
+      {/* Detail dialog (unchanged) */}
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
         <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
           {selected && (
