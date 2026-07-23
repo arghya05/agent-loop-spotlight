@@ -8,6 +8,7 @@ import { useInventoryStore } from '@/store/inventoryStore';
 import { toast } from 'sonner';
 import { ArrowLeft, CheckCircle2, XCircle, Send, Zap, Database, Brain, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { RootCauseSummary } from '@/components/RootCauseSummary';
 
 const modeColor: Record<string, string> = {
   replenish: 'bg-blue-500/10 text-blue-500',
