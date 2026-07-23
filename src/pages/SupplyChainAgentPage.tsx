@@ -143,10 +143,6 @@ export const SupplyChainAgentPage = () => {
             <RefreshCw className={cn('w-4 h-4 mr-2', isRefreshing && 'animate-spin')} />
             {isRefreshing ? 'Refreshing...' : 'Pull Signals'}
           </Button>
-          <Button size="sm" onClick={runAgent} disabled={isRunning} className="gap-1.5">
-            <Play className="w-3.5 h-3.5" />
-            {isRunning ? 'Running…' : 'Run Agent'}
-          </Button>
         </div>
       </div>
 
