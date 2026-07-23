@@ -8,6 +8,7 @@ import { useInventoryStore } from '@/store/inventoryStore';
 import { toast } from 'sonner';
 import { ArrowLeft, CheckCircle2, XCircle, Send, Zap, Database, Brain, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { RootCauseSummary } from '@/components/RootCauseSummary';
 
 const modeColor: Record<string, string> = {
   replenish: 'bg-blue-500/10 text-blue-500',
@@ -131,11 +132,36 @@ export const InventorySignalDetailPage = () => {
         </Card>
       </div>
 
-      {/* Rationale */}
+      {/* Root cause — plain English */}
       <Card className="card-elevated">
-        <CardHeader><CardTitle className="text-sm">Why This Recommendation</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-sm">Root Cause Analysis</CardTitle></CardHeader>
         <CardContent>
-          <p className="text-sm">{s.rationale}</p>
+          <RootCauseSummary
+            domainLabel="Autonomous Inventory Agent"
+            signal={{
+              entity: `${s.sku} · ${s.productName}`,
+              location: s.location,
+              severity: s.stockoutRiskPct >= 70 ? 'critical' : s.stockoutRiskPct >= 40 ? 'high' : s.stockoutRiskPct >= 20 ? 'medium' : 'low',
+              bucket: s.stockoutRiskPct >= 70 ? 'breached' : s.stockoutRiskPct >= 30 ? 'at-risk' : 'optimized',
+              metricLabel: 'Cover vs Forecast (14d)',
+              metricValue: `${coverDays}d cover · ${s.onHand + s.inTransit}u available`,
+              threshold: `Reorder ${s.reorderPoint}u · Safety ${s.safetyStock}u · Lead time ${s.leadTimeDays}d`,
+              reason: s.rationale,
+              evidence: [
+                `On hand ${s.onHand.toLocaleString()}u + in-transit ${s.inTransit.toLocaleString()}u`,
+                `Forecast ${s.forecast14d.toLocaleString()}u over 14d (${s.demandTrend})`,
+                `Stockout risk ${s.stockoutRiskPct}% at current cover`,
+                `Sources: ${s.externalSources.join(', ')}`,
+              ],
+              estimatedImpact: s.expectedSavings,
+              recommendedAction: s.recommendedQty > 0
+                ? `${s.mode === 'transfer' ? 'Transfer' : 'Order'} ${s.recommendedQty.toLocaleString()}u via ${s.recommendedSupplier} (${s.po}).`
+                : 'Hold — no order needed at current cover.',
+              recommendedOwner: s.mode === 'transfer' ? 'Network Planning' : 'Category Buyer',
+              confidence: s.confidence,
+              dueIn: `${Math.max(1, s.leadTimeDays - 2)}d`,
+            }}
+          />
         </CardContent>
       </Card>
 

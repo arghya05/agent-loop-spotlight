@@ -8,6 +8,7 @@ import { usePricingStore } from '@/store/pricingStore';
 import { toast } from 'sonner';
 import { ArrowLeft, CheckCircle2, XCircle, Send, Zap, Database, Brain, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { RootCauseSummary } from '@/components/RootCauseSummary';
 
 const modeColor: Record<string, string> = {
   reprice: 'bg-blue-500/10 text-blue-500',
@@ -133,11 +134,34 @@ export const PricingSignalDetailPage = () => {
         </Card>
       </div>
 
-      {/* Rationale */}
+      {/* Root cause — plain English */}
       <Card className="card-elevated">
-        <CardHeader><CardTitle className="text-sm">Why This Recommendation</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-sm">Root Cause Analysis</CardTitle></CardHeader>
         <CardContent>
-          <p className="text-sm">{s.rationale}</p>
+          <RootCauseSummary
+            domainLabel="Pricing Agent"
+            signal={{
+              entity: `${s.sku} · ${s.productName}`,
+              location: (s.channels || []).join(' · ') || s.category,
+              severity: changePct <= -10 ? 'critical' : Math.abs(changePct) >= 5 ? 'high' : 'medium',
+              bucket: status === 'executed' || status === 'approved' ? 'optimized' : (changePct < 0 ? 'breached' : 'at-risk'),
+              metricLabel: 'Recommended vs Current Price',
+              metricValue: `$${s.recommendedPrice.toFixed(2)}`,
+              threshold: `Floor $${s.marginFloor.toFixed(2)} · Ceiling $${s.ceilingPrice.toFixed(2)}`,
+              reason: s.rationale,
+              evidence: [
+                s.competitorAvg ? `Competitor avg $${s.competitorAvg.toFixed(2)}` : 'No live competitor benchmark',
+                `Demand index ${s.demandIndex}/100 · Sell-through ${s.sellThroughPct}%`,
+                `Stock age ${s.stockAgeDays}d · ${s.stockUnits.toLocaleString()} units on hand`,
+                `Margin currently ${s.marginPct.toFixed(1)}% · floor $${s.marginFloor.toFixed(2)}`,
+              ],
+              estimatedImpact: s.expectedRevenueLift,
+              recommendedAction: `${s.mode === 'markdown' ? 'Mark down to' : s.mode === 'promote' ? 'Promote at' : 'Reprice to'} $${s.recommendedPrice.toFixed(2)} on ${s.channels.join(', ')}.`,
+              recommendedOwner: 'Category Pricing Lead',
+              confidence: s.confidence,
+              dueIn: '24h',
+            }}
+          />
         </CardContent>
       </Card>
 
