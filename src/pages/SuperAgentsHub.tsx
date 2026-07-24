@@ -160,7 +160,8 @@ const areas: AgentArea[] = [
       'Portal support copilot, ticket triage, agent-assist, knowledge synthesis, and customer sentiment radar.',
     icon: Headset,
     gradient: 'from-teal-500/20 to-cyan-500/20',
-    status: 'coming-soon',
+    status: 'active',
+    externalUrl: 'https://finkloopais.live/',
     agentCount: 5,
   },
   {
