@@ -8,6 +8,7 @@ const EXTERNAL_AGENTS: Record<string, { title: string; url: string }> = {
   'merchandising': { title: 'Merchandising Agents', url: 'https://lifecycle-analyzer.com/' },
   'workforce': { title: 'Workforce & HR Agents', url: 'https://lifecycle-analyzer.online/documents' },
   'finance': { title: 'Finance & Risk Agents', url: 'https://rebatewhisperer.com/' },
+  'analytics': { title: 'Analytics & Insights Agents', url: 'https://mayarobinsongenie-3650405149511689.9.azure.databricksapps.com' },
 };
 
 export const ExternalAgentPage = () => {
