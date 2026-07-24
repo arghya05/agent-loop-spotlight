@@ -50,6 +50,7 @@ import { SupplyChainAgentPage } from "./pages/SupplyChainAgentPage";
 import { SupplyChainBucketPage } from "./pages/SupplyChainBucketPage";
 import { SupplyChainSignalDetailPage } from "./pages/SupplyChainSignalDetailPage";
 import { SupplyChainUtilityPage } from "./pages/SupplyChainUtilityPage";
+import { ExternalAgentPage } from "./pages/ExternalAgentPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
