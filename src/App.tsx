@@ -74,6 +74,7 @@ const App = () => (
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/hub" element={<ProtectedRoute><SuperAgentsHub /></ProtectedRoute>} />
+          <Route path="/external/:agentId" element={<ProtectedRoute><ExternalAgentPage /></ProtectedRoute>} />
           <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
             <Route path="/landing" element={<LandingPage />} />
             <Route path="/bucket/:bucketId" element={<BucketPage />} />
