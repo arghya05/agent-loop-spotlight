@@ -113,7 +113,8 @@ const areas: AgentArea[] = [
       'Talent sourcing, workforce planning, shift optimization, engagement pulse, and manager copilot for retail associates.',
     icon: Users,
     gradient: 'from-violet-500/20 to-purple-500/20',
-    status: 'coming-soon',
+    status: 'active',
+    externalUrl: 'https://lifecycle-analyzer.online/documents',
     agentCount: 6,
   },
   {
