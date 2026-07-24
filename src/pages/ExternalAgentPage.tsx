@@ -6,6 +6,8 @@ const EXTERNAL_AGENTS: Record<string, { title: string; url: string }> = {
   'customer-experience': { title: 'Customer Experience Agents', url: 'https://lifecycle-analyzer.store/auth' },
   'marketing': { title: 'Marketing & Campaign Agents', url: 'https://lifecycle-analyzer.info/' },
   'merchandising': { title: 'Merchandising Agents', url: 'https://lifecycle-analyzer.com/' },
+  'workforce': { title: 'Workforce & HR Agents', url: 'https://lifecycle-analyzer.online/documents' },
+  'finance': { title: 'Finance & Risk Agents', url: 'https://rebatewhisperer.com/' },
 };
 
 export const ExternalAgentPage = () => {
