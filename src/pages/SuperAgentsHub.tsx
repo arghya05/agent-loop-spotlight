@@ -99,10 +99,11 @@ const areas: AgentArea[] = [
     title: 'Analytics & Insights Agents',
     tagline: 'Ask · Explore · Discover',
     description:
-      'Maya-style natural-language analyst, KPI monitors, anomaly detection, executive briefings, and self-serve dashboards.',
+      'Maya conversational AI for natural-language analytics, KPI monitors, anomaly detection, executive briefings, and self-serve dashboards.',
     icon: BarChart3,
     gradient: 'from-cyan-500/20 to-sky-500/20',
-    status: 'beta',
+    status: 'active',
+    externalUrl: 'https://mayarobinsongenie-3650405149511689.9.azure.databricksapps.com',
     agentCount: 5,
   },
   {
