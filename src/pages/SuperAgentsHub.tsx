@@ -125,7 +125,8 @@ const areas: AgentArea[] = [
       'Continuous close, expense audit, working capital, treasury copilot, tax & compliance monitoring, and vendor risk.',
     icon: ShieldCheck,
     gradient: 'from-lime-500/20 to-emerald-500/20',
-    status: 'coming-soon',
+    status: 'active',
+    externalUrl: 'https://rebatewhisperer.com/',
     agentCount: 7,
   },
   {
