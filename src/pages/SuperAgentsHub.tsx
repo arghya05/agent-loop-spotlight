@@ -191,7 +191,7 @@ export const SuperAgentsHub = () => {
 
   const handleOpen = (area: AgentArea) => {
     if (area.externalUrl) {
-      window.open(area.externalUrl, '_blank', 'noopener,noreferrer');
+      navigate(`/external/${area.id}`);
       return;
     }
     if (area.status === 'coming-soon' || !area.path) return;
